@@ -1,6 +1,7 @@
 const user = require('../models/user');
 const global = require('../middlewares/auth');
 const bcrypt = require('bcrypt-nodejs');
+const path = require('path');
 
 module.exports = (app) => {
     app.get('/users', (req, res) => {
@@ -50,6 +51,25 @@ module.exports = (app) => {
         });
     });
 
+    app.get('/login', (req, res) => {
+        res.sendFile(path.join(__dirname+'/../public/login.html'));
+    });
+
+    // llama vista de creacion de nuevo usuario
+    app.post('/new-user', (req, res) => {
+        let userToken = req.body.token;
+        console.log(userToken);
+        global.validateToken(userToken, (response, err) => {
+            console.table(err);
+            if(err){
+                console.log(err.data.message);
+                res.status(500).send('Error en post new-user');
+            }else{
+                res.sendFile(path.join(__dirname+'/../public/newUser.html'));
+            }
+        })
+    });
+
     app.post('/login', (req, res) => {
         console.log(req);
         let username = req.body.username;
@@ -57,6 +77,8 @@ module.exports = (app) => {
         global.auth(username, password, res);
     });
 
+
+    // crear nuevo usuario
     app.post('/new/user', (req, res) => {
         const userData = {
             'id': null,
@@ -64,6 +86,8 @@ module.exports = (app) => {
             'password': bcrypt.hashSync(req.body.password),
             'nombre': req.body.nombre,
             'apellido': req.body.apellido,
+            'tipo_usuario': req.body.tipo_usuario,
+            'estado': 'activo'
         };
 
         user.createUser(userData, (err, data) => {
@@ -72,7 +96,8 @@ module.exports = (app) => {
                     success: true,
                     msg: 'Usuario creado',
                     data: data
-                })
+                });
+                console.table(data);
             }else{
                 res.status(500).json({
                     success: false,

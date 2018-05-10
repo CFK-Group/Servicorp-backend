@@ -20,45 +20,52 @@ global.auth = (username, password, res) => {
             userToken: token = jwt.sign({id: userData.id}, secret, {expiresIn: 86400 /* expires in 24 hoursΩ */}), //Crear token
             id: userData.id
         };
-        user.saveToken(userD, (err, data) => {
+        return user.saveToken(userD, (err, data) => {
             if(data && data.affectedRows > 0){
-                res.status(200).json({
+                console.log(data);
+                return res.status(200).json({
                     success: true,
                     msg: 'Token guardado',
                     data: data,
                     auth: true,
-                    token: token
+                    token: userD.userToken,
+                    typeUser: userData.tipo_usuario,
+                    id_usuario: userData.id
                 })
             }else{
-                res.status(500).json({
+                console.log(data);
+                return res.status(500).json({
                     success: false,
                     msg: `Error al guardar token`
                 })
             }
-            console.log(data);
         })
     });
 };
 
 global.validateToken = (token, callback) => {
-    if (!token) callback(null, {
-        statusCode: 403,
-        data:{
-            auth: false,
-            message: 'No token provided.'
-        }
-    });
-    jwt.verify(token, secret, (err, decoded) => {
-        if (err) callback(null, {
-            statusCode: 500,
+    if (!token) {
+        callback(null, {
+            statusCode: 403,
             data:{
                 auth: false,
-                message: 'Failed to authenticate token.'
+                message: 'No token provided.'
             }
         });
-        // if everything good, save to request for use in other routes
-        callback(true, null);
-    });
+    }else {
+        jwt.verify(token, secret, (err, decoded) => {
+            console.log('----------------------------------------',decoded);
+            if (err) callback(null, {
+                statusCode: 500,
+                data:{
+                    auth: false,
+                    message: 'Failed to authenticate token.'
+                }
+            });
+            // if everything good, save to request for use in other routes
+            callback(true, null);
+        });
+    }
 };
 
 module.exports = global;
