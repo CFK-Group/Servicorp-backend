@@ -54,7 +54,6 @@ global.validateToken = (token, callback) => {
         });
     }else {
         jwt.verify(token, secret, (err, decoded) => {
-            console.log('----------------------------------------',decoded);
             if (err) callback(null, {
                 statusCode: 500,
                 data:{

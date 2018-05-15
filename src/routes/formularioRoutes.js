@@ -2,10 +2,10 @@ const formulario = require('../models/formulario');
 const global = require('../middlewares/auth');
 
 module.exports = (app) => {
+    let statusError = 500;
 
     // Formulario de mantencion hfc id=1
     app.post('/formulario/mantencion/hfc', (req, res) => {
-        console.log(req);
         const respuestas = {
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
@@ -104,16 +104,16 @@ module.exports = (app) => {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 1,
-            usuario_id: req.body.usuario_id
+            usuario_id: parseInt(req.body.usuario_id)
         };
-        let statusError = 500;
         let auth = new Promise ( (resolve, reject) => {
-            global.validateToken(req.body.token, (err, response) => {
-                console.log('linea 111',response);
-                if(err){
+            global.validateToken(req.body.token, (response, err) => {
+                if(!err){
+                    return resolve(true);
+                }else{
                     statusError = 401;
+                    reject(new Error('Token inválido'));
                 }
-                return (err) ? reject(new Error('Token inválido')) : resolve(true);
             })
         });
 
@@ -121,21 +121,24 @@ module.exports = (app) => {
             // creamos el formulario
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
-                    formulario.createForm(data, (err, data) => {
-                        console.log(data);
-                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(data);
+                    formulario.createForm(data, (err, res) => {
+                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res);
                     })
                 })
             })
 
             // enviamos las respuestas a la bdd
             .then( (resolved, rejected) => {
+                console.log('ahora guardamos las respuestas: ',resolved);
                 data = {
-                    tipo_formulario_id: resolved.data.tipo_formulario_id,
+                    tipo_formulario_id: resolved.insertId,
                     respuestas: respuestas
                 };
+                data = {
+                    respuesta 
+                }
                 return new Promise( (resolve, reject) => {
-                    formulario.guardarRespuestas(resolved, (err, data) => {
+                    formulario.guardarRespuestas(data, (err, res) => {
                         return (err) ? reject(new Error('No se ha podido guardar las respuestas')) : resolve(data);
                     })
                 })
@@ -156,7 +159,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err);
+                console.log(err.message);
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -351,14 +354,31 @@ module.exports = (app) => {
 
     // Formulario de desconexion id=5
     app.post('/formulario/desconexion', (req, res) => {
-        global.validateToken(req.query.token, (response, err) => {
-            if(!err){
-                // hacer algo
-            }else {
-                console.log(`Error en post desconexion: ${err.msg}`);
-                res.status(500).send('Internal Server Error');
-            }
-        })
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.body.token, (err, response) => {
+                if(err){
+                    statusError = 401;
+                }
+                return (err) ? reject(new Error('Token inválido')) : resolve(true);
+            })
+        });
+
+        auth
+            .then((resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Desconexión realizada con éxito`
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err);
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
     });
 
 };

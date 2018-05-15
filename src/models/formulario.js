@@ -28,22 +28,28 @@ formularioModel.getRespuestas = (callback) => {
     }
 };
 
-formularioModel.guardarRespuestas = (data, callback) => {
+formularioModel.guardarRespuesta = (req, callback) => {
     if(connection){
-
+        let data = [];
+        for(let elemento in req) {
+            data.push(req[elemento]);
+        }
+        connection.query('INSERT INTO srv_respuestas (respuesta, formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id) VALUES (?)', [data],
+        (err, row) => {
+            return (err) ? callback(err, null) : callback(null, row);
+        })
     }
 };
 
-formularioModel.createForm = (data, callback) => {
+formularioModel.createForm = (req, callback) => {
     if(connection){
-        data = JSON.stringify(data);
-        connection.query('INSERT INTO srv_formulario (latitud, longitud, tipo_formulario_id, usuario_id) VALUES (?, ?, ?, ?)', data,
+        let data = [];
+        for(let elemento in req) {
+            data.push(req[elemento]);
+        }
+        connection.query('INSERT INTO srv_formulario (latitud, longitud, tipo_formulario_id, usuario_id) VALUES (?)', [data],
             (err, row) => {
-                if(err){
-                    callback(err, null);
-                    console.log(`Error en saveToken: ${err.message}`);
-                }
-                if(!err) callback(null, row);
+                return (err) ? callback(err, null) : callback(null, row);
             }
         )
     }
