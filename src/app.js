@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 // static elements
-//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 require('./routes/userRoutes')(app);
