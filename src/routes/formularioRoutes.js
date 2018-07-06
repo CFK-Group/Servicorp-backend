@@ -1,8 +1,8 @@
-const formulario = require('../models/formulario');
-const global = require('../middlewares/auth');
+const formulario = require('../models/formulario')
+const global = require('../middlewares/auth')
 
 module.exports = (app) => {
-    let statusError = 500;
+    let statusError = 500
 
     // Formulario de mantencion hfc id=1
     app.post('/formulario/mantencion/hfc', (req, res) => {
@@ -98,56 +98,37 @@ module.exports = (app) => {
             resp_87: req.body.resp_87,
             resp_88: req.body.resp_88,
             resp_89: req.body.resp_89,
-            cod_decodificador: req.body.cod_decodificador
-        };
-        let data = {
+            cod_decodificador: req.body.cod_decodificador,
+            imagen_1: req.body.imagen_1,
+            imagen_2: req.body.imagen_2,
+            imagen_3: req.body.imagen_3,
+            imagen_4: req.body.imagen_4,
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 1,
             usuario_id: parseInt(req.body.usuario_id)
-        };
+        }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    return resolve(true);
+                    console.log('usuario autorizado')
+                    return resolve(true)
                 }else{
-                    statusError = 401;
-                    reject(new Error('Token inválido'));
+                    statusError = 401
+                    reject(new Error('Token inválido'))
                 }
             })
-        });
+        })
 
         auth
-            // creamos el formulario
+            // creamos el formulario, guardamos respuestas e imágenes
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
-                    formulario.createForm(data, (err, res) => {
-                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res);
+                    formulario.createForm(respuestas, (err, res) => {
+                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
             })
-
-            // enviamos las respuestas a la bdd
-            .then( (resolved, rejected) => {
-                console.log('ahora guardamos las respuestas: ',resolved);
-                data = {
-                    tipo_formulario_id: resolved.insertId,
-                    respuestas: respuestas
-                };
-                data = {
-                    respuesta 
-                }
-                return new Promise( (resolve, reject) => {
-                    formulario.guardarRespuestas(data, (err, res) => {
-                        return (err) ? reject(new Error('No se ha podido guardar las respuestas')) : resolve(data);
-                    })
-                })
-            })
-
-            // guardámos las imágenes en el servidor
-            // .then( (resolved, rejected) => {
-            //
-            // })
 
             // respondemos al cliente
             .then( (resolved, rejected) => {
@@ -159,13 +140,13 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message);
+                console.log(err.message)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
                 })
             })
-    });
+    })
 
     // Formulario de mantencion dth id=2
     app.post('/formulario/mantencion/dth', (req, res) => {
@@ -173,15 +154,15 @@ module.exports = (app) => {
             if(!err){
                 // hacer algo
             }else {
-                console.log(`Error en post mantencion dth: ${err.msg}`);
-                res.status(500).send('Internal Server Error');
+                console.log(`Error en post mantencion dth: ${err.msg}`)
+                res.status(500).send('Internal Server Error')
             }
         })
-    });
+    })
 
     // Formulario de instalacion hfc id=3
     app.post('/formulario/instalacion/hfc', (req, res) => {
-        console.log(req);
+        console.log(req)
         const respuestas = {
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
@@ -275,31 +256,31 @@ module.exports = (app) => {
             resp_88: req.body.resp_88,
             resp_89: req.body.resp_89,
             cod_decodificador: req.body.cod_decodificador
-        };
+        }
         let data = {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 3,
             usuario_id: req.body.usuario_id
-        };
-        let statusError = 500;
+        }
+        let statusError = 500
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (err, response) => {
-                console.log('linea 285',err);
+                console.log('linea 285',err)
                 if(err){
-                    statusError = 401;
+                    statusError = 401
                 }
-                return (err) ? reject(new Error('Token inválido')) : resolve(true);
+                return (err) ? reject(new Error('Token inválido')) : resolve(true)
             })
-        });
+        })
 
         auth
         // creamos el formulario
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, data) => {
-                        console.log(data);
-                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(data);
+                        console.log(data)
+                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(data)
                     })
                 })
             })
@@ -309,10 +290,10 @@ module.exports = (app) => {
                 data = {
                     tipo_formulario_id: resolved.data.tipo_formulario_id,
                     respuestas: respuestas
-                };
+                }
                 return new Promise( (resolve, reject) => {
                     formulario.guardarRespuestas(resolved, (err, data) => {
-                        return (err) ? reject(new Error('No se ha podido guardar las respuestas')) : resolve(data);
+                        return (err) ? reject(new Error('No se ha podido guardar las respuestas')) : resolve(data)
                     })
                 })
             })
@@ -332,13 +313,13 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err);
+                console.log(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
                 })
             })
-    });
+    })
 
     // Formulario de instalacion dth id=4
     app.post('/formulario/instalacion/dth', (req, res) => {
@@ -346,22 +327,22 @@ module.exports = (app) => {
             if(!err){
                 // hacer algo
             }else {
-                console.log(`Error en post instalacion dth: ${err.msg}`);
-                res.status(500).send('Internal Server Error');
+                console.log(`Error en post instalacion dth: ${err.msg}`)
+                res.status(500).send('Internal Server Error')
             }
         })
-    });
+    })
 
     // Formulario de desconexion id=5
     app.post('/formulario/desconexion', (req, res) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (err, response) => {
                 if(err){
-                    statusError = 401;
+                    statusError = 401
                 }
-                return (err) ? reject(new Error('Token inválido')) : resolve(true);
+                return (err) ? reject(new Error('Token inválido')) : resolve(true)
             })
-        });
+        })
 
         auth
             .then((resolved, rejected) => {
@@ -373,12 +354,12 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err);
+                console.log(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
                 })
             })
-    });
+    })
 
-};
+}
