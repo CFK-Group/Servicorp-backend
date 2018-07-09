@@ -30,19 +30,6 @@ formularioModel.getRespuestas = (callback) => {
     }
 }
 
-formularioModel.guardarRespuesta = (req, callback) => {
-    if(connection){
-        let data = []
-        for(let elemento in req) {
-            data.push(req[elemento])
-        }
-        connection.query('INSERT INTO srv_respuestas (respuesta, formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id) VALUES (?)', [data],
-        (err, row) => {
-            return (err) ? callback(err, null) : callback(null, row)
-        })
-    }
-}
-
 formularioModel.createForm = (req, callback) => {
     if(connection){
         let values = [
@@ -58,8 +45,8 @@ formularioModel.createForm = (req, callback) => {
             connection.query('INSERT INTO srv_formulario (latitud, longitud, tipo_formulario_id, usuario_id) VALUES (?)', [values],(err, result) => {
                 if  ( err )  {  
                     connection. rollback ( function ( )  { 
-                        throw err ; 
-                    }) ; 
+                        throw err 
+                    }) 
                   }
                 let formulario_id = result.insertId
                 values = [
@@ -157,7 +144,7 @@ formularioModel.createForm = (req, callback) => {
                 ]
             
                 // guardando respuestas
-                connection.query('INSERT INTO srv_respuestas (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES (?)', [values], (err, result) => {
+                connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES (?)', [values], (err, result) => {
                     if (err) { 
                         connection.rollback(() => {
                             throw err
@@ -173,36 +160,49 @@ formularioModel.createForm = (req, callback) => {
                         imagen_4: req.imagen_4
                     }
                     // decodificamos la img y la guardamos
-                    if (imgs.cod_decodificador !== undefined || imgs.cod_decodificador !== ''){
-                        decodeImg(imgs.cod_decodificador)
-                    }
-                    if (imgs.imagen_1 !== undefined){
-                        decodeImg(imgs.imagen_1)
-                    }
-                    if (imgs.imagen_2 !== undefined){
-                        decodeImg(imgs.imagen_2)
-                    }
-                    if (imgs.imagen_3 !== undefined){
-                        decodeImg(imgs.imagen_3)
-                    }
-                    if (imgs.imagen_4 !== undefined){
-                        decodeImg(imgs.imagen_4)
-                    }
-                    values = [
-                        ['nombre_imagen', '../public/img/', formulario_id, req.tipo_formulario_id, req.usuario_id],
-                        ['nombre_imagen', '../public/img/', formulario_id, req.tipo_formulario_id, req.usuario_id],
-                        ['nombre_imagen', '../public/img/', formulario_id, req.tipo_formulario_id, req.usuario_id],
-                        ['nombre_imagen', '../public/img/', formulario_id, req.tipo_formulario_id, req.usuario_id],
-                    ]
-                    // guardando las rutas de las imágenes en la bdd
-                    connection.query('INSERT INTO srv_imagen (nombre_imagen, ruta, formulario_id, formulario_tipo_formulario_id, formulario_usuario_id) VALUES(?)', [values], (err, result) => {
-                        connection.commit((err) => {
-                            if (err) { 
-                                connection.rollback(() => {
-                                throw err
-                                })
-                            }
-                            console.log('Transaction Complete.')
+                    let guardarImg = new Promise ( (resolve, reject) => {
+                        if (imgs.cod_decodificador !== undefined || imgs.cod_decodificador !== ''){
+                            decodeImg(imgs.cod_decodificador, req.ot_servicorp + '_cod_dec')
+                        }
+                        if (imgs.imagen_1 !== undefined){
+                            decodeImg(imgs.imagen_1, req.ot_servicorp + '_img1')
+                        }
+                        if (imgs.imagen_2 !== undefined){
+                            decodeImg(imgs.imagen_2, req.ot_servicorp + '_img2')
+                        }
+                        if (imgs.imagen_3 !== undefined){
+                            decodeImg(imgs.imagen_3, req.ot_servicorp + '_img3')
+                        }
+                        if (imgs.imagen_4 !== undefined){
+                            decodeImg(imgs.imagen_4, req.ot_servicorp + '_img4')
+                        }
+                    })
+                    guardarImg
+                    .then( (resolved, rejected) => {
+                        values = [
+                            [req.ot_servicorp + '_img1', '../public/img/' + req.ot_servicorp + '_img1', formulario_id, req.tipo_formulario_id, req.usuario_id],
+                            [req.ot_servicorp + '_img2', '../public/img/' + req.ot_servicorp + '_img2', formulario_id, req.tipo_formulario_id, req.usuario_id],
+                            [req.ot_servicorp + '_img3', '../public/img/' + req.ot_servicorp + '_img3', formulario_id, req.tipo_formulario_id, req.usuario_id],
+                            [req.ot_servicorp + '_img4', '../public/img/' + req.ot_servicorp + '_img4', formulario_id, req.tipo_formulario_id, req.usuario_id],
+                            [req.ot_servicorp + '_cod_dec', '../public/img/' + req.ot_servicorp + '_cod_dec', formulario_id, req.tipo_formulario_id, req.usuario_id],
+                        ]
+                        // guardando las rutas de las imágenes en la bdd
+                        connection.query('INSERT INTO srv_imagen (nombre_imagen, ruta, formulario_id, formulario_tipo_formulario_id, formulario_usuario_id) VALUES(?)', [values], (err, result) => {
+                            connection.commit((err) => {
+                                if (err) { 
+                                    connection.rollback(() => {
+                                        console.log('Transaction error.')
+                                        throw err
+                                    })
+                                }
+                                console.log('Transaction Complete.')
+                            })
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err.message)
+                        connection.rollback(() => {
+                            throw err
                         })
                     })
                 })
@@ -212,13 +212,3 @@ formularioModel.createForm = (req, callback) => {
 }
 
 module.exports = formularioModel
-
-//codigo q finaliza la transaccion
-/* connection.commit((err) => {
-    if (err) { 
-        connection.rollback(() => {
-        throw err
-        })
-    }
-    console.log('Transaction Complete.')
-}) */

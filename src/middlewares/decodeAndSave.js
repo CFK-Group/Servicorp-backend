@@ -1,4 +1,4 @@
-module.exports = function(imagen_base_64){
+module.exports = function(imagen_base_64, name){
     console.log(imagen_base_64 + 'imagen recibida')
     try{
         function decodeBase64Image(dataString) {
@@ -19,15 +19,15 @@ module.exports = function(imagen_base_64){
         // This regular image extracts the "jpeg" from "image/jpeg"
         let imageTypeRegularExpression      = /\/(.*?)$/;      
         
-        // Generate random string
-        let crypto = require('crypto');
+        // Generate random string // cambié esto por name
+        /* let crypto = require('crypto');
         let seed = crypto.randomBytes(20);
-        let uniqueSHA1String = crypto.createHash('sha1').update(seed).digest('hex');
+        let uniqueSHA1String = crypto.createHash('sha1').update(seed).digest('hex'); */
         
         let imageBuffer = decodeBase64Image('data:image/jpeg;base64,' + imagen_base_64);
         let userUploadedFeedMessagesLocation = 'src/public/img/';
         
-        let uniqueRandomImageName = 'image-' + uniqueSHA1String;
+        let uniqueRandomImageName = name;
         // This variable is actually an array which has 5 values,
         // The [1] value is the real image extension
         let imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression);
