@@ -125,6 +125,10 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
+                        console.log('-----------------------------')
+                        console.log(err)
+                        console.log(res)
+                        console.log('-----------------------------')
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
