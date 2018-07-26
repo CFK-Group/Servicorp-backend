@@ -6,13 +6,13 @@ const path = require('path');
 module.exports = (app) => {
     app.get('/users', (req, res) => {
         user.getUsers((err, data) => {
-            res.status(200).json(data);
+            res.status(200).json(data)
         })
     });
 
     app.get("/user/id/:id", (req, res) => {
         //id del usuario
-        let id = req.params.id;
+        let id = req.params.id
         //solo actualizamos si la id es un número
         if(!isNaN(id)) {
             user.getUserById(id, (error, data) => {
@@ -24,20 +24,20 @@ module.exports = (app) => {
                 else {
                     res.status(404).json({
                         "msg":`No existe el usuario con id = ${req.params.id}`
-                    });
+                    })
                 }
-            });
+            })
         }
         //si hay algún error
         else {
-            res.status(500).json({"msg":"Error"});
+            res.status(500).json({"msg":"Error"})
         }
     });
 
-    app.get("/user/:userName", function(req, res) {
+    app.get("/user/:userName", (req, res) => {
         //id del usuario
         let userName = req.params.userName;
-        user.getUserByUsername(userName, function(err, data) {
+        user.getUserByUsername(userName, (err, data) => {
             //si el usuario existe lo mostramos en formato json
             if (typeof data !== 'undefined' && data.length > 0) {
                 res.status(200).json(data);

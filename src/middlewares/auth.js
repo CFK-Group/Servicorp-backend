@@ -7,13 +7,13 @@ let global = {};
 global.auth = (username, password, res) => {
 
     user.getUserByUsername(username, (err, userData) => {
-        if (err) return res.status(500).send('Error en getUserByUsername.');
+        if (err) return res.status(500).send({auth: false, token: null, message: 'Error en getUserByUsername.'});
         userData = userData[0];
-        if (!userData) return res.status(404).send('Usuario no encontrado.');
+        if (!userData) return res.status(401).send({auth: false, token: null, message: 'Usuario no autorizado.'});
 
         //Validar la contraseña
         passwordIsValid = bcrypt.compareSync(password, userData.password);
-        if (!passwordIsValid) return res.status(401).send({auth: false, token: null});
+        if (!passwordIsValid) return res.status(401).send({auth: false, token: null, message: 'Usuario no autorizado.'});
 
         //guardar token en bdd
         const userD = {
@@ -62,7 +62,12 @@ global.validateToken = (token, callback) => {
                 }
             });
             // if everything good, save to request for use in other routes
-            callback(true, null);
+            let data = {
+                auth: true,
+                message: 'Usuario autenticado.',
+                userId: decoded.id
+            }
+            callback(data, null);
         });
     }
 };

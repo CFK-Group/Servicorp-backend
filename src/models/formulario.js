@@ -358,4 +358,24 @@ formularioModel.createForm = (req, callback) => {
     }
 }
 
+formularioModel.getFormularios = (req, callback) => {
+    if(connection){
+        let data = [
+            req.tipo_formulario_id,
+            req.usuario_id
+        ]
+        console.log(data)
+        connection.query(`SELECT * FROM srv_formulario WHERE tipo_formulario_id=? and usuario_id=?`, data, (err, row) => {
+            if(err){
+                callback(err, null)
+                console.log(`Error en getFormularios: ${err.message}`)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
 module.exports = formularioModel

@@ -105,12 +105,14 @@ module.exports = (app) => {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 1,
-            usuario_id: parseInt(req.body.usuario_id)
+            //usuario_id: parseInt(req.body.usuario_id)
+            usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
                     console.log('usuario autorizado')
+                    respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
@@ -252,12 +254,13 @@ module.exports = (app) => {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 4,
-            usuario_id: parseInt(req.body.usuario_id)
+            usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
                     console.log('usuario autorizado')
+                    respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
@@ -400,12 +403,13 @@ module.exports = (app) => {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 3,
-            usuario_id: parseInt(req.body.usuario_id)
+            usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
                     console.log('usuario autorizado')
+                    respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
@@ -444,6 +448,10 @@ module.exports = (app) => {
                     message: err.message
                 })
             })
+    })
+
+    app.get('/formulario/instalacion/hfc/:token', (req, res) => {
+
     })
 
     // Formulario de instalacion dth id=4
@@ -548,12 +556,13 @@ module.exports = (app) => {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 4,
-            usuario_id: parseInt(req.body.usuario_id)
+            usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
                     console.log('usuario autorizado')
+                    respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
@@ -615,12 +624,13 @@ module.exports = (app) => {
             latitud: req.body.latitud,
             longitud: req.body.longitud,
             tipo_formulario_id: 5,
-            usuario_id: parseInt(req.body.usuario_id)
+            usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
                     console.log('usuario autorizado')
+                    respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
@@ -648,6 +658,117 @@ module.exports = (app) => {
                 res.status(200).json({
                     success: true,
                     message: `Formulario guardado con éxito`
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // Get de formularios
+    app.get('/formulario/:tipoFormulario/:subtipoFormulario/:token', (req, res) => {
+        let data = {
+            tipo_formulario_id: null,
+            usuario_id: null,
+        }
+        switch (req.params.tipoFormulario | req.params.subtipoFormulario) {
+            case 'mantencion' | 'hfc':
+                data.tipo_formulario_id = 1
+            break
+            case 'mantencion' | 'dth':
+                data.tipo_formulario_id = 2
+            break
+            case 'instalacion' | 'hfc':
+                data.tipo_formulario_id = 3
+            break
+            case 'instalacion' | 'dth':
+                data.tipo_formulario_id = 4
+            break
+        }
+        console.log()
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    data.usuario_id = response.userId
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos los formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getFormularios(data, (err, res) => {
+                        return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos los formularios correspondientes
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} del usuario con id = ${data.usuario_id}`,
+                    data: resolved
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // Get de formularios de desconexion
+    app.get('/formulario/desconexion/:token', (req, res) => {
+        let data = {
+            tipo_formulario_id: 5,
+            usuario_id: null,
+        }
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    data.usuario_id = response.userId
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos los formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getFormularios(data, (err, res) => {
+                        return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos los formularios correspondientes
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Formularios de desconexion del usuario con id = ${data.usuario_id}`,
+                    data: resolved
                 })
             })
 
