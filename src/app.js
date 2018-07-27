@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // routes
 require('./routes/userRoutes')(app);
 require('./routes/formularioRoutes')(app);
+require('./routes/backoffice')(app)
 
 app.listen(app.get('port'), () => {
     console.log(`Servidor iniciado en el puerto ${port}`);

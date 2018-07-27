@@ -51,10 +51,6 @@ module.exports = (app) => {
         });
     });
 
-    app.get('/login', (req, res) => {
-        res.sendFile(path.join(__dirname+'/../public/login.html'));
-    });
-
     // llama vista de creacion de nuevo usuario
     app.post('/new-user', (req, res) => {
         let userToken = req.body.token;
@@ -65,7 +61,7 @@ module.exports = (app) => {
                 console.log(err.data.message);
                 res.status(500).send('Error en post new-user');
             }else{
-                res.sendFile(path.join(__dirname+'/../public/newUser.html'));
+                res.sendFile(path.join(__dirname+'/../static/newUser.html'));
             }
         })
     });
