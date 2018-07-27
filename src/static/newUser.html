@@ -100,7 +100,7 @@
             })(document.createElement('div'));
             $('select').formSelect();
             $("form").submit(function(e) {
-                let url = "http://localhost:3000/new/user"; // the script where you handle the form input.
+                let url = "http://servicorp.xpass.cl:3000/new/user"; // the script where you handle the form input.
                 let data = {
                     'username': $("#username").val() || null,
                     'password': $("#password").val() || null,
