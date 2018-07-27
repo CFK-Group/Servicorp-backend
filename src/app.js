@@ -7,7 +7,7 @@ const cors = require('cors');
 const db = require('./middlewares/database');
 
 //settings
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 app.set('port', port);
 
 // middlewares
