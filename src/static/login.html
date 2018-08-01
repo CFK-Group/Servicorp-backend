@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login superuser</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <style>
+        body{
+            height: 100vh;
+            background-image: url("background.png");
+            background-size: 100vw auto;
+        }
+        form{
+            width: 400px !important;
+        }
+        .no-margin{
+            margin: 0!important;
+        }
+        label{
+            color: black!important;
+        }
+        .z-depth-4{
+            box-shadow: 5px 5px 15px 2px rgba(0,0,0,0.8), 5px 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -7px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="blue-grey darken-4 valign-wrapper">
+<div class="row">
+    <form class="card-panel grey lighten-2 z-depth-4 animated" method="post">
+        <div class="row center no-margin">
+            <i class="fas fa-user-circle fa-7x"></i>
+            <h5>Iniciar Sesión</h5>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="username" type="text" class="validate" required="true" autofocus>
+                <label for="username">Username</label>
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="input-field col s12">
+                <input id="password" type="password" class="validate" required="true">
+                <label for="password">Contraseña</label>
+            </div>
+        </div>
+        <div class="row"></div>
+        <div class="row">
+            <input type="submit" class="btn light-blue darken-3 col s12" value="Entrar">
+        </div>
+    </form>
+</div>
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<script>
+    $(document).ready(() => {
+        let animationEnd = ((el) => {
+            let animations = {
+                animation: 'animationend',
+                OAnimation: 'oAnimationEnd',
+                MozAnimation: 'mozAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd',
+            };
+
+            for (let t in animations) {
+                if (el.style[t] !== undefined) {
+                    return animations[t];
+                }
+            }
+        })(document.createElement('div'));
+        $('select').formSelect();
+        $("form").submit( (e) => {
+            let url = "http://servicorp.xpass.cl:3000/"; // the script where you handle the form input.
+            let data = {
+                'username': $("#username").val(),
+                'password': $("#password").val()
+            };
+            $.ajax({
+                type: "POST",
+                url: url+'login',
+                data: data, // serializes the form's elements.
+                success: (res) => {
+                    if(res.typeUser === 'superadmin'){
+                        $('form').addClass("bounceOutUp").one(animationEnd, () =>{
+                            $.ajax({
+                                type: 'POST',
+                                url: url+'new-user',
+                                data: {token: res.token},
+                                success: (res) => {
+                                    $('body').html(res);
+                                },
+                                error: (res) => {
+                                    M.toast({html: res})
+                                }
+                            })
+                        });
+                    }else{
+                        $('form').addClass("shake").one(animationEnd, () => {
+                            $('form').removeClass("shake").trigger('reset');
+                        });
+                        M.toast({html: 'Usuario no autorizado'});
+                    }
+                },
+                error: () => {
+                    M.toast({html: 'Error, vuelva a intentarlo más tarde'});
+                    $('form').addClass("shake").one(animationEnd, () => {
+                        $('form').removeClass("shake");
+                    });
+                }
+            });
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+        });
+    });
+</script>
+</body>
+</html>
