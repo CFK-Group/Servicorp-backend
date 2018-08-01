@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql')
 
 connection = mysql.createConnection({
     host: 'localhost',
@@ -9,10 +9,9 @@ connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) {
-        console.log('No se ha podido conectar a la bdd');
-        console.log(err.message);
-        throw err;
+        console.log('No se ha podido conectar a la bdd')
+        console.log(err.message)
     }else{
-        console.log("Connectado a la bdd correctamente!");
+        console.log("Connectado a la bdd correctamente!")
     }
 });
