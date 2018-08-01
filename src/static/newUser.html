@@ -98,11 +98,11 @@
                     OAnimation: 'oAnimationEnd',
                     MozAnimation: 'mozAnimationEnd',
                     WebkitAnimation: 'webkitAnimationEnd',
-                };
+                }
 
                 for (let t in animations) {
                     if (el.style[t] !== undefined) {
-                        return animations[t];
+                        return animations[t]
                     }
                 }
             })(document.createElement('div'));
@@ -114,27 +114,28 @@
                     'password': $("#password").val() || null,
                     'nombre': $("#nombre").val() || null,
                     'apellido': $("#apellido").val() || null,
-                    'tipo_usuario': $('input[name=tipo_usuario]:checked', 'form').val() || undefined
-                };
+                    'tipo_usuario': $('input[name=tipo_usuario]:checked', 'form').val() || undefined,
+                    'empresa': $('input[name=empresa]:checked', 'form').val() || undefined,
+                }
                 console.table(data);
                 $.ajax({
                     type: "POST",
                     url: url,
                     data: data, // serializes the form's elements.
                     success: function(data) {
-                        M.toast({html: 'Usuario creado'}); // show response from the api.
+                        M.toast({html: 'Usuario creado'}) // show response from the api.
                         $('form').addClass("bounceOutUp").one(animationEnd, function(){
-                            $('form').removeClass("bounceOutUp").trigger("reset").addClass("bounceInLeft");
+                            $('form').removeClass("bounceOutUp").trigger("reset").addClass("bounceInLeft")
                         });
                     },
                     error: function(){
                         M.toast({html: 'Error, vuelva a intentarlo más tarde'});
                         $('form').addClass("shake").one(animationEnd, function(){
-                            $('form').removeClass("shake");
+                            $('form').removeClass("shake")
                         });
                     }
                 });
-                e.preventDefault(); // avoid to execute the actual submit of the form.
+                e.preventDefault() // avoid to execute the actual submit of the form.
             });
         });
     </script>
