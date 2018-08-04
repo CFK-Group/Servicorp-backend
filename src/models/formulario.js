@@ -147,8 +147,8 @@ formularioModel.createForm = (req, callback) => {
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 86, req.resp_86],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 87, req.resp_87],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 88, req.resp_88],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 90, req.ot_servicorp],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 91, req.folio_servicio]
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 93, req.ot_servicorp],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 94, req.folio_servicio]
                         ]
                     break
                     case 3:             // instalacion hfc
@@ -243,22 +243,22 @@ formularioModel.createForm = (req, callback) => {
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 87, req.resp_87],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 88, req.resp_88],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 89, req.resp_89],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 90, req.ot_servicorp],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 91, req.folio_servicio]
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 93, req.ot_servicorp],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 94, req.folio_servicio]
                         ]
                     break
                     case 5:             // desconexion
                         values = [
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 1, req.resp_1],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 2, req.resp_2],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 3, req.resp_3],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 4, req.resp_4],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 5, req.resp_5],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 6, req.resp_6],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 7, req.resp_7],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 8, req.resp_8],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 90, req.ot_servicorp],
-                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 91, req.folio_servicio]
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 95, req.resp_1],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 96, req.resp_2],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 97, req.resp_3],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 98, req.resp_4],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 99, req.resp_5],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 100, req.resp_6],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 101, req.resp_7],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 53, req.resp_8],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 93, req.ot_servicorp],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 94, req.folio_servicio]
                         ]
                     break
                     default:
@@ -366,6 +366,41 @@ formularioModel.getFormularios = (req, callback) => {
         ]
         console.log(data)
         connection.query(`SELECT * FROM srv_formulario WHERE tipo_formulario_id=? and usuario_id=?`, data, (err, row) => {
+            if(err){
+                callback(err, null)
+                console.log(`Error en getFormularios: ${err.message}`)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getResponsesByFormId = (req, callback) => {
+    if(connection){
+        let formulario_id = req
+        console.log(formulario_id)
+        connection.query(`SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?`, formulario_id, (err, row) => {
+            if(err){
+                callback(err, null)
+                console.log(`Error en getFormularios: ${err.message}`)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getQuestionsByFormId = (req, callback) => {
+    if(connection){
+        let formulario_id = req
+        console.log(formulario_id)
+        connection.query(`select glosa from srv_pregunta 
+        inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
             if(err){
                 callback(err, null)
                 console.log(`Error en getFormularios: ${err.message}`)

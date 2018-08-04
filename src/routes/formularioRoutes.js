@@ -450,10 +450,6 @@ module.exports = (app) => {
             })
     })
 
-    app.get('/formulario/instalacion/hfc/:token', (req, res) => {
-
-    })
-
     // Formulario de instalacion dth id=4
     app.post('/formulario/instalacion/dth', (req, res) => {
         const respuestas = {
@@ -768,6 +764,94 @@ module.exports = (app) => {
                 res.status(200).json({
                     success: true,
                     message: `Formularios de desconexion del usuario con id = ${data.usuario_id}`,
+                    data: resolved
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // get respuestas por id de formulario
+    app.get('/respuestas/:idFormulario/:token', (req, res) => {
+        let formulario_id = req.params.idFormulario
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos los formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getResponsesByFormId(formulario_id, (err, res) => {
+                        return (err) ? reject(new Error(`No se ha podido leer respuestas del formulario con id = ${req.params.idFormulario} de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos los formularios correspondientes
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Respuestas del formulario con id = ${req.params.idFormulario}`,
+                    data: resolved
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // get preguntas por id de formulario
+    app.get('/preguntas/:idFormulario/:token', (req, res) => {
+        let formulario_id = req.params.idFormulario
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos los formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getQuestionsByFormId(formulario_id, (err, res) => {
+                        return (err) ? reject(new Error(`No se ha podido leer preguntas del formulario con id = ${req.params.idFormulario} de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos los formularios correspondientes
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Preguntas del formulario con id = ${req.params.idFormulario}`,
                     data: resolved
                 })
             })
