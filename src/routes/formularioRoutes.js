@@ -673,21 +673,15 @@ module.exports = (app) => {
             tipo_formulario_id: null,
             usuario_id: null,
         }
-        switch (req.params.tipoFormulario | req.params.subtipoFormulario) {
-            case 'mantencion' | 'hfc':
-                data.tipo_formulario_id = 1
-            break
-            case 'mantencion' | 'dth':
-                data.tipo_formulario_id = 2
-            break
-            case 'instalacion' | 'hfc':
-                data.tipo_formulario_id = 3
-            break
-            case 'instalacion' | 'dth':
-                data.tipo_formulario_id = 4
-            break
+        if(req.params.tipoFormulario.toString() === 'mantencion' && req.params.subtipoFormulario.toString() === 'hfc'){
+            data.tipo_formulario_id = 1
+        }else if(req.params.tipoFormulario.toString() === 'mantencion' && req.params.subtipoFormulario.toString() === 'dth'){
+            data.tipo_formulario_id = 2
+        }else if(req.params.tipoFormulario.toString() === 'instalacion' && req.params.subtipoFormulario.toString() === 'hfc'){
+            data.tipo_formulario_id = 3
+        }else if(req.params.tipoFormulario.toString() === 'instalacion' && req.params.subtipoFormulario.toString() === 'dth'){
+            data.tipo_formulario_id = 4
         }
-        console.log()
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -700,34 +694,35 @@ module.exports = (app) => {
                 }
             })
         })
-
+        
         auth
-            // buscamos los formularios en la bdd
-            .then( (resolved, rejected) => {
-                return new Promise( (resolve, reject) => {
-                    formulario.getFormularios(data, (err, res) => {
-                        return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
-                    })
+        // buscamos los formularios en la bdd
+        .then( (resolved, rejected) => {
+            return new Promise( (resolve, reject) => {
+                formulario.getFormularios(data, (err, res) => {
+                    return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
                 })
             })
+        })
+        
+        // entregamos los formularios correspondientes
+        .then( (resolved, rejected) => {
+            console.log(data.tipo_formulario_id)
+            res.status(200).json({
+                success: true,
+                message: `Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} del usuario con id = ${data.usuario_id}`,
+                data: resolved
+            })
+        })
 
-            // entregamos los formularios correspondientes
-            .then( (resolved, rejected) => {
-                res.status(200).json({
-                    success: true,
-                    message: `Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} del usuario con id = ${data.usuario_id}`,
-                    data: resolved
-                })
+        // manejamos algún posible error
+        .catch( (err) => {
+            console.log(err.message)
+            res.status(statusError).json({
+                success: false,
+                message: err.message
             })
-
-            // manejamos algún posible error
-            .catch( (err) => {
-                console.log(err.message)
-                res.status(statusError).json({
-                    success: false,
-                    message: err.message
-                })
-            })
+        })
     })
 
     // Get de formularios de desconexion

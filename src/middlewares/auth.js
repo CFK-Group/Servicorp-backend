@@ -7,6 +7,7 @@ let global = {};
 global.auth = (username, password, res) => {
 
     user.getUserByUsername(username, (err, userData) => {
+        console.log(userData)
         if (err) return res.status(500).send({auth: false, token: null, message: 'Error en getUserByUsername.'});
         userData = userData[0];
         if (!userData) return res.status(401).send({auth: false, token: null, message: 'Usuario no autorizado.'});
@@ -17,12 +18,12 @@ global.auth = (username, password, res) => {
 
         //guardar token en bdd
         const userD = {
-            userToken: token = jwt.sign({id: userData.id}, secret, {expiresIn: 86400 /* expires in 24 hoursΩ */}), //Crear token
+            userToken: token = jwt.sign({id: userData.id, username: userData.username}, secret, {expiresIn: 86400 /* expires in 24 hoursΩ */}), //Crear token
             id: userData.id
         };
         return user.saveToken(userD, (err, data) => {
             if(data && data.affectedRows > 0){
-                console.log(data);
+                console.log(userData.empresa)
                 return res.status(200).json({
                     success: true,
                     msg: 'Token guardado',
@@ -30,10 +31,10 @@ global.auth = (username, password, res) => {
                     auth: true,
                     token: userD.userToken,
                     typeUser: userData.tipo_usuario,
-                    id_usuario: userData.id
+                    id_usuario: userData.id,
+                    empresa: userData.empresa
                 })
             }else{
-                console.log(data);
                 return res.status(500).json({
                     success: false,
                     msg: `Error al guardar token`
@@ -67,6 +68,7 @@ global.validateToken = (token, callback) => {
                 message: 'Usuario autenticado.',
                 userId: decoded.id
             }
+            console.log('------------------------------------------------------------' + decoded)
             callback(data, null);
         });
     }
