@@ -368,7 +368,13 @@ formularioModel.createForm = (req, callback) => {
                         imagen_1: (req.imagen_1 === '') ? null:req.imagen_1,
                         imagen_2: (req.imagen_2 === '') ? null:req.imagen_2,
                         imagen_3: (req.imagen_3 === '') ? null:req.imagen_3,
-                        imagen_4: (req.imagen_4 === '') ? null:req.imagen_4
+                        imagen_4: (req.imagen_4 === '') ? null:req.imagen_4,
+                        imagen_5: (req.imagen_4 === '') ? null:req.imagen_5,
+                        imagen_6: (req.imagen_4 === '') ? null:req.imagen_6,
+                        imagen_7: (req.imagen_4 === '') ? null:req.imagen_7,
+                        imagen_8: (req.imagen_4 === '') ? null:req.imagen_8,
+                        imagen_9: (req.imagen_4 === '') ? null:req.imagen_9,
+                        imagen_10: (req.imagen_4 === '') ? null:req.imagen_10
                     }
                     // decodificamos la img y la guardamos
                     if (typeof(req.cod_decodificador) !== 'undefined' && req.cod_decodificador !== ''){
@@ -386,6 +392,24 @@ formularioModel.createForm = (req, callback) => {
                     if (typeof(req.imagen_4) !== 'undefined' && req.imagen_4 !== ''){
                         decodeImg(req.imagen_4, req.ot_servicorp + '_img4')
                     }
+                    if (typeof(req.imagen_5) !== 'undefined' && req.imagen_5 !== ''){
+                        decodeImg(req.imagen_5, req.ot_servicorp + '_img5')
+                    }
+                    if (typeof(req.imagen_6) !== 'undefined' && req.imagen_6 !== ''){
+                        decodeImg(req.imagen_6, req.ot_servicorp + '_img6')
+                    }
+                    if (typeof(req.imagen_7) !== 'undefined' && req.imagen_7 !== ''){
+                        decodeImg(req.imagen_7, req.ot_servicorp + '_img7')
+                    }
+                    if (typeof(req.imagen_8) !== 'undefined' && req.imagen_8 !== ''){
+                        decodeImg(req.imagen_8, req.ot_servicorp + '_img8')
+                    }
+                    if (typeof(req.imagen_9) !== 'undefined' && req.imagen_9 !== ''){
+                        decodeImg(req.imagen_9, req.ot_servicorp + '_img9')
+                    }
+                    if (typeof(req.imagen_10) !== 'undefined' && req.imagen_10 !== ''){
+                        decodeImg(req.imagen_10, req.ot_servicorp + '_img10')
+                    }
                     values = []
                     if(typeof(imgs.imagen_1) !== 'undefined' && imgs.imagen_1 !== ''){
                         values.push([req.ot_servicorp + '_img1', 'public/img/' + req.ot_servicorp + '_img1.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
@@ -399,8 +423,23 @@ formularioModel.createForm = (req, callback) => {
                     if(typeof(imgs.imagen_4) !== 'undefined' && imgs.imagen_4 !== ''){
                         values.push([req.ot_servicorp + '_img4', 'public/img/' + req.ot_servicorp + '_img4.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
-                    if(typeof(imgs.cod_decodificador) !== 'undefined' && imgs.cod_decodificador !== ''){
-                        values.push([req.ot_servicorp + '_cod_dec', 'public/img/' + req.ot_servicorp + '_cod_dec.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                    if(typeof(imgs.imagen_5) !== 'undefined' && imgs.imagen_5 !== ''){
+                        values.push([req.ot_servicorp + '_img5', 'public/img/' + req.ot_servicorp + '_img5.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                    }
+                    if(typeof(imgs.imagen_6) !== 'undefined' && imgs.imagen_6 !== ''){
+                        values.push([req.ot_servicorp + '_img6', 'public/img/' + req.ot_servicorp + '_img6.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                    }
+                    if(typeof(imgs.imagen_7) !== 'undefined' && imgs.imagen_7 !== ''){
+                        values.push([req.ot_servicorp + '_img7', 'public/img/' + req.ot_servicorp + '_img7.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                    }
+                    if(typeof(imgs.imagen_8) !== 'undefined' && imgs.imagen_8 !== ''){
+                        values.push([req.ot_servicorp + '_img8', 'public/img/' + req.ot_servicorp + '_img8.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                    }
+                    if(typeof(imgs.imagen_9) !== 'undefined' && imgs.imagen_9 !== ''){
+                        values.push([req.ot_servicorp + '_img9', 'public/img/' + req.ot_servicorp + '_img9.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                    }
+                    if(typeof(imgs.imagen_10) !== 'undefined' && imgs.imagen_10 !== ''){
+                        values.push([req.ot_servicorp + '_img10', 'public/img/' + req.ot_servicorp + '_img10.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     console.log('cantidad de imagenes a guardar en la bdd: ' + values.length)
                     console.log(values)

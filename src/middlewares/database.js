@@ -5,7 +5,7 @@ connection = mysql.createConnection({
     user: 'root',
     password: 'colseco',
     database: 'cfk_servicorp'
-});
+})
 
 connection.connect((err) => {
     if (err) {
@@ -14,4 +14,4 @@ connection.connect((err) => {
     }else{
         console.log("Connectado a la bdd correctamente!")
     }
-});
+})
