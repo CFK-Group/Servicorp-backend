@@ -147,6 +147,7 @@ formularioModel.createForm = (req, callback) => {
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 86, req.resp_84],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 87, req.resp_85],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 88, req.resp_86],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 199, req.cod_decodificador],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 1, req.ot_servicorp],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 2, req.folio_servicio]
                         ]
@@ -244,6 +245,7 @@ formularioModel.createForm = (req, callback) => {
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 86, req.resp_87],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 87, req.resp_88],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 88, req.resp_89],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 199, req.cod_decodificador],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 1, req.ot_servicorp],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 2, req.folio_servicio]
                         ]
@@ -349,6 +351,7 @@ formularioModel.createForm = (req, callback) => {
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 196, req.resp_81],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 197, req.resp_82],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 198, req.resp_83],
+                            [formulario_id, req.tipo_formulario_id, req.usuario_id, 199, req.cod_decodificador],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 1, req.ot_servicorp],
                             [formulario_id, req.tipo_formulario_id, req.usuario_id, 2, req.folio_servicio]
                         ]
@@ -532,6 +535,25 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
             if(err){
                 callback(err, null)
                 console.log(`Error en getFormularios: ${err.message}`)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getTotalForms = (req, callback) => {
+    if(connection){
+        connection.query(`SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=1 
+        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=2
+        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=3  
+        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=4 
+        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=5`, (err, row) => {
+            if(err){
+                callback(err, null)
+                console.log(`Error en getTotalForms: ${err.message}`)
             }
             if(!err){
                 console.log(row)

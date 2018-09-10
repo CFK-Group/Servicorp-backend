@@ -1048,4 +1048,47 @@ module.exports = (app) => {
             })
     })
 
+    // get preguntas por id de formulario
+    app.get('/users/forms/:token', (req, res) => {
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos los formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getTotalForms((err, res) => {
+                        return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos los formularios correspondientes
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Cantidad de formularios por usuario`,
+                    data: resolved
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
 }
