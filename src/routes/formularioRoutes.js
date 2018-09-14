@@ -9,6 +9,7 @@ module.exports = (app) => {
     // Formulario de mantencion hfc id=1
     app.post('/formulario/claro/mantencion/hfc', (req, res) => {
         const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
             resp_1: req.body.resp_1,
@@ -164,6 +165,7 @@ module.exports = (app) => {
     // Formulario de mantencion dth id=2
     app.post('/formulario/claro/mantencion/dth', (req, res) => {
         const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
             resp_1: req.body.resp_1,
@@ -318,6 +320,7 @@ module.exports = (app) => {
     // Formulario de instalacion hfc id=3
     app.post('/formulario/claro/instalacion/hfc', (req, res) => {
         const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
             resp_1: req.body.resp_1,
@@ -473,6 +476,7 @@ module.exports = (app) => {
     // Formulario de instalacion dth id=4
     app.post('/formulario/claro/instalacion/dth', (req, res) => {
         const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
             resp_1: req.body.resp_1,
@@ -598,10 +602,6 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        console.log('-----------------------------')
-                        console.log(err)
-                        console.log(res)
-                        console.log('-----------------------------')
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -628,6 +628,7 @@ module.exports = (app) => {
     // Formulario de desconexion id=5
     app.post('/formulario/claro/desconexion', (req, res) => {
         const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
             resp_1: req.body.resp_1,
@@ -704,6 +705,7 @@ module.exports = (app) => {
     // Formulario de instalacion dth id=6
     app.post('/formulario/entel/instalacion/dth', (req, res) => {
         const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
             folio_servicio: req.body.folio_servicio,
             resp_1: req.body.resp_1,
@@ -960,7 +962,7 @@ module.exports = (app) => {
             })
     })
 
-    // get respuestas por id de formulario
+    // Get respuestas por id de formulario
     app.get('/respuestas/:idFormulario/:token', (req, res) => {
         let formulario_id = req.params.idFormulario
         let auth = new Promise ( (resolve, reject) => {
@@ -1004,7 +1006,7 @@ module.exports = (app) => {
             })
     })
 
-    // get preguntas por id de formulario
+    // Get preguntas por id de formulario
     app.get('/preguntas/:idFormulario/:token', (req, res) => {
         let formulario_id = req.params.idFormulario
         let auth = new Promise ( (resolve, reject) => {
@@ -1048,7 +1050,7 @@ module.exports = (app) => {
             })
     })
 
-    // get preguntas por id de formulario
+    // Get preguntas por id de formulario
     app.get('/users/forms/:token', (req, res) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
