@@ -529,12 +529,11 @@ formularioModel.getResponsesByFormId = (req, callback) => {
 formularioModel.getQuestionsByFormId = (req, callback) => {
     if(connection){
         let formulario_id = req
-        console.log(formulario_id)
         connection.query(`select glosa from srv_pregunta 
         inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
             if(err){
-                callback(err, null)
                 console.log(`Error en getFormularios: ${err.message}`)
+                callback(err, null)
             }
             if(!err){
                 console.log(row)
@@ -546,14 +545,30 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
 
 formularioModel.getTotalForms = (req, callback) => {
     if(connection){
-        connection.query(`SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=1 
-        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=2
-        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=3  
-        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=4 
-        union SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=2 and tipo_formulario_id=5`, (err, row) => {
+        let usuario_id = req
+        connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=1 
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=2
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=3  
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=4 
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5;`, [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
             if(err){
-                callback(err, null)
                 console.log(`Error en getTotalForms: ${err.message}`)
+                callback(err, null)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getZips = (callback) => {
+    if(connection){
+        connection.query(`SELECT * FROM cfk_servicorp.srv_img_descarga WHERE estado='Activo'`, (err, row) => {
+            if(err){
+                console.log(`Error en getZips: ${err.message}`)
+                callback(err, null)
             }
             if(!err){
                 console.log(row)

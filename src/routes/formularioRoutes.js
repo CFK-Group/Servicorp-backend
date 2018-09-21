@@ -1050,8 +1050,58 @@ module.exports = (app) => {
             })
     })
 
-    // Get preguntas por id de formulario
-    app.get('/users/forms/:token', (req, res) => {
+    // Get cantidad de formularios por id de usuario
+    app.get('/user/:userId/forms/:token', (req, res) => {
+        let usuario_id = req.params.userId
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos la cantidad de formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getTotalForms(usuario_id, (err, res) => {
+                        return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos la cantidad de formularios
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Cantidad de formularios por usuario con id = ${usuario_id}`,
+                    data: {
+                        "instalacion-hfc": resolved[0].cantidad,
+                        "instalacion-dth": resolved[1].cantidad,
+                        "mantencion-hfc": resolved[2].cantidad,
+                        "mantencion-dth": resolved[3].cantidad,
+                        "desconexion": resolved[4].cantidad
+                    }
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // Get zips imagenes
+    app.get('/zips-imgs/:token', (req, res) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -1068,7 +1118,7 @@ module.exports = (app) => {
             // buscamos los formularios en la bdd
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
-                    formulario.getTotalForms((err, res) => {
+                    formulario.getZips((err, res) => {
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1078,7 +1128,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 res.status(200).json({
                     success: true,
-                    message: `Cantidad de formularios por usuario`,
+                    message: `Zips con imágenes`,
                     data: resolved
                 })
             })
