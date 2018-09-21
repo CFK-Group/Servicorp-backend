@@ -269,7 +269,7 @@ module.exports = (app) => {
             imagen_10: req.body.imagen_10,
             latitud: req.body.latitud,
             longitud: req.body.longitud,
-            tipo_formulario_id: 4,
+            tipo_formulario_id: 2,
             usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
