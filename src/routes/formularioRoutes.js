@@ -1119,7 +1119,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getZips((err, res) => {
-                        return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
+                        return (err) ? reject(new Error(`No se ha podido leer los zips de la base de datos`)) : resolve(res)
                     })
                 })
             })
