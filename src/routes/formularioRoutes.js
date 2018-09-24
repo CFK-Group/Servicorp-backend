@@ -1051,7 +1051,7 @@ module.exports = (app) => {
     })
 
     // Get cantidad de formularios por id de usuario
-    app.get('/user/:userId/forms/:token', (req, res) => {
+    app.get('/formularios/:userId/:token', (req, res) => {
         let usuario_id = req.params.userId
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1069,7 +1069,7 @@ module.exports = (app) => {
             // buscamos la cantidad de formularios en la bdd
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
-                    formulario.getTotalForms(usuario_id, (err, res) => {
+                    formulario.getTotalFormsByUserId(usuario_id, (err, res) => {
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1081,13 +1081,81 @@ module.exports = (app) => {
                     success: true,
                     message: `Cantidad de formularios por usuario con id = ${usuario_id}`,
                     data: {
-                        "instalacion-hfc": resolved[0].cantidad,
-                        "instalacion-dth": resolved[1].cantidad,
-                        "mantencion-hfc": resolved[2].cantidad,
-                        "mantencion-dth": resolved[3].cantidad,
-                        "desconexion": resolved[4].cantidad
+                        "instalacionHfc": resolved[0].cantidad,
+                        "instalacionDth": resolved[1].cantidad,
+                        "mantencionHfc": resolved[2].cantidad,
+                        "mantencionDth": resolved[3].cantidad,
+                        "desconexion": resolved[4].cantidad,
+                        "instalacionDthEntel": resolved[5].cantidad,
+                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
                     }
                 })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // Get cantidad de formularios desde x fecha
+    app.get('/formularios/:empresa/fechas/:inicio/:fin/:token', (req, res) => {
+        let data = {
+            inicio: req.params.inicio,
+            fin: req.params.fin,
+            empresa: req.params.empresa
+        }
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+        
+        auth
+            // buscamos la cantidad de formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getTotalFormsByDate(data, (err, res) => {
+                        return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos la cantidad de formularios
+            .then( (resolved, rejected) => {
+                if(req.params.empresa == 'claro'){
+                    res.status(200).json({
+                        success: true,
+                        message: `Cantidad de formularios de claro con fecha = ${data.inicio}`,
+                        data: {
+                            "instalacion-hfc": resolved[0].cantidad,
+                            "instalacion-dth": resolved[1].cantidad,
+                            "mantencion-hfc": resolved[2].cantidad,
+                            "mantencion-dth": resolved[3].cantidad,
+                            "desconexion": resolved[4].cantidad,
+                            "total": resolved[5].cantidad
+                        }
+                    })
+                }else if(req.params.empresa == 'entel'){
+                    res.status(200).json({
+                        success: true,
+                        message: `Cantidad de formularios de entel con fecha = ${data.inicio}`,
+                        data: {
+                            "instalacion-dth": resolved[0].cantidad,
+                            "total": resolved[1].cantidad
+                        }
+                    })
+                }
             })
 
             // manejamos algún posible error

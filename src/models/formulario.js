@@ -543,16 +543,39 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
     }
 }
 
-formularioModel.getTotalForms = (req, callback) => {
+formularioModel.getTotalFormsByUserId = (req, callback) => {
     if(connection){
         let usuario_id = req
         connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=1 
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=2
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=3  
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=4 
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5;`, [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=6;`, [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
             if(err){
-                console.log(`Error en getTotalForms: ${err.message}`)
+                console.log(`Error en getTotalFormsByUserId: ${err.message}`)
+                callback(err, null)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getTotalFormsByDate = (req, callback) => {
+    let data = req
+    if(connection){
+        connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=1 AND create_time BETWEEN "?" AND "?"
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=2 AND create_time BETWEEN "?" AND "?"
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=3 AND create_time BETWEEN "?" AND "?"
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=4 AND create_time BETWEEN "?" AND "?"
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=5 AND create_time BETWEEN "?" AND "?"
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN "?" AND "?"
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE create_time BETWEEN "?" AND "?";`, [data.inicio,data.fin], (err, row) => {
+            if(err){
+                console.log(`Error en getTotalFormsByDate: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
