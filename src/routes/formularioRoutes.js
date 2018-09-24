@@ -1143,7 +1143,7 @@ module.exports = (app) => {
                             "mantencion-hfc": resolved[2].cantidad,
                             "mantencion-dth": resolved[3].cantidad,
                             "desconexion": resolved[4].cantidad,
-                            "total": resolved[5].cantidad
+                            "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad 
                         }
                     })
                 }else if(req.params.empresa == 'entel'){
@@ -1151,8 +1151,8 @@ module.exports = (app) => {
                         success: true,
                         message: `Cantidad de formularios de entel con fecha = ${data.inicio}`,
                         data: {
-                            "instalacion-dth": resolved[0].cantidad,
-                            "total": resolved[1].cantidad
+                            "instalacion-dth": resolved[5].cantidad,
+                            "total": resolved[5].cantidad
                         }
                     })
                 }
