@@ -564,26 +564,55 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
     }
 }
 
+// formularioModel.getTotalFormsByDate = (req, callback) => {
+//     let data = req
+//     if(connection){
+//         prueba = connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=1 AND create_time BETWEEN ? AND ?
+//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=2 AND create_time BETWEEN ? AND ?
+//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=3 AND create_time BETWEEN ? AND ?
+//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=4 AND create_time BETWEEN ? AND ?
+//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=5 AND create_time BETWEEN ? AND ?
+//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN ? AND ?
+//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE create_time BETWEEN ? AND ?;`, [data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin,], (err, row) => {
+//             if(err){
+//                 console.log(`Error en getTotalFormsByDate: ${err.message}`)
+//                 callback(err, null)
+//             }
+//             if(!err){
+//                 console.log(prueba.sql)
+//                 callback(null, row)
+//             }
+//         })
+//     }
+// }
+
 formularioModel.getTotalFormsByDate = (req, callback) => {
-    let data = req
+    let fechas = []
+    let query = ''
+    if(req.empresa == 'claro'){
+        query = `SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id!=6 AND create_time BETWEEN '${req.fechas[0]}' AND '${req.fechas[1]}'`
+        for(let i=1; i<req.fechas.length-1; i++){
+            query = query.concat(` UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id!=6 AND create_time BETWEEN '${req.fechas[i]}' AND '${req.fechas[i+1]}'`)
+        }
+    }else if(req.empresa == 'entel'){
+        query = `SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN '${req.fechas[0]}' AND '${req.fechas[1]}'`
+        for(let i=1; i<req.fechas.length-1; i++){
+            query = query.concat(` UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN '${req.fechas[i]}' AND '${req.fechas[i+1]}'`)
+        }
+    }
     if(connection){
-        prueba = connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=1 AND create_time BETWEEN ? AND ?
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=2 AND create_time BETWEEN ? AND ?
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=3 AND create_time BETWEEN ? AND ?
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=4 AND create_time BETWEEN ? AND ?
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=5 AND create_time BETWEEN ? AND ?
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN ? AND ?
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE create_time BETWEEN ? AND ?;`, [data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin,], (err, row) => {
+        prueba = connection.query(query, fechas, (err, row) => {
             if(err){
                 console.log(`Error en getTotalFormsByDate: ${err.message}`)
+                console.log(prueba.sql)
                 callback(err, null)
             }
             if(!err){
-                console.log(prueba.sql)
                 callback(null, row)
             }
         })
     }
+
 }
 
 formularioModel.getZips = (callback) => {

@@ -1102,6 +1102,51 @@ module.exports = (app) => {
             })
     })
 
+    // 'Get' cantidad de formularios desde x fecha
+    app.post('/formularios/:empresa/:token', (req, res) => {
+        let fechas = req.body
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado id =', response.userId)
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+        
+        auth
+
+        // buscamos la cantidad de formularios en la bdd
+        .then( (resolved, rejected) => {
+            return new Promise( (resolve, reject) => {
+                formulario.getTotalFormsByDate({empresa: req.params.empresa, fechas: fechas}, (err, res) => {
+                    return (err) ? reject(new Error(err.message)) : resolve(res)
+                })
+            })
+        })
+
+        // entregamos la cantidad de formularios
+        .then( (resolved, rejected) => {
+            res.status(200).json({
+                success: true,
+                message: `Cantidad de formularios de claro`,
+                data: resolved
+            })
+        })
+
+        // manejamos algún posible error
+        .catch( (err) => {
+            console.log(err.message)
+            res.status(statusError).json({
+                success: false,
+                message: err.message
+            })
+        })
+    })
+
     // Get cantidad de formularios desde x fecha
     app.get('/formularios/:empresa/fechas/:inicio/:fin/:token', (req, res) => {
         let data = {
