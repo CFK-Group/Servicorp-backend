@@ -564,28 +564,6 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
     }
 }
 
-// formularioModel.getTotalFormsByDate = (req, callback) => {
-//     let data = req
-//     if(connection){
-//         prueba = connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=1 AND create_time BETWEEN ? AND ?
-//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=2 AND create_time BETWEEN ? AND ?
-//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=3 AND create_time BETWEEN ? AND ?
-//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=4 AND create_time BETWEEN ? AND ?
-//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=5 AND create_time BETWEEN ? AND ?
-//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN ? AND ?
-//         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE create_time BETWEEN ? AND ?;`, [data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin, data.inicio,data.fin,], (err, row) => {
-//             if(err){
-//                 console.log(`Error en getTotalFormsByDate: ${err.message}`)
-//                 callback(err, null)
-//             }
-//             if(!err){
-//                 console.log(prueba.sql)
-//                 callback(null, row)
-//             }
-//         })
-//     }
-// }
-
 formularioModel.getTotalFormsByDate = (req, callback) => {
     let fechas = []
     let query = ''
@@ -624,6 +602,40 @@ formularioModel.getZips = (callback) => {
             }
             if(!err){
                 console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getReporte = (req, callback) => {
+    let values = req
+    if(connection){
+        prueba = connection.query(`select glosa,respuesta,srv_pregunta.create_time,formulario_id,formulario_tipo_formulario_id,username from srv_respuesta
+        inner join srv_pregunta
+        on srv_respuesta.pregunta_id=srv_pregunta.id
+        inner join srv_usuario
+        on srv_respuesta.formulario_usuario_id=srv_usuario.id
+        where formulario_tipo_formulario_id=? and formulario_id='?'`, [values.tipo_formulario_id, values.formulario_id], (err, row) => {
+            if(err){
+                console.log(`Error en getReporte: ${err.message}`)
+                callback(err, null)
+            }
+            if(!err){
+                callback(null, row)
+            }
+        })
+    }
+}
+
+formularioModel.getFormulariosId = (req, callback) => {
+    if(connection){
+        connection.query('SELECT id FROM srv_formulario where tipo_formulario_id=?', [req], (err, row) => {
+            if(err){
+                console.log('Error en getFormulariosId', err.message)
+                callback(err, null)
+            }
+            if(!err){
                 callback(null, row)
             }
         })
