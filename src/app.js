@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(cors())
 
 // Headers
+app.options('*', cors())
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*, http://servicorp.xpass.cl")
     res.header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST, PUT")
