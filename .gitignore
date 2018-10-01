@@ -6,3 +6,9 @@ node_modules/
 src/public/img/
 
 
+
+\.DS_Store
+
+\.idea/vcs\.xml
+
+\.idea/workspace\.xml
