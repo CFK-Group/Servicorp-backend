@@ -12,3 +12,11 @@ src/public/img/
 \.idea/vcs\.xml
 
 \.idea/workspace\.xml
+
+src/middlewares/database\.js
+
+\.idea/Servicorp-backend\.iml
+
+\.idea/misc\.xml
+
+\.idea/modules\.xml
