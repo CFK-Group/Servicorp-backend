@@ -24,7 +24,8 @@ module.exports = function(imagen_base_64, name){
         let uniqueSHA1String = crypto.createHash('sha1').update(seed).digest('hex') */
         
         let imageBuffer = decodeBase64Image('data:image/jpeg;base64,' + imagen_base_64)
-        let userUploadedFeedMessagesLocation = __dirname + '../public/img/'
+        let userUploadedFeedMessagesLocation = '/var/www/Servicorp/Servicorp-backend/src/public/img/'
+        
         
         let uniqueRandomImageName = name;
         // This variable is actually an array which has 5 values,
