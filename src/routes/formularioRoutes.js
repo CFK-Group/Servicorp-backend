@@ -1257,12 +1257,13 @@ module.exports = (app) => {
     })
 
     // Get reporte segun tipo de formulario y rango de fecha
-    app.get('/reporte/:tipoFormularioId/:inicio/:fin/:token', (req, res) => {
+    app.get('/reporte/:tipoFormulario/:empresa/:inicio/:fin/:token', (req, res) => {
         let data = {
-            tipo_formulario_id: req.params.tipoFormularioId,
+            tipo_formulario: req.params.tipoFormulario,
             fechaInicio: req.params.inicio,
             fechaFin: req.params.fin,
-            formulario_id: ''
+            formulario_id: '',
+            empresa: req.params.empresa
         }
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1279,151 +1280,150 @@ module.exports = (app) => {
             // buscamos los formularios en la bdd
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
-                    formulario.getFormulariosId(data.tipo_formulario_id, (err, res) => {
+                    formulario.getFormulariosId(data, (err, res) => {
                         return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                     })
                 })
             })
             
             .then( (resolved, rejected) => { // resolved = array con los ids de los formularios a consultar
-                res.send(path.join(__dirname, '../public', '/reporte-claro-desconexion.xlsx'))
-                // tipoReporte = ''
-                // let formsId = []
-                // for(let j=0; j<resolved.length; j++){
-                //     formsId.push(JSON.parse(JSON.stringify(resolved[j].id)))
-                // }
-                // console.log('ids de formularios', formsId.length)
-                // for(let i=0; i<formsId.length; i++){ //formsId.length
-                //     auth
-                //     .then( (resolved, rejected) => {
-                //         return new Promise( (resolve, reject) => {
-                //             data.formulario_id = formsId[i]
-                //             formulario.getReporte(data, (err, res) => {
-                //                 return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
-                //             })
-                //         })
-                //     })
+                tipoReporte = ''
+                let formsId = []
+                for(let j=0; j<resolved.length; j++){
+                    formsId.push(JSON.parse(JSON.stringify(resolved[j].id)))
+                }
+                console.log('ids de formularios', formsId.length)
+                for(let i=0; i<formsId.length; i++){ //formsId.length
+                    auth
+                    .then( (resolved, rejected) => {
+                        return new Promise( (resolve, reject) => {
+                            data.formulario_id = formsId[i]
+                            formulario.getReporte(data, (err, res) => {
+                                return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
+                            })
+                        })
+                    })
                     
-                //     .then( (resolved, rejected) => {
-                //         aux = JSON.parse(JSON.stringify(resolved))
-                //         console.log('------------------------------')
-                //         console.log(aux[i].respuesta)
-                //         console.log('++++++++++++++++++++++++++++++')
-                //         console.log(data.tipo_formulario_id.toString() == '5')
-                //         if(data.tipo_formulario_id.toString() == '1'){
-                //             tipoReporte = 'claro-mantencion-hfc'
-                //         }else if(data.tipo_formulario_id.toString() == '2'){
-                //             tipoReporte = 'claro-mantencion-dth'
-                //         }else if(data.tipo_formulario_id.toString() == '3'){
-                //             tipoReporte = 'claro-instalacion-hfc'
-                //         }else if(data.tipo_formulario_id.toString() == '4'){
-                //             tipoReporte = 'claro-instalacion-dth'
-                //         }else if(data.tipo_formulario_id.toString() == '5'){
-                //             console.log('paso')
-                //             if(i=0){
-                //                 tipoReporte = 'claro-desconexion'
-                //                 hoja_1
-                //                 .cell(1, 1)
-                //                 .string('N°')
-                //                 hoja_1
-                //                 .cell(1, 2)
-                //                 .string('Usuario')
-                //                 hoja_1
-                //                 .cell(1, 3)
-                //                 .string('Técnico corta acometida')
-                //                 hoja_1
-                //                 .cell(1, 4)
-                //                 .string('Técnico retira acometida')
-                //                 hoja_1
-                //                 .cell(1, 5)
-                //                 .string('Desconexión OK')
-                //                 hoja_1
-                //                 .cell(1, 6)
-                //                 .string('Cliente activo')
-                //                 hoja_1
-                //                 .cell(1, 7)
-                //                 .string('Certificador desconecta')
-                //                 hoja_1
-                //                 .cell(1, 8)
-                //                 .string('Se corta ilegal')
-                //                 hoja_1
-                //                 .cell(1, 9)
-                //                 .string('No permiten realizar corte')
-                //                 hoja_1
-                //                 .cell(1, 10)
-                //                 .string('Observaciones')
-                //                 hoja_1
-                //                 .cell(1, 11)
-                //                 .string('OT SERVICORP')
-                //                 hoja_1
-                //                 .cell(1, 12)
-                //                 .string('Fecha')
-                //                 hoja_1
-                //                 .cell(1, 13)
-                //                 .string('Hora')
-                //                 hoja_1
-                //                 .cell(1, 14)
-                //                 .string('Longitud')
-                //                 hoja_1
-                //                 .cell(1, 15)
-                //                 .string('Latitud')
-                //             }
-                //             hoja_1
-                //             .cell(i+2, 1)
-                //             .string(aux[0].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 2)
-                //             .string(aux[0].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 3)
-                //             .string(aux[0].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 4)
-                //             .string(aux[1].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 5)
-                //             .string(aux[2].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 6)
-                //             .string(aux[3].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 7)
-                //             .string(aux[4].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 8)
-                //             .string(aux[5].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 9)
-                //             .string(aux[6].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 10)
-                //             .string('aux[7].respuesta')
-                //             hoja_1
-                //             .cell(i+2, 11)
-                //             .string(aux[8].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 12)
-                //             .string(aux[9].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 13)
-                //             .string(aux[10].respuesta)
-                //             hoja_1
-                //             .cell(i+2, 14)
-                //             .string('aux[11].respuesta')
-                //             hoja_1
-                //             .cell(i+2, 15)
-                //             .string('aux[12].respuesta')  
-                //         }else if(data.tipo_formulario_id.toString() == '6'){
-                //             tipoReporte = 'entel-instalacion-hfc'
-                //         }
-                //     })
+                    .then( (resolved, rejected) => {
+                        aux = JSON.parse(JSON.stringify(resolved))
+                        console.log('------------------------------')
+                        console.log(aux[i].respuesta)
+                        console.log('++++++++++++++++++++++++++++++')
+                        console.log(data.tipo_formulario_id.toString() == '5')
+                        if(data.tipo_formulario_id.toString() == '1'){
+                            tipoReporte = 'claro-mantencion-hfc'
+                        }else if(data.tipo_formulario_id.toString() == '2'){
+                            tipoReporte = 'claro-mantencion-dth'
+                        }else if(data.tipo_formulario_id.toString() == '3'){
+                            tipoReporte = 'claro-instalacion-hfc'
+                        }else if(data.tipo_formulario_id.toString() == '4'){
+                            tipoReporte = 'claro-instalacion-dth'
+                        }else if(data.tipo_formulario_id.toString() == '5'){
+                            console.log('paso')
+                            if(i=0){
+                                tipoReporte = 'claro-desconexion'
+                                hoja_1
+                                .cell(1, 1)
+                                .string('N°')
+                                hoja_1
+                                .cell(1, 2)
+                                .string('Usuario')
+                                hoja_1
+                                .cell(1, 3)
+                                .string('Técnico corta acometida')
+                                hoja_1
+                                .cell(1, 4)
+                                .string('Técnico retira acometida')
+                                hoja_1
+                                .cell(1, 5)
+                                .string('Desconexión OK')
+                                hoja_1
+                                .cell(1, 6)
+                                .string('Cliente activo')
+                                hoja_1
+                                .cell(1, 7)
+                                .string('Certificador desconecta')
+                                hoja_1
+                                .cell(1, 8)
+                                .string('Se corta ilegal')
+                                hoja_1
+                                .cell(1, 9)
+                                .string('No permiten realizar corte')
+                                hoja_1
+                                .cell(1, 10)
+                                .string('Observaciones')
+                                hoja_1
+                                .cell(1, 11)
+                                .string('OT SERVICORP')
+                                hoja_1
+                                .cell(1, 12)
+                                .string('Fecha')
+                                hoja_1
+                                .cell(1, 13)
+                                .string('Hora')
+                                hoja_1
+                                .cell(1, 14)
+                                .string('Longitud')
+                                hoja_1
+                                .cell(1, 15)
+                                .string('Latitud')
+                            }
+                            hoja_1
+                            .cell(i+2, 1)
+                            .string(aux[0].respuesta)
+                            hoja_1
+                            .cell(i+2, 2)
+                            .string(aux[0].respuesta)
+                            hoja_1
+                            .cell(i+2, 3)
+                            .string(aux[0].respuesta)
+                            hoja_1
+                            .cell(i+2, 4)
+                            .string(aux[1].respuesta)
+                            hoja_1
+                            .cell(i+2, 5)
+                            .string(aux[2].respuesta)
+                            hoja_1
+                            .cell(i+2, 6)
+                            .string(aux[3].respuesta)
+                            hoja_1
+                            .cell(i+2, 7)
+                            .string(aux[4].respuesta)
+                            hoja_1
+                            .cell(i+2, 8)
+                            .string(aux[5].respuesta)
+                            hoja_1
+                            .cell(i+2, 9)
+                            .string(aux[6].respuesta)
+                            hoja_1
+                            .cell(i+2, 10)
+                            .string('aux[7].respuesta')
+                            hoja_1
+                            .cell(i+2, 11)
+                            .string(aux[8].respuesta)
+                            hoja_1
+                            .cell(i+2, 12)
+                            .string(aux[9].respuesta)
+                            hoja_1
+                            .cell(i+2, 13)
+                            .string(aux[10].respuesta)
+                            hoja_1
+                            .cell(i+2, 14)
+                            .string('aux[11].respuesta')
+                            hoja_1
+                            .cell(i+2, 15)
+                            .string('aux[12].respuesta')  
+                        }else if(data.tipo_formulario_id.toString() == '6'){
+                            tipoReporte = 'entel-instalacion-hfc'
+                        }
+                    })
 
-                //     // manejamos algún posible error
-                //     .catch( (err) => {
-                //         console.log(err.message)
-                //     })
-                // }
-                // xl.write(`reporte-${tipoReporte}.xlsx`, res)
+                    // manejamos algún posible error
+                    .catch( (err) => {
+                        console.log(err.message)
+                    })
+                }
+                xl.write(`reporte-${tipoReporte}.xlsx`, res)
             })
 
             // manejamos algún posible error

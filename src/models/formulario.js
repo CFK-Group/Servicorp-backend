@@ -629,8 +629,17 @@ formularioModel.getReporte = (req, callback) => {
 }
 
 formularioModel.getFormulariosId = (req, callback) => {
+    if(req.tipo_formulario == 'instalacion' && req.empresa == 'claro'){
+        tipo_formulario_id = [1,2]
+    }else if(req.tipo_formulario == 'mantencion'){
+        tipo_formulario_id = [3,4]
+    }else if(req.tipo_formulario == 'desconexion'){
+        tipo_formulario_id = [5,5]
+    }else if(req.tipo_formulario == 'instalacion' && req.empresa == 'entel'){
+        tipo_formulario_id = [6,6]
+    }
     if(connection){
-        connection.query('SELECT id FROM srv_formulario where tipo_formulario_id=?', [req], (err, row) => {
+        prueba = connection.query('SELECT id FROM srv_formulario WHERE tipo_formulario_id=? AND tipo_formulario_id=?', tipo_formulario_id, (err, row) => {
             if(err){
                 console.log('Error en getFormulariosId', err.message)
                 callback(err, null)
@@ -638,6 +647,7 @@ formularioModel.getFormulariosId = (req, callback) => {
             if(!err){
                 callback(null, row)
             }
+            console.log(prueba.sql)
         })
     }
 }
