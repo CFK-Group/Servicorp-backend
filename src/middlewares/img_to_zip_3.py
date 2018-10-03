@@ -63,7 +63,7 @@ def zipdir(path, ziph, start_date, end_date, empresa, mysql_connection, path_zip
     close(mysql_connection)
 
 if __name__ == '__main__':
-    path = '/var/www/Servicorp-backend/src/public/img'
+    path = '/var/www/Servicorp/Servicorp-backend/src/public/img'
 
     # Hacer 2 veces, 1 por cada empresa
     empresas = ["entel", "claro"]
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     tomorrow_mid = today_mid + 86400
 
     for empresa in empresas:
-        filename = '/var/www/Servicorp-backend/src/public/zips/' + empresa + '_' + str(int(today_mid)) + '.zip'
+        filename = '/var/www/Servicorp/Servicorp-backend/src/public/zips/' + empresa + '_' + str(int(today_mid)) + '.zip'
         zipf = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
         zipdir(path, zipf, today_mid, tomorrow_mid, empresa, connect(), path_zip='/var/www/Servicorp-backend/src/public/zips/', zipfile=empresa + '_' + str(int(today_mid)) + '.zip')
         zipf.close()
