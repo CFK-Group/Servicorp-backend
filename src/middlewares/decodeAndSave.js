@@ -25,7 +25,7 @@ module.exports = function(imagen_base_64, name){
         
         let imageBuffer = decodeBase64Image('data:image/jpeg;base64,' + imagen_base_64)
         let userUploadedFeedMessagesLocation = '/var/www/Servicorp/Servicorp-backend/src/public/img/'
-        
+
         let uniqueRandomImageName = name;
         // This variable is actually an array which has 5 values,
         // The [1] value is the real image extension
