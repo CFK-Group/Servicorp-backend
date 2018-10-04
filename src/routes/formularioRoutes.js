@@ -1330,6 +1330,7 @@ module.exports = (app) => {
                             console.log('mantencion')
                         } else if(data.tipo_formulario.toString() === 'desconexion'){
                             if (i===0){
+                                tipoReporte = 'Desconexion'
                                 console.log('entró')
                                 hoja_1.cell(1,1).string('N°')
                                 hoja_1.cell(1,2).string('Usuario')
@@ -1354,18 +1355,24 @@ module.exports = (app) => {
                                 hoja_1.cell(1,21).string('NO PERMITEN REALIZAR CORTE')
                                 hoja_1.cell(1,22).string('OBSERVACIONES')
                                 hoja_1.cell(1,23).string('Coordenadas')
-                                console.log(aux);
+
                             }
 
-
-                            hoja_1.cell(i+2,1).number((aux[0].formulario_id))
+                            //hoja_1.cell(i+2,1).number((aux[0].formulario_id))
                             hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
                             hoja_1.cell(i+2,3).number(parseInt(aux[9].respuesta) || 0)
                             hoja_1.cell(i+2,4).number(parseInt(aux[8].respuesta) || 0)
-                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').format('DD-MM-YYYY'))
-                            hoja_1.cell(i+2,6).string(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').format('HH:mm').toString())
+                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ')).style({numberFormat: 'dd-mm-yyyy'})
+                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ')).style({numberFormat: 'HH:MM'})
                             hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
+                            hoja_1.cell(i+2,16).string((aux[1].respuesta || '').toString())
+                            hoja_1.cell(i+2,17).string((aux[2].respuesta || '').toString())
+                            hoja_1.cell(i+2,18).string((aux[3].respuesta || '').toString())
+                            hoja_1.cell(i+2,19).string((aux[4].respuesta || '').toString())
+                            hoja_1.cell(i+2,20).string((aux[5].respuesta || '').toString())
+                            hoja_1.cell(i+2,21).string((aux[6].respuesta || '').toString())
                             hoja_1.cell(i+2,22).string((aux[7].respuesta || '').toString())
+                            hoja_1.cell(i+2,23).string((aux[7].coordenadas || '').toString())
                         }
 
                         if (i === formsId.length-1){
