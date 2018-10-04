@@ -2,7 +2,7 @@ const formulario = require('../models/formulario')
 const global = require('../middlewares/auth')
 const excel = require('excel4node')
 const path = require('path')
-
+const moment = require('moment')
 // Creamos un libro de excel
 let xl = new excel.Workbook()
 
@@ -1329,100 +1329,6 @@ module.exports = (app) => {
                         } else if (data.tipo_formulario.toString() === 'mantencion') {
                             console.log('mantencion')
                         } else if(data.tipo_formulario.toString() === 'desconexion'){
-                            /*if(i=0){
-                                tipoReporte = 'claro-desconexion'
-                                hoja_1
-                                .cell(1, 1)
-                                .string('N°')
-                                hoja_1
-                                .cell(1, 2)
-                                .string('Usuario')
-                                hoja_1
-                                .cell(1, 3)
-                                .string('Técnico corta acometida')
-                                hoja_1
-                                .cell(1, 4)
-                                .string('Técnico retira acometida')
-                                hoja_1
-                                .cell(1, 5)
-                                .string('Desconexión OK')
-                                hoja_1
-                                .cell(1, 6)
-                                .string('Cliente activo')
-                                hoja_1
-                                .cell(1, 7)
-                                .string('Certificador desconecta')
-                                hoja_1
-                                .cell(1, 8)
-                                .string('Se corta ilegal')
-                                hoja_1
-                                .cell(1, 9)
-                                .string('No permiten realizar corte')
-                                hoja_1
-                                .cell(1, 10)
-                                .string('Observaciones')
-                                hoja_1
-                                .cell(1, 11)
-                                .string('OT SERVICORP')
-                                hoja_1
-                                .cell(1, 12)
-                                .string('Fecha')
-                                hoja_1
-                                .cell(1, 13)
-                                .string('Hora')
-                                hoja_1
-                                .cell(1, 14)
-                                .string('Longitud')
-                                hoja_1
-                                .cell(1, 15)
-                                .string('Latitud')
-                            }
-                            console.log(aux[0])
-                            hoja_1
-                            .cell(i+2, 1)
-                            .string(aux[0].respuesta)
-                            hoja_1
-                            .cell(i+2, 2)
-                            .string(aux[0].respuesta)
-                            hoja_1
-                            .cell(i+2, 3)
-                            .string(aux[0].respuesta)
-                            hoja_1
-                            .cell(i+2, 4)
-                            .string(aux[1].respuesta)
-                            hoja_1
-                            .cell(i+2, 5)
-                            .string(aux[2].respuesta)
-                            hoja_1
-                            .cell(i+2, 6)
-                            .string(aux[3].respuesta)
-                            hoja_1
-                            .cell(i+2, 7)
-                            .string(aux[4].respuesta)
-                            hoja_1
-                            .cell(i+2, 8)
-                            .string(aux[5].respuesta)
-                            hoja_1
-                            .cell(i+2, 9)
-                            .string(aux[6].respuesta)
-                            hoja_1
-                            .cell(i+2, 10)
-                            .string('aux[7].respuesta')
-                            hoja_1
-                            .cell(i+2, 11)
-                            .string(aux[8].respuesta)
-                            hoja_1
-                            .cell(i+2, 12)
-                            .string(aux[9].respuesta)
-                            hoja_1
-                            .cell(i+2, 13)
-                            .string(aux[10].respuesta)
-                            hoja_1
-                            .cell(i+2, 14)
-                            .string('aux[11].respuesta')
-                            hoja_1
-                            .cell(i+2, 15)
-                            .string('aux[12].respuesta')  */
                             if (i===0){
                                 console.log('entró')
                                 hoja_1.cell(1,1).string('N°')
@@ -1448,14 +1354,18 @@ module.exports = (app) => {
                                 hoja_1.cell(1,21).string('NO PERMITEN REALIZAR CORTE')
                                 hoja_1.cell(1,22).string('OBSERVACIONES')
                                 hoja_1.cell(1,23).string('Coordenadas')
+                                console.log(aux);
                             }
-                            console.log(aux)
-                            hoja_1.cell(i+2,2).string(aux[0].username.toString() || '')
-                            hoja_1.cell(i+2,3).number(Number(aux[9].respuesta) || '')
-                            hoja_1.cell(i+2,4).number(Number(aux[8].respuesta) || '')
-                            hoja_1.cell(i+2,5).date(aux[0].create_time || '')
-                            hoja_1.cell(i+2,15).string(aux[0].respuesta.toString() || '')
-                            hoja_1.cell(i+2,22).string(aux[7].respuesta.toString() || '')
+
+
+                            hoja_1.cell(i+2,1).number((aux[0].formulario_id))
+                            hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
+                            hoja_1.cell(i+2,3).number(parseInt(aux[9].respuesta) || 0)
+                            hoja_1.cell(i+2,4).number(parseInt(aux[8].respuesta) || 0)
+                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').format('DD-MM-YYYY'))
+                            hoja_1.cell(i+2,6).string(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').format('HH:mm').toString())
+                            hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
+                            hoja_1.cell(i+2,22).string((aux[7].respuesta || '').toString())
                         }
 
                         if (i === formsId.length-1){

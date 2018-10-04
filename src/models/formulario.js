@@ -611,7 +611,7 @@ formularioModel.getZips = (callback) => {
 formularioModel.getReporte = (req, callback) => {
     let values = req
     if(connection){
-        prueba = connection.query(`select glosa,respuesta,srv_pregunta.create_time,formulario_id,formulario_tipo_formulario_id,username from srv_respuesta
+        prueba = connection.query(`select glosa,respuesta,srv_respuesta.create_time,formulario_id,formulario_tipo_formulario_id,username from srv_respuesta
         inner join srv_pregunta
         on srv_respuesta.pregunta_id=srv_pregunta.id
         inner join srv_usuario
