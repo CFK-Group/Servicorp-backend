@@ -7,7 +7,7 @@ const path = require('path')
 let xl = new excel.Workbook()
 
 // agregamos hojas de trabajo al libro excel
-let hoja_1 = xl.addWorksheet('hoja 1')
+let hoja_1 = xl.addWorksheet('Hoja 1')
 
 module.exports = (app) => {
     let statusError = 500
@@ -1258,6 +1258,15 @@ module.exports = (app) => {
 
     // Get reporte segun tipo de formulario y rango de fecha
     app.get('/reporte/:tipoFormulario/:empresa/:inicio/:fin/:token', (req, res) => {
+
+        // Creamos un libro de excel
+        let xl = new excel.Workbook()
+
+        // agregamos hojas de trabajo al libro excel
+        let hoja_1 = xl.addWorksheet('Hoja 100')
+
+
+        console.log("Iniciando solicitud de reporte")
         let data = {
             tipo_formulario: req.params.tipoFormulario,
             fechaInicio: req.params.inicio,
@@ -1265,7 +1274,9 @@ module.exports = (app) => {
             formulario_id: '',
             empresa: req.params.empresa
         }
+
         let auth = new Promise ( (resolve, reject) => {
+            console.log('validando token')
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
                     return resolve(true)
@@ -1280,6 +1291,7 @@ module.exports = (app) => {
             // buscamos los formularios en la bdd
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
+                    console.log('iniciando busqueda de formularios')
                     formulario.getFormulariosId(data, (err, res) => {
                         return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                     })
@@ -1306,21 +1318,18 @@ module.exports = (app) => {
                     
                     .then( (resolved, rejected) => {
                         aux = JSON.parse(JSON.stringify(resolved))
-                        console.log('------------------------------')
-                        console.log(aux[i].respuesta)
-                        console.log('++++++++++++++++++++++++++++++')
-                        console.log(data.tipo_formulario_id.toString() == '5')
-                        if(data.tipo_formulario_id.toString() == '1'){
-                            tipoReporte = 'claro-mantencion-hfc'
-                        }else if(data.tipo_formulario_id.toString() == '2'){
-                            tipoReporte = 'claro-mantencion-dth'
-                        }else if(data.tipo_formulario_id.toString() == '3'){
-                            tipoReporte = 'claro-instalacion-hfc'
-                        }else if(data.tipo_formulario_id.toString() == '4'){
-                            tipoReporte = 'claro-instalacion-dth'
-                        }else if(data.tipo_formulario_id.toString() == '5'){
-                            console.log('paso')
-                            if(i=0){
+                        // console.log('------------------------------')
+                        // console.log(aux[i+1].formulario_id)
+                        // console.log(aux[i+1].respuesta)
+                        // console.log('++++++++++++++++++++++++++++++')
+                        // console.log(data)
+                        // console.log(data.tipo_formulario === 'instalacion')
+                        if (data.tipo_formulario.toString() === 'instalacion') {
+                            console.log('instalacion')
+                        } else if (data.tipo_formulario.toString() === 'mantencion') {
+                            console.log('mantencion')
+                        } else if(data.tipo_formulario.toString() === 'desconexion'){
+                            /*if(i=0){
                                 tipoReporte = 'claro-desconexion'
                                 hoja_1
                                 .cell(1, 1)
@@ -1368,6 +1377,7 @@ module.exports = (app) => {
                                 .cell(1, 15)
                                 .string('Latitud')
                             }
+                            console.log(aux[0])
                             hoja_1
                             .cell(i+2, 1)
                             .string(aux[0].respuesta)
@@ -1412,9 +1422,45 @@ module.exports = (app) => {
                             .string('aux[11].respuesta')
                             hoja_1
                             .cell(i+2, 15)
-                            .string('aux[12].respuesta')  
-                        }else if(data.tipo_formulario_id.toString() == '6'){
-                            tipoReporte = 'entel-instalacion-hfc'
+                            .string('aux[12].respuesta')  */
+                            if (i===0){
+                                console.log('entró')
+                                hoja_1.cell(1,1).string('N°')
+                                hoja_1.cell(1,2).string('Usuario')
+                                hoja_1.cell(1,3).string('Folio')
+                                hoja_1.cell(1,4).string('Numero de OT Servicio')
+                                hoja_1.cell(1,5).string('Fecha')
+                                hoja_1.cell(1,6).string('Hora')
+                                hoja_1.cell(1,7).string('Nombre de Cliente')
+                                hoja_1.cell(1,8).string('Rut')
+                                hoja_1.cell(1,9).string('Direccion')
+                                hoja_1.cell(1,10).string('Comuna')
+                                hoja_1.cell(1,11).string('Empresa Instaladora')
+                                hoja_1.cell(1,12).string('Técnico')
+                                hoja_1.cell(1,13).string('Fecha de Servicio')
+                                hoja_1.cell(1,14).string('Tipo de Venta')
+                                hoja_1.cell(1,15).string('TECNICO CORTA ACOMETIDA')
+                                hoja_1.cell(1,16).string('TECNICO RETIRA ACOMETIDA')
+                                hoja_1.cell(1,17).string('DESCONEXION OK')
+                                hoja_1.cell(1,18).string('CLIENTE ACTIVO')
+                                hoja_1.cell(1,19).string('CERTIFICADOR DESCONECTA')
+                                hoja_1.cell(1,20).string('SE CORTA ILEGAL')
+                                hoja_1.cell(1,21).string('NO PERMITEN REALIZAR CORTE')
+                                hoja_1.cell(1,22).string('OBSERVACIONES')
+                                hoja_1.cell(1,23).string('Coordenadas')
+                            }
+                            console.log(aux)
+                            hoja_1.cell(i+2,2).string(aux[0].username.toString() || '')
+                            hoja_1.cell(i+2,3).number(Number(aux[9].respuesta) || '')
+                            hoja_1.cell(i+2,4).number(Number(aux[8].respuesta) || '')
+                            hoja_1.cell(i+2,5).date(aux[0].create_time || '')
+                            hoja_1.cell(i+2,15).string(aux[0].respuesta.toString() || '')
+                            hoja_1.cell(i+2,22).string(aux[7].respuesta.toString() || '')
+                        }
+
+                        if (i === formsId.length-1){
+                            console.log('terminando de escribir en el excel')
+                            xl.write(`reporte-${tipoReporte}.xlsx`)
                         }
                     })
 
@@ -1422,8 +1468,10 @@ module.exports = (app) => {
                     .catch( (err) => {
                         console.log(err.message)
                     })
+
+
                 }
-                xl.write(`reporte-${tipoReporte}.xlsx`, res)
+
             })
 
             // manejamos algún posible error

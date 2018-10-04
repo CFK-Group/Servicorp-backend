@@ -616,7 +616,7 @@ formularioModel.getReporte = (req, callback) => {
         on srv_respuesta.pregunta_id=srv_pregunta.id
         inner join srv_usuario
         on srv_respuesta.formulario_usuario_id=srv_usuario.id
-        where formulario_tipo_formulario_id=? and formulario_id='?'`, [values.tipo_formulario_id, values.formulario_id], (err, row) => {
+        where formulario_id='?'`, [values.formulario_id], (err, row) => {
             if(err){
                 console.log(`Error en getReporte: ${err.message}`)
                 callback(err, null)
@@ -629,25 +629,16 @@ formularioModel.getReporte = (req, callback) => {
 }
 
 formularioModel.getFormulariosId = (req, callback) => {
-    if(req.tipo_formulario == 'instalacion' && req.empresa == 'claro'){
-        tipo_formulario_id = [1,2]
-    }else if(req.tipo_formulario == 'mantencion'){
-        tipo_formulario_id = [3,4]
-    }else if(req.tipo_formulario == 'desconexion'){
-        tipo_formulario_id = [5,5]
-    }else if(req.tipo_formulario == 'instalacion' && req.empresa == 'entel'){
-        tipo_formulario_id = [6,6]
-    }
     if(connection){
-        prueba = connection.query('SELECT id FROM srv_formulario WHERE tipo_formulario_id=? AND tipo_formulario_id=?', tipo_formulario_id, (err, row) => {
+        prueba = connection.query('SELECT id FROM srv_formulario WHERE tipo_formulario_id in (SELECT id FROM cfk_servicorp.srv_tipo_formulario where empresa like lower(?) and nombre like lower(?));', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%'], (err, row) => {
             if(err){
-                console.log('Error en getFormulariosId', err.message)
+                //console.log('Error en getFormulariosId', err.message)
                 callback(err, null)
             }
             if(!err){
                 callback(null, row)
             }
-            console.log(prueba.sql)
+            //console.log(prueba.sql)
         })
     }
 }
