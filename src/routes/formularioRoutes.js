@@ -3,12 +3,7 @@ const global = require('../middlewares/auth')
 const excel = require('excel4node')
 const path = require('path')
 const moment = require('moment')
-// Creamos un libro de excel
-let xl = new excel.Workbook()
-
-// agregamos hojas de trabajo al libro excel
-let hoja_1 = xl.addWorksheet('Hoja 1')
-
+const timezone = 3
 module.exports = (app) => {
     let statusError = 500
 
@@ -1274,7 +1269,7 @@ module.exports = (app) => {
             formulario_id: '',
             empresa: req.params.empresa
         }
-
+        console.log(data)
         let auth = new Promise ( (resolve, reject) => {
             console.log('validando token')
             global.validateToken(req.params.token, (response, err) => {
@@ -1324,8 +1319,10 @@ module.exports = (app) => {
                         // console.log('++++++++++++++++++++++++++++++')
                         // console.log(data)
                         // console.log(data.tipo_formulario === 'instalacion')
-                        if (data.tipo_formulario.toString() === 'instalacion') {
-                            console.log('instalacion')
+                        if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Claro') {
+                            console.log('instalacion claro')
+                        } else if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Entel') {
+                                console.log('instalacion entel')
                         } else if (data.tipo_formulario.toString() === 'mantencion') {
                             console.log('mantencion')
                         } else if(data.tipo_formulario.toString() === 'desconexion'){
@@ -1355,15 +1352,14 @@ module.exports = (app) => {
                                 hoja_1.cell(1,21).string('NO PERMITEN REALIZAR CORTE')
                                 hoja_1.cell(1,22).string('OBSERVACIONES')
                                 hoja_1.cell(1,23).string('Coordenadas')
-
                             }
 
                             //hoja_1.cell(i+2,1).number((aux[0].formulario_id))
                             hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
                             hoja_1.cell(i+2,3).number(parseInt(aux[9].respuesta) || 0)
                             hoja_1.cell(i+2,4).number(parseInt(aux[8].respuesta) || 0)
-                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ')).style({numberFormat: 'dd-mm-yyyy'})
-                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ')).style({numberFormat: 'HH:MM'})
+                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
+                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
                             hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
                             hoja_1.cell(i+2,16).string((aux[1].respuesta || '').toString())
                             hoja_1.cell(i+2,17).string((aux[2].respuesta || '').toString())
