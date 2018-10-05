@@ -1377,7 +1377,7 @@ module.exports = (app) => {
 
                         if (i === formsId.length-1){
                             console.log('terminando de escribir en el excel')
-                            xl.write(`reporte-${tipoReporte}.xlsx`)
+                            xl.write(`reporte-${tipoReporte}.xlsx`, res)
                         }
                     })
 
@@ -1402,67 +1402,3 @@ module.exports = (app) => {
     })
 
 }
-
-/* 
-METE EL AUTH EN UN FOR PARA CALCULAR UNA POR UNA LAS FOLAS DEL EXCEL Y GUARDARLAS; Y NO ENVÍES LA ESPUESTA HASTA SALIR DE ESE FOR
-
-    algoritmo para crear filas del excel
-    if(data.tipo_formulario_id.toString() == '1'){
-        tipoReporte = 'claro-mantencion-hfc'
-    }else if(data.tipo_formulario_id.toString() == '2'){
-        tipoReporte = 'claro-mantencion-dth'
-    }else if(data.tipo_formulario_id.toString() == '3'){
-        tipoReporte = 'claro-instalacion-hfc'
-    }else if(data.tipo_formulario_id.toString() == '4'){
-        tipoReporte = 'claro-instalacion-dth'
-    }else if(data.tipo_formulario_id.toString() == '5'){
-        tipoReporte = 'claro-desconexion'
-        hoja_1
-        .cell(1, 1)
-        .string('N°')
-        hoja_1
-        .cell(1, 2)
-        .string('Usuario')
-        hoja_1
-        .cell(1, 3)
-        .string(res[0].glosa)
-        hoja_1
-        .cell(1, 4)
-        .string(res[1].glosa)
-        hoja_1
-        .cell(1, 5)
-        .string(res[2].glosa)
-        hoja_1
-        .cell(1, 6)
-        .string(res[3].glosa)
-        hoja_1
-        .cell(1, 7)
-        .string(res[4].glosa)
-        hoja_1
-        .cell(1, 8)
-        .string(res[5].glosa)
-        hoja_1
-        .cell(1, 9)
-        .string(res[6].glosa)
-        hoja_1
-        .cell(1, 10)
-        .string(res[7].glosa)
-        hoja_1
-        .cell(1, 11)
-        .string(res[8].glosa)
-        hoja_1
-        .cell(1, 12)
-        .string(res[9].glosa)
-        hoja_1
-        .cell(1, 13)
-        .string(res[10].glosa)
-        hoja_1
-        .cell(1, 14)
-        .string(res[11].glosa)
-        hoja_1
-        .cell(1, 15)
-        .string(res[12].glosa)  
-    }else if(data.tipo_formulario_id.toString() == '6'){
-        tipoReporte = 'entel-instalacion-hfc'
-    }
-*/
