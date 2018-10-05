@@ -9,7 +9,7 @@ module.exports = (app) => {
 
     //***************************Formularios Claro***************************
 
-    // Formulario de mantencion hfc id=1
+    // Formulario de mantencion hfc id=3
     app.post('/formulario/claro/mantencion/hfc', (req, res) => {
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
@@ -116,7 +116,7 @@ module.exports = (app) => {
             imagen_10: req.body.imagen_10,
             latitud: req.body.latitud,
             longitud: req.body.longitud,
-            tipo_formulario_id: 1,
+            tipo_formulario_id: 3,
             //usuario_id: parseInt(req.body.usuario_id)
             usuario_id: null
         }
@@ -165,7 +165,7 @@ module.exports = (app) => {
             })
     })
 
-    // Formulario de mantencion dth id=2
+    // Formulario de mantencion dth id=4
     app.post('/formulario/claro/mantencion/dth', (req, res) => {
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
@@ -272,7 +272,7 @@ module.exports = (app) => {
             imagen_10: req.body.imagen_10,
             latitud: req.body.latitud,
             longitud: req.body.longitud,
-            tipo_formulario_id: 2,
+            tipo_formulario_id: 4,
             usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
@@ -320,7 +320,7 @@ module.exports = (app) => {
             })
     })
 
-    // Formulario de instalacion hfc id=3
+    // Formulario de instalacion hfc id=1
     app.post('/formulario/claro/instalacion/hfc', (req, res) => {
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
@@ -428,7 +428,7 @@ module.exports = (app) => {
             imagen_10: req.body.imagen_10,
             latitud: req.body.latitud,
             longitud: req.body.longitud,
-            tipo_formulario_id: 3,
+            tipo_formulario_id: 1,
             usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
@@ -476,7 +476,7 @@ module.exports = (app) => {
             })
     })
 
-    // Formulario de instalacion dth id=4
+    // Formulario de instalacion dth id=2
     app.post('/formulario/claro/instalacion/dth', (req, res) => {
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
@@ -584,7 +584,7 @@ module.exports = (app) => {
             imagen_10: req.body.imagen_10,
             latitud: req.body.latitud,
             longitud: req.body.longitud,
-            tipo_formulario_id: 4,
+            tipo_formulario_id: 2,
             usuario_id: null
         }
         let auth = new Promise ( (resolve, reject) => {
