@@ -24,3 +24,5 @@ src/middlewares/database\.js
 reporte-\.xlsx
 
 ~\$reporte-\.xlsx
+
+*.xlsx
