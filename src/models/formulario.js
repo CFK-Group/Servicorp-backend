@@ -610,6 +610,9 @@ formularioModel.getZips = (callback) => {
 
 formularioModel.getReporte = (req, callback) => {
     let values = req
+    console.log('------')
+    console.log(values)
+    console.log('------')
     if(connection){
         prueba = connection.query(`select srv_pregunta.glosa,srv_respuesta.respuesta,srv_respuesta.create_time,formulario_id,formulario_tipo_formulario_id,username, concat(srv_formulario.latitud, ',', srv_formulario.longitud) as coordenadas from srv_respuesta
         inner join srv_pregunta
@@ -618,12 +621,13 @@ formularioModel.getReporte = (req, callback) => {
         on srv_respuesta.formulario_usuario_id=srv_usuario.id
         inner join srv_formulario
         on srv_respuesta.formulario_id=srv_formulario.id
-        where formulario_id='?'`, [values.formulario_id], (err, row) => {
+        where formulario_id='?' and srv_usuario.empresa like lower(?)`, [values.formulario_id, '%'+values.empresa+'%'], (err, row) => {
             if(err){
                 console.log(`Error en getReporte: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
+                console.log(prueba.sql)
                 callback(null, row)
             }
         })
@@ -632,7 +636,7 @@ formularioModel.getReporte = (req, callback) => {
 
 formularioModel.getFormulariosId = (req, callback) => {
     if(connection){
-        prueba = connection.query('SELECT id FROM srv_formulario WHERE tipo_formulario_id in (SELECT id FROM cfk_servicorp.srv_tipo_formulario where empresa like lower(?) and nombre like lower(?));', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%'], (err, row) => {
+        prueba = connection.query('SELECT srv_formulario.id FROM srv_formulario inner join srv_usuario on srv_formulario.usuario_id = srv_usuario.id WHERE tipo_formulario_id in (SELECT srv_tipo_formulario.id FROM cfk_servicorp.srv_tipo_formulario  where srv_tipo_formulario.empresa like lower(?) and nombre like lower(?)) and srv_usuario.empresa like lower(?);', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%', '%'+req.empresa+'%'], (err, row) => {
             if(err){
                 //console.log('Error en getFormulariosId', err.message)
                 callback(err, null)
@@ -640,7 +644,7 @@ formularioModel.getFormulariosId = (req, callback) => {
             if(!err){
                 callback(null, row)
             }
-            //console.log(prueba.sql)
+            console.log(prueba.sql)
         })
     }
 }
