@@ -57,23 +57,8 @@ module.exports = (app) => {
         global.auth(username, password, res)
     })
 
-    // llama vista de creacion de nuevo usuario
-    app.post('/new-user', (req, res) => {
-        let userToken = req.body.token
-        console.log(userToken)
-        global.validateToken(userToken, (response, err) => {
-            console.table(err)
-            if(err){
-                console.log(err.data.message)
-                res.status(500).send('Error en post new-user')
-            }else{
-                res.sendFile(path.join(__dirname+'/../static/newUser.html'))
-            }
-        })
-    })
-
     // crear nuevo usuario
-    app.post('/new/user', (req, res) => {
+    app.post('/new/user/:token', (req, res) => {
         const userData = {
             'id': null,
             'username': req.body.username,
@@ -84,21 +69,40 @@ module.exports = (app) => {
             'empresa': req.body.empresa,
             'estado': 'activo'
         }
-
-        user.createUser(userData, (err, data) => {
-            if(data && data.insertId){
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    console.log('usuario autorizado')
+                    return resolve(true)
+                }else{
+                    console.log(err)
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+        auth
+            // creamos el formulario, guardamos respuestas e imágenes
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    user.createUser(userData, (err, data) => {
+                        return (err) ? reject(new Error('No se ha podido crear un nuevo usuario')) : resolve(res)
+                    })
+                })
+            })
+            .then((resolved, rejected) => {
                 res.status(200).json({
                     success: true,
-                    msg: 'Usuario creado',
-                    data: data
+                    msg: 'Usuario creado'
                 })
-                console.table(data)
-            }else{
+            })
+            .catch(err => {
+                console.log(err)
                 res.status(500).json({
                     success: false,
                     msg: `Error al crear nuevo usuario: ${err.message}`
                 })
-            }
-        })
+            })
+        
     })
 }
