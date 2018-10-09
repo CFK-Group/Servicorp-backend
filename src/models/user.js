@@ -2,7 +2,7 @@ let userModel = {};
 
 userModel.getUsers = (callback) => {
     if(connection){
-        connection.query('SELECT * FROM srv_usuario WHERE id NOT BETWEEN 1 AND 3 AND tipo_usuario NOT LIKE '%superadmin%' ORDER BY id',
+        connection.query('SELECT * FROM srv_usuario WHERE id NOT BETWEEN 1 AND 3 AND tipo_usuario NOT LIKE "%superadmin%" ORDER BY id',
             (err, row) => {
                 if(err){
                     callback(err, null);
