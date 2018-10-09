@@ -636,7 +636,7 @@ formularioModel.getReporte = (req, callback) => {
 
 formularioModel.getFormulariosId = (req, callback) => {
     if(connection){
-        prueba = connection.query('SELECT srv_formulario.id FROM srv_formulario inner join srv_usuario on srv_formulario.usuario_id = srv_usuario.id WHERE tipo_formulario_id in (SELECT srv_tipo_formulario.id FROM cfk_servicorp.srv_tipo_formulario  where srv_tipo_formulario.empresa like lower(?) and nombre like lower(?)) and srv_usuario.empresa like lower(?);', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%', '%'+req.empresa+'%'], (err, row) => {
+        prueba = connection.query('SELECT srv_formulario.id FROM srv_formulario inner join srv_usuario on srv_formulario.usuario_id = srv_usuario.id WHERE tipo_formulario_id in (SELECT srv_tipo_formulario.id FROM cfk_servicorp.srv_tipo_formulario  where srv_tipo_formulario.empresa like lower(?) and nombre like lower(?)) and srv_usuario.empresa like lower(?) and (srv_formulario.create_time >= (?) and srv_formulario.create_time <= (?));', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%', '%'+req.empresa+'%', req.fechaInicio, req.fechaFin], (err, row) => {
             if(err){
                 //console.log('Error en getFormulariosId', err.message)
                 callback(err, null)
