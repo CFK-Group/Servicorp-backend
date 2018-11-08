@@ -1836,7 +1836,7 @@ module.exports = (app) => {
                                 hoja_1.cell(1,101).string('CÓDIGO DECODIFICADOR')
                                 hoja_1.cell(1,102).string('COORDENADAS')
                             }
-                            hoja_1.cell(i+2,1).number((aux[0].formulario_id))
+                            //hoja_1.cell(i+2,1).number((aux[0].formulario_id))
                             hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
                             hoja_1.cell(i+2,3).number(parseInt(aux[88].respuesta) || 0)
                             hoja_1.cell(i+2,4).number(parseInt(aux[87].respuesta) || 0)
@@ -1929,7 +1929,7 @@ module.exports = (app) => {
                             hoja_1.cell(i+2,99).string((aux[84].respuesta || '').toString())
                             hoja_1.cell(i+2,100).string((aux[84].respuesta || '').toString())
                             hoja_1.cell(i+2,101).string((aux[86].respuesta || '').toString())
-                            hoja_1.cell(i+2,102).string((aux[87].respuesta || '').toString())
+                            hoja_1.cell(i+2,102).string((aux[0].coordenadas || '').toString())
 
 
                         } else if(data.tipo_formulario.toString() === 'desconexion')
