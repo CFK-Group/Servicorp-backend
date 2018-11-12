@@ -529,7 +529,7 @@ formularioModel.getResponsesByFormId = (req, callback) => {
 formularioModel.getQuestionsByFormId = (req, callback) => {
     if(connection){
         let formulario_id = req
-        connection.query(`select glosa from srv_pregunta 
+        connection.query(`select glosa, respuesta from srv_pregunta 
         inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
             if(err){
                 console.log(`Error en getFormularios: ${err.message}`)
