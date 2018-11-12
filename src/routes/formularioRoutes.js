@@ -2005,4 +2005,44 @@ module.exports = (app) => {
             })
     })
 
+    // Get imgs segun id formulario
+    app.get('/imgs/:idFormulario/:token', (req, res) => {
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+        .then((resolved, rejected) => {
+            return new Promise( (resolve, reject) => {
+                formulario.getFormularioImgs(req.params.idFormulario, (err, res) => {
+                    return (err) ? reject(new Error(`No se ha podido leer las imágenes en la base de datos`)) : resolve(res)
+                })
+            })
+        })
+
+        .then((resolved, rejected) => {
+            res.status(200).json({
+                success: true,
+                message: `Imágenes del furmulario con id = ${req.params.idFormulario}`,
+                data: resolved
+            })
+        })
+
+        // manejamos algún posible error
+        .catch( (err) => {
+            console.log(err.message)
+            res.status(statusError).json({
+                success: false,
+                message: err.message
+            })
+        })
+    })
+
 }
