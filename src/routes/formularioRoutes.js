@@ -2045,4 +2045,46 @@ module.exports = (app) => {
         })
     })
 
+    app.put('/edit-form/:idTipoFormulario/:token', (req, res) => {
+        console.log(req.body)
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+        // editamos el formulario en la bdd
+        .then( (resolved, rejected) => {
+            return new Promise( (resolve, reject) => {
+                formulario.editFormulario(req.body, req.params.idTipoFormulario, (err, res) => {
+                    return (err) ? reject(new Error(`No se ha podido editar el formulario`)) : resolve(res)
+                })
+            })
+        })
+
+        // respondemos que los cambios se han guardado
+        .then( (resolved, rejected) => {
+            res.status(200).json({
+                success: true,
+                message: `Formulario Editado`,
+                data: resolved
+            })
+        })
+
+        // manejamos algún posible error
+        .catch( (err) => {
+            console.log(err.message)
+            res.status(statusError).json({
+                success: false,
+                message: err.message
+            })
+        })
+    })
+
 }

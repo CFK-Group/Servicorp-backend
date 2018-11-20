@@ -39,7 +39,7 @@ formularioModel.createForm = (req, callback) => {
             req.tipo_formulario_id, 
             req.usuario_id
         ]
-        connection.beginTransaction(function(err) {
+        connection.beginTransaction((err) => {
             if (err) { 
                 console.log(err)
             }
@@ -468,11 +468,11 @@ formularioModel.createForm = (req, callback) => {
     
                                 console.log('Transaction Complete.')
                                 callback(null, result);
-                            });
+                            })
                         })
                     }else{
                         connection.commit(function (err) {
-                            console.log('Commiting transaction.....');
+                            console.log('Commiting transaction.....')
                             if (err) {
                                 return connection.rollback(function () {
                                     throw err
@@ -529,7 +529,7 @@ formularioModel.getResponsesByFormId = (req, callback) => {
 formularioModel.getQuestionsByFormId = (req, callback) => {
     if(connection){
         let formulario_id = req
-        connection.query(`select glosa, respuesta from srv_pregunta 
+        connection.query(`select glosa, respuesta, respuestas.id from srv_pregunta 
         inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
             if(err){
                 console.log(`Error en getFormularios: ${err.message}`)
@@ -610,9 +610,6 @@ formularioModel.getZips = (callback) => {
 
 formularioModel.getReporte = (req, callback) => {
     let values = req
-    console.log('------')
-    console.log(values)
-    console.log('------')
     if(connection){
         prueba = connection.query(`select srv_pregunta.glosa,srv_respuesta.respuesta,srv_respuesta.create_time,formulario_id,formulario_tipo_formulario_id,username, concat(srv_formulario.latitud, ',', srv_formulario.longitud) as coordenadas from srv_respuesta
         inner join srv_pregunta
@@ -652,7 +649,6 @@ formularioModel.getFormulariosId = (req, callback) => {
 formularioModel.getFormularioImgs = (req, callback) => {
     if(connection){
         prueba = connection.query('SELECT ruta FROM srv_imagen WHERE formulario_id=?', req, (err, row) => {
-            console.log(prueba.sql)
             if(err){
                 console.log('Error en getFormularioImgs', err.message)
             }
@@ -660,6 +656,4451 @@ formularioModel.getFormularioImgs = (req, callback) => {
                 callback(null, row)
             }
         })
+    }
+}
+
+formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
+    if(connection){
+        let values = []
+        if(idTipoFormulario == 1 || idTipoFormulario == 2){
+            values.respuestas = [
+                [req.ot_servicorp],
+                [req.folio_servicio],
+                [req.resp_1],
+                [req.resp_2],
+                [req.resp_3],
+                [req.resp_4],
+                [req.resp_5],
+                [req.resp_6],
+                [req.resp_7],
+                [req.resp_8],
+                [req.resp_9],
+                [req.resp_10],
+                [req.resp_11],
+                [req.resp_12],
+                [req.resp_13],
+                [req.resp_14],
+                [req.resp_15],
+                [req.resp_16],
+                [req.resp_17],
+                [req.resp_18],
+                [req.resp_19],
+                [req.resp_20],
+                [req.resp_21],
+                [req.resp_22],
+                [req.resp_23],
+                [req.resp_24],
+                [req.resp_25],
+                [req.resp_26],
+                [req.resp_27],
+                [req.resp_28],
+                [req.resp_29],
+                [req.resp_30],
+                [req.resp_31],
+                [req.resp_32],
+                [req.resp_33],
+                [req.resp_34],
+                [req.resp_35],
+                [req.resp_36],
+                [req.resp_37],
+                [req.resp_38],
+                [req.resp_39],
+                [req.resp_40],
+                [req.resp_41],
+                [req.resp_42],
+                [req.resp_43],
+                [req.resp_44],
+                [req.resp_45],
+                [req.resp_46],
+                [req.resp_47],
+                [req.resp_48],
+                [req.resp_49],
+                [req.resp_50],
+                [req.resp_51],
+                [req.resp_52],
+                [req.resp_53],
+                [req.resp_54],
+                [req.resp_55],
+                [req.resp_56],
+                [req.resp_57],
+                [req.resp_58],
+                [req.resp_59],
+                [req.resp_60],
+                [req.resp_61],
+                [req.resp_62],
+                [req.resp_63],
+                [req.resp_64],
+                [req.resp_65],
+                [req.resp_66],
+                [req.resp_67],
+                [req.resp_68],
+                [req.resp_69],
+                [req.resp_70],
+                [req.resp_71],
+                [req.resp_72],
+                [req.resp_73],
+                [req.resp_74],
+                [req.resp_75],
+                [req.resp_76],
+                [req.resp_77],
+                [req.resp_78],
+                [req.resp_79],
+                [req.resp_80],
+                [req.resp_81],
+                [req.resp_82],
+                [req.resp_83],
+                [req.resp_84],
+                [req.resp_85],
+                [req.resp_86],
+                [req.resp_87],
+                [req.resp_88],
+                [req.resp_89],
+            ]
+            values.ids = [
+                [req.id_ot_servicorp],
+                [req.id_folio_servicio],
+                [req.id_resp_1],
+                [req.id_resp_2],
+                [req.id_resp_3],
+                [req.id_resp_4],
+                [req.id_resp_5],
+                [req.id_resp_6],
+                [req.id_resp_7],
+                [req.id_resp_8],
+                [req.id_resp_9],
+                [req.id_resp_10],
+                [req.id_resp_11],
+                [req.id_resp_12],
+                [req.id_resp_13],
+                [req.id_resp_14],
+                [req.id_resp_15],
+                [req.id_resp_16],
+                [req.id_resp_17],
+                [req.id_resp_18],
+                [req.id_resp_19],
+                [req.id_resp_20],
+                [req.id_resp_21],
+                [req.id_resp_22],
+                [req.id_resp_23],
+                [req.id_resp_24],
+                [req.id_resp_25],
+                [req.id_resp_26],
+                [req.id_resp_27],
+                [req.id_resp_28],
+                [req.id_resp_29],
+                [req.id_resp_30],
+                [req.id_resp_31],
+                [req.id_resp_32],
+                [req.id_resp_33],
+                [req.id_resp_34],
+                [req.id_resp_35],
+                [req.id_resp_36],
+                [req.id_resp_37],
+                [req.id_resp_38],
+                [req.id_resp_39],
+                [req.id_resp_40],
+                [req.id_resp_41],
+                [req.id_resp_42],
+                [req.id_resp_43],
+                [req.id_resp_44],
+                [req.id_resp_45],
+                [req.id_resp_46],
+                [req.id_resp_47],
+                [req.id_resp_48],
+                [req.id_resp_49],
+                [req.id_resp_50],
+                [req.id_resp_51],
+                [req.id_resp_52],
+                [req.id_resp_53],
+                [req.id_resp_54],
+                [req.id_resp_55],
+                [req.id_resp_56],
+                [req.id_resp_57],
+                [req.id_resp_58],
+                [req.id_resp_59],
+                [req.id_resp_60],
+                [req.id_resp_61],
+                [req.id_resp_62],
+                [req.id_resp_63],
+                [req.id_resp_64],
+                [req.id_resp_65],
+                [req.id_resp_66],
+                [req.id_resp_67],
+                [req.id_resp_68],
+                [req.id_resp_69],
+                [req.id_resp_70],
+                [req.id_resp_71],
+                [req.id_resp_72],
+                [req.id_resp_73],
+                [req.id_resp_74],
+                [req.id_resp_75],
+                [req.id_resp_76],
+                [req.id_resp_77],
+                [req.id_resp_78],
+                [req.id_resp_79],
+                [req.id_resp_80],
+                [req.id_resp_81],
+                [req.id_resp_82],
+                [req.id_resp_83],
+                [req.id_resp_84],
+                [req.id_resp_85],
+                [req.id_resp_86],
+                [req.id_resp_87],
+                [req.id_resp_88],
+                [req.id_resp_89],
+            ]
+            connection.beginTransaction((err) => {
+                if (err) { 
+                    console.log(err, err.message)
+                }
+                let query = new Promise((resolve, reject) => {
+                    connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
+                        if (err) { 
+                            return connection.rollback(() => {
+                                console.log('Error al editar respuestas: ' + err.message)
+                                reject(new Error('Error'))
+                            })
+                        }else{
+                            return resolve(true)
+                        }
+                    })
+                })
+                
+                query
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[10], values.ids[10]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[11], values.ids[11]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[12], values.ids[12]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[13], values.ids[13]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[14], values.ids[14]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[15], values.ids[15]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[16], values.ids[16]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[17], values.ids[17]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[18], values.ids[18]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[19], values.ids[19]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[20], values.ids[20]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[21], values.ids[21]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[22], values.ids[22]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[23], values.ids[23]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[24], values.ids[24]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[25], values.ids[25]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[26], values.ids[26]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[27], values.ids[27]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[28], values.ids[28]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[29], values.ids[29]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[30], values.ids[30]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[31], values.ids[31]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[32], values.ids[32]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[33], values.ids[33]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[34], values.ids[34]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[35], values.ids[35]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[36], values.ids[36]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[37], values.ids[37]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[38], values.ids[38]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[39], values.ids[39]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[40], values.ids[40]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[41], values.ids[41]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[42], values.ids[42]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[43], values.ids[43]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[44], values.ids[44]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[45], values.ids[45]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[46], values.ids[46]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[47], values.ids[47]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[48], values.ids[48]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[49], values.ids[49]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[50], values.ids[50]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[51], values.ids[51]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[52], values.ids[52]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[53], values.ids[53]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[54], values.ids[54]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[55], values.ids[55]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[56], values.ids[56]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[57], values.ids[57]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[58], values.ids[58]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[59], values.ids[59]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[60], values.ids[60]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[61], values.ids[61]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[62], values.ids[62]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[63], values.ids[63]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[64], values.ids[64]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[65], values.ids[65]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[66], values.ids[66]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[67], values.ids[67]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[68], values.ids[68]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[69], values.ids[69]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[70], values.ids[70]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[71], values.ids[71]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[72], values.ids[72]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[73], values.ids[73]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[74], values.ids[74]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[75], values.ids[75]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[76], values.ids[76]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[77], values.ids[77]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[78], values.ids[78]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[79], values.ids[79]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[80], values.ids[80]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[81], values.ids[81]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[82], values.ids[82]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[83], values.ids[83]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[84], values.ids[84]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[85], values.ids[85]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[86], values.ids[86]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[87], values.ids[87]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[88], values.ids[88]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[89], values.ids[89]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    connection.commit((err) => {
+                        if (err) {
+                            return connection.rollback(() =>  {
+                                throw err
+                            })
+                        }
+                        console.log('Transaction Complete.')
+                        callback(null)
+                    })
+                })
+                .catch(err => {
+                    callback(err, null)
+                })
+            })
+        }else if(idTipoFormulario == 3 || idTipoFormulario == 4){
+            values.respuestas = [
+                [req.ot_servicorp],
+                [req.folio_servicio],
+                [req.resp_1],
+                [req.resp_2],
+                [req.resp_3],
+                [req.resp_4],
+                [req.resp_5],
+                [req.resp_6],
+                [req.resp_7],
+                [req.resp_8],
+                [req.resp_9],
+                [req.resp_10],
+                [req.resp_11],
+                [req.resp_12],
+                [req.resp_13],
+                [req.resp_14],
+                [req.resp_15],
+                [req.resp_16],
+                [req.resp_17],
+                [req.resp_18],
+                [req.resp_19],
+                [req.resp_20],
+                [req.resp_21],
+                [req.resp_22],
+                [req.resp_23],
+                [req.resp_24],
+                [req.resp_25],
+                [req.resp_26],
+                [req.resp_27],
+                [req.resp_28],
+                [req.resp_29],
+                [req.resp_30],
+                [req.resp_31],
+                [req.resp_32],
+                [req.resp_33],
+                [req.resp_34],
+                [req.resp_35],
+                [req.resp_36],
+                [req.resp_37],
+                [req.resp_38],
+                [req.resp_39],
+                [req.resp_40],
+                [req.resp_41],
+                [req.resp_42],
+                [req.resp_43],
+                [req.resp_44],
+                [req.resp_45],
+                [req.resp_46],
+                [req.resp_47],
+                [req.resp_48],
+                [req.resp_49],
+                [req.resp_50],
+                [req.resp_51],
+                [req.resp_52],
+                [req.resp_53],
+                [req.resp_54],
+                [req.resp_55],
+                [req.resp_56],
+                [req.resp_57],
+                [req.resp_58],
+                [req.resp_59],
+                [req.resp_60],
+                [req.resp_61],
+                [req.resp_62],
+                [req.resp_63],
+                [req.resp_64],
+                [req.resp_65],
+                [req.resp_66],
+                [req.resp_67],
+                [req.resp_68],
+                [req.resp_69],
+                [req.resp_70],
+                [req.resp_71],
+                [req.resp_72],
+                [req.resp_73],
+                [req.resp_74],
+                [req.resp_75],
+                [req.resp_76],
+                [req.resp_77],
+                [req.resp_78],
+                [req.resp_79],
+                [req.resp_80],
+                [req.resp_81],
+                [req.resp_82],
+                [req.resp_83],
+                [req.resp_84],
+                [req.resp_85],
+                [req.resp_86]
+            ]
+            values.ids = [
+                [req.id_ot_servicorp],
+                [req.id_folio_servicio],
+                [req.id_resp_1],
+                [req.id_resp_2],
+                [req.id_resp_3],
+                [req.id_resp_4],
+                [req.id_resp_5],
+                [req.id_resp_6],
+                [req.id_resp_7],
+                [req.id_resp_8],
+                [req.id_resp_9],
+                [req.id_resp_10],
+                [req.id_resp_11],
+                [req.id_resp_12],
+                [req.id_resp_13],
+                [req.id_resp_14],
+                [req.id_resp_15],
+                [req.id_resp_16],
+                [req.id_resp_17],
+                [req.id_resp_18],
+                [req.id_resp_19],
+                [req.id_resp_20],
+                [req.id_resp_21],
+                [req.id_resp_22],
+                [req.id_resp_23],
+                [req.id_resp_24],
+                [req.id_resp_25],
+                [req.id_resp_26],
+                [req.id_resp_27],
+                [req.id_resp_28],
+                [req.id_resp_29],
+                [req.id_resp_30],
+                [req.id_resp_31],
+                [req.id_resp_32],
+                [req.id_resp_33],
+                [req.id_resp_34],
+                [req.id_resp_35],
+                [req.id_resp_36],
+                [req.id_resp_37],
+                [req.id_resp_38],
+                [req.id_resp_39],
+                [req.id_resp_40],
+                [req.id_resp_41],
+                [req.id_resp_42],
+                [req.id_resp_43],
+                [req.id_resp_44],
+                [req.id_resp_45],
+                [req.id_resp_46],
+                [req.id_resp_47],
+                [req.id_resp_48],
+                [req.id_resp_49],
+                [req.id_resp_50],
+                [req.id_resp_51],
+                [req.id_resp_52],
+                [req.id_resp_53],
+                [req.id_resp_54],
+                [req.id_resp_55],
+                [req.id_resp_56],
+                [req.id_resp_57],
+                [req.id_resp_58],
+                [req.id_resp_59],
+                [req.id_resp_60],
+                [req.id_resp_61],
+                [req.id_resp_62],
+                [req.id_resp_63],
+                [req.id_resp_64],
+                [req.id_resp_65],
+                [req.id_resp_66],
+                [req.id_resp_67],
+                [req.id_resp_68],
+                [req.id_resp_69],
+                [req.id_resp_70],
+                [req.id_resp_71],
+                [req.id_resp_72],
+                [req.id_resp_73],
+                [req.id_resp_74],
+                [req.id_resp_75],
+                [req.id_resp_76],
+                [req.id_resp_77],
+                [req.id_resp_78],
+                [req.id_resp_79],
+                [req.id_resp_80],
+                [req.id_resp_81],
+                [req.id_resp_82],
+                [req.id_resp_83],
+                [req.id_resp_84],
+                [req.id_resp_85],
+                [req.id_resp_86]
+            ]
+            connection.beginTransaction((err) => {
+                if (err) { 
+                    console.log(err, err.message)
+                }
+                let query = new Promise((resolve, reject) => {
+                    connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
+                        if (err) { 
+                            return connection.rollback(() => {
+                                console.log('Error al editar respuestas: ' + err.message)
+                                reject(new Error('Error'))
+                            })
+                        }else{
+                            return resolve(true)
+                        }
+                    })
+                })
+                
+                query
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[10], values.ids[10]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[11], values.ids[11]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[12], values.ids[12]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[13], values.ids[13]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[14], values.ids[14]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[15], values.ids[15]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[16], values.ids[16]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[17], values.ids[17]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[18], values.ids[18]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[19], values.ids[19]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[20], values.ids[20]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[21], values.ids[21]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[22], values.ids[22]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[23], values.ids[23]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[24], values.ids[24]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[25], values.ids[25]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[26], values.ids[26]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[27], values.ids[27]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[28], values.ids[28]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[29], values.ids[29]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[30], values.ids[30]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[31], values.ids[31]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[32], values.ids[32]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[33], values.ids[33]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[34], values.ids[34]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[35], values.ids[35]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[36], values.ids[36]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[37], values.ids[37]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[38], values.ids[38]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[39], values.ids[39]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[40], values.ids[40]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[41], values.ids[41]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[42], values.ids[42]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[43], values.ids[43]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[44], values.ids[44]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[45], values.ids[45]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[46], values.ids[46]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[47], values.ids[47]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[48], values.ids[48]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[49], values.ids[49]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[50], values.ids[50]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[51], values.ids[51]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[52], values.ids[52]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[53], values.ids[53]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[54], values.ids[54]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[55], values.ids[55]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[56], values.ids[56]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[57], values.ids[57]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[58], values.ids[58]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[59], values.ids[59]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[60], values.ids[60]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[61], values.ids[61]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[62], values.ids[62]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[63], values.ids[63]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[64], values.ids[64]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[65], values.ids[65]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[66], values.ids[66]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[67], values.ids[67]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[68], values.ids[68]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[69], values.ids[69]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[70], values.ids[70]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[71], values.ids[71]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[72], values.ids[72]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[73], values.ids[73]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[74], values.ids[74]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[75], values.ids[75]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[76], values.ids[76]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[77], values.ids[77]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[78], values.ids[78]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[79], values.ids[79]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[80], values.ids[80]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[81], values.ids[81]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[82], values.ids[82]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[83], values.ids[83]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[84], values.ids[84]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[85], values.ids[85]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[86], values.ids[86]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    connection.commit((err) => {
+                        if (err) {
+                            return connection.rollback(() =>  {
+                                throw err
+                            })
+                        }
+                        console.log('Transaction Complete.')
+                        callback(null)
+                    })
+                })
+                .catch(err => {
+                    callback(err, null)
+                })
+            })
+        }else if(idTipoFormulario == 5){
+            values.respuestas = [
+                [req.ot_servicorp],
+                [req.folio_servicio],
+                [req.resp_1],
+                [req.resp_2],
+                [req.resp_3],
+                [req.resp_4],
+                [req.resp_5],
+                [req.resp_6],
+                [req.resp_7],
+                [req.resp_8]
+            ]
+            values.ids = [
+                [req.id_ot_servicorp],
+                [req.id_folio_servicio],
+                [req.id_resp_1],
+                [req.id_resp_2],
+                [req.id_resp_3],
+                [req.id_resp_4],
+                [req.id_resp_5],
+                [req.id_resp_6],
+                [req.id_resp_7],
+                [req.id_resp_8]
+            ]
+            connection.beginTransaction((err) => {
+                if (err) { 
+                    console.log(err, err.message)
+                }
+                let query = new Promise((resolve, reject) => {
+                    connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
+                        if (err) { 
+                            return connection.rollback(() => {
+                                console.log('Error al editar respuestas: ' + err.message)
+                                reject(new Error('Error'))
+                            })
+                        }else{
+                            return resolve(true)
+                        }
+                    })
+                })
+                
+                query
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    connection.commit((err) => {
+                        if (err) {
+                            return connection.rollback(() =>  {
+                                throw err
+                            })
+                        }
+                        console.log('Transaction Complete.')
+                        callback(null)
+                    })
+                })
+                .catch(err => {
+                    callback(err, null)
+                })
+            })
+        }else if(idTipoFormulario == 6){
+            values.respuestas = [
+                [req.ot_servicorp],
+                [req.folio_servicio],
+                [req.resp_1],
+                [req.resp_2],
+                [req.resp_3],
+                [req.resp_4],
+                [req.resp_5],
+                [req.resp_6],
+                [req.resp_7],
+                [req.resp_8],
+                [req.resp_9],
+                [req.resp_10],
+                [req.resp_11],
+                [req.resp_12],
+                [req.resp_13],
+                [req.resp_14],
+                [req.resp_15],
+                [req.resp_16],
+                [req.resp_17],
+                [req.resp_18],
+                [req.resp_19],
+                [req.resp_20],
+                [req.resp_21],
+                [req.resp_22],
+                [req.resp_23],
+                [req.resp_24],
+                [req.resp_25],
+                [req.resp_26],
+                [req.resp_27],
+                [req.resp_28],
+                [req.resp_29],
+                [req.resp_30],
+                [req.resp_31],
+                [req.resp_32],
+                [req.resp_33],
+                [req.resp_34],
+                [req.resp_35],
+                [req.resp_36],
+                [req.resp_37],
+                [req.resp_38],
+                [req.resp_39],
+                [req.resp_40],
+                [req.resp_41],
+                [req.resp_42],
+                [req.resp_43],
+                [req.resp_44],
+                [req.resp_45],
+                [req.resp_46],
+                [req.resp_47],
+                [req.resp_48],
+                [req.resp_49],
+                [req.resp_50],
+                [req.resp_51],
+                [req.resp_52],
+                [req.resp_53],
+                [req.resp_54],
+                [req.resp_55],
+                [req.resp_56],
+                [req.resp_57],
+                [req.resp_58],
+                [req.resp_59],
+                [req.resp_60],
+                [req.resp_61],
+                [req.resp_62],
+                [req.resp_63],
+                [req.resp_64],
+                [req.resp_65],
+                [req.resp_66],
+                [req.resp_67],
+                [req.resp_68],
+                [req.resp_69],
+                [req.resp_70],
+                [req.resp_71],
+                [req.resp_72],
+                [req.resp_73],
+                [req.resp_74],
+                [req.resp_75],
+                [req.resp_76],
+                [req.resp_77],
+                [req.resp_78],
+                [req.resp_79],
+                [req.resp_80],
+                [req.resp_81],
+                [req.resp_82],
+                [req.resp_83]
+            ]
+            values.ids = [
+                [req.id_ot_servicorp],
+                [req.id_folio_servicio],
+                [req.id_resp_1],
+                [req.id_resp_2],
+                [req.id_resp_3],
+                [req.id_resp_4],
+                [req.id_resp_5],
+                [req.id_resp_6],
+                [req.id_resp_7],
+                [req.id_resp_8],
+                [req.id_resp_9],
+                [req.id_resp_10],
+                [req.id_resp_11],
+                [req.id_resp_12],
+                [req.id_resp_13],
+                [req.id_resp_14],
+                [req.id_resp_15],
+                [req.id_resp_16],
+                [req.id_resp_17],
+                [req.id_resp_18],
+                [req.id_resp_19],
+                [req.id_resp_20],
+                [req.id_resp_21],
+                [req.id_resp_22],
+                [req.id_resp_23],
+                [req.id_resp_24],
+                [req.id_resp_25],
+                [req.id_resp_26],
+                [req.id_resp_27],
+                [req.id_resp_28],
+                [req.id_resp_29],
+                [req.id_resp_30],
+                [req.id_resp_31],
+                [req.id_resp_32],
+                [req.id_resp_33],
+                [req.id_resp_34],
+                [req.id_resp_35],
+                [req.id_resp_36],
+                [req.id_resp_37],
+                [req.id_resp_38],
+                [req.id_resp_39],
+                [req.id_resp_40],
+                [req.id_resp_41],
+                [req.id_resp_42],
+                [req.id_resp_43],
+                [req.id_resp_44],
+                [req.id_resp_45],
+                [req.id_resp_46],
+                [req.id_resp_47],
+                [req.id_resp_48],
+                [req.id_resp_49],
+                [req.id_resp_50],
+                [req.id_resp_51],
+                [req.id_resp_52],
+                [req.id_resp_53],
+                [req.id_resp_54],
+                [req.id_resp_55],
+                [req.id_resp_56],
+                [req.id_resp_57],
+                [req.id_resp_58],
+                [req.id_resp_59],
+                [req.id_resp_60],
+                [req.id_resp_61],
+                [req.id_resp_62],
+                [req.id_resp_63],
+                [req.id_resp_64],
+                [req.id_resp_65],
+                [req.id_resp_66],
+                [req.id_resp_67],
+                [req.id_resp_68],
+                [req.id_resp_69],
+                [req.id_resp_70],
+                [req.id_resp_71],
+                [req.id_resp_72],
+                [req.id_resp_73],
+                [req.id_resp_74],
+                [req.id_resp_75],
+                [req.id_resp_76],
+                [req.id_resp_77],
+                [req.id_resp_78],
+                [req.id_resp_79],
+                [req.id_resp_80],
+                [req.id_resp_81],
+                [req.id_resp_82],
+                [req.id_resp_83]
+            ]
+            connection.beginTransaction((err) => {
+                if (err) { 
+                    console.log(err, err.message)
+                }
+                let query = new Promise((resolve, reject) => {
+                    connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
+                        if (err) { 
+                            return connection.rollback(() => {
+                                console.log('Error al editar respuestas: ' + err.message)
+                                reject(new Error('Error'))
+                            })
+                        }else{
+                            return resolve(true)
+                        }
+                    })
+                })
+                
+                query
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[10], values.ids[10]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[11], values.ids[11]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[12], values.ids[12]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[13], values.ids[13]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[14], values.ids[14]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[15], values.ids[15]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[16], values.ids[16]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[17], values.ids[17]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[18], values.ids[18]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[19], values.ids[19]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[20], values.ids[20]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[21], values.ids[21]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[22], values.ids[22]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[23], values.ids[23]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[24], values.ids[24]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[25], values.ids[25]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[26], values.ids[26]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[27], values.ids[27]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[28], values.ids[28]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[29], values.ids[29]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[30], values.ids[30]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[31], values.ids[31]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[32], values.ids[32]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[33], values.ids[33]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[34], values.ids[34]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[35], values.ids[35]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[36], values.ids[36]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[37], values.ids[37]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[38], values.ids[38]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[39], values.ids[39]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[40], values.ids[40]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[41], values.ids[41]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[42], values.ids[42]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[43], values.ids[43]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[44], values.ids[44]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[45], values.ids[45]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[46], values.ids[46]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[47], values.ids[47]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[48], values.ids[48]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[49], values.ids[49]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[50], values.ids[50]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[51], values.ids[51]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[52], values.ids[52]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[53], values.ids[53]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[54], values.ids[54]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[55], values.ids[55]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[56], values.ids[56]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[57], values.ids[57]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[58], values.ids[58]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[59], values.ids[59]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[60], values.ids[60]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[61], values.ids[61]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[62], values.ids[62]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[63], values.ids[63]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[64], values.ids[64]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[65], values.ids[65]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[66], values.ids[66]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[67], values.ids[67]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[68], values.ids[68]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[69], values.ids[69]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[70], values.ids[70]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[71], values.ids[71]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[72], values.ids[72]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[73], values.ids[73]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[74], values.ids[74]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[75], values.ids[75]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[76], values.ids[76]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[77], values.ids[77]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[78], values.ids[78]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[79], values.ids[79]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[80], values.ids[80]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[81], values.ids[81]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[82], values.ids[82]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    return new Promise( (resolve, reject) => {
+                        connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[83], values.ids[83]], (err, result) => {
+                            if (err) { 
+                                return connection.rollback(() => {
+                                    console.log('Error al editar respuestas: ' + err.message)
+                                    reject(new Error('Error'))
+                                })
+                            }else{
+                                return resolve(true)
+                            }
+                        })
+                    })
+                })
+                .then((resolved, rejected) => {
+                    connection.commit((err) => {
+                        if (err) {
+                            return connection.rollback(() =>  {
+                                throw err
+                            })
+                        }
+                        console.log('Transaction Complete.')
+                        callback(null)
+                    })
+                })
+                .catch(err => {
+                    callback(err, null)
+                })
+            })
+        }
     }
 }
 
