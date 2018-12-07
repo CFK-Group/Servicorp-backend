@@ -564,6 +564,37 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
     }
 }
 
+formularioModel.getTotalFormsByUserIdAndDate = (req, callback) => {
+    if(connection){
+        let data = req
+        prueba = connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=1 and (create_time BETWEEN ? AND ?)
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=2 and (create_time BETWEEN ? AND ?)
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=3 and (create_time BETWEEN ? AND ?)
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=4 and (create_time BETWEEN ? AND ?)
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5 and (create_time BETWEEN ? AND ?)
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=6 and (create_time BETWEEN ? AND ?);`, [
+            data.usuario_id, data.fechaInicio, data.fechaFin,
+            data.usuario_id, data.fechaInicio, data.fechaFin,
+            data.usuario_id, data.fechaInicio, data.fechaFin,
+            data.usuario_id, data.fechaInicio, data.fechaFin,
+            data.usuario_id, data.fechaInicio, data.fechaFin,
+            data.usuario_id, data.fechaInicio, data.fechaFin
+        ], (err, row) => {
+            console.log('**************************************')
+            console.log(prueba.sql)
+            console.log('**************************************')
+            if(err){
+                console.log(`Error en getTotalFormsByUserId: ${err.message}`)
+                callback(err, null)
+            }
+            if(!err){
+                console.log(row)
+                callback(null, row)
+            }
+        })
+    }
+}
+
 formularioModel.getTotalFormsByDate = (req, callback) => {
     let fechas = []
     let query = ''

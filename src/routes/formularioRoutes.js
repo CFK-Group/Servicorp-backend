@@ -1103,6 +1103,62 @@ module.exports = (app) => {
             })
     })
 
+    // Get cantidad de formularios por id de usuario entre fechas
+    app.get('/formularios/:userId/:fechaInicio/:fechaFin/:token', (req, res) => {
+        let data = {
+            usuario_id: req.params.userId,
+            fechaInicio: req.params.fechaInicio,
+            fechaFin: req.params.fechaFin
+        }
+        let usuario_id = req.params.userId
+        let auth = new Promise ( (resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos la cantidad de formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    formulario.getTotalFormsByUserIdAndDate(data, (err, res) => {
+                        return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // entregamos la cantidad de formularios
+            .then( (resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Cantidad de formularios por usuario con id = ${data.usuario_id}`,
+                    data: {
+                        "instalacionHfc": resolved[0].cantidad,
+                        "instalacionDth": resolved[1].cantidad,
+                        "mantencionHfc": resolved[2].cantidad,
+                        "mantencionDth": resolved[3].cantidad,
+                        "desconexion": resolved[4].cantidad,
+                        "instalacionDthEntel": resolved[5].cantidad,
+                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
+                    }
+                })
+            })
+
+            // manejamos algún posible error
+            .catch( (err) => {
+                console.log(err.message)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
     // 'Get' cantidad de formularios desde x fecha
     app.post('/formularios/:empresa/:token', (req, res) => {
         let fechas = req.body
