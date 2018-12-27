@@ -34,7 +34,7 @@ userModel.getUserById = (id, callback) => {
 
 userModel.getUserByUsername = (user, callback) => {
     if (connection) {
-        connection.query('SELECT * FROM srv_usuario WHERE username=?', user,
+        connection.query('SELECT * FROM srv_usuario WHERE username = ?', user,
             (err, row) => {
                 if(err){
                     callback(err, null);

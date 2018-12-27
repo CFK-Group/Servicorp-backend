@@ -1351,7 +1351,6 @@ module.exports = (app) => {
                     })
                 })
             })
-            
             .then( (resolved, rejected) => { // resolved = array con los ids de los formularios a consultar
                 tipoReporte = ''
                 let formsId = []
@@ -1372,7 +1371,6 @@ module.exports = (app) => {
                             })
                         })
                     })
-                    
                     .then( (resolved, rejected) => {
                         aux = JSON.parse(JSON.stringify(resolved))
                         // console.log('------------------------------')
@@ -1384,6 +1382,7 @@ module.exports = (app) => {
                         if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Entel')
                         {
                             if(i===0){
+                                tipoReporte = 'InstalacionEntel'
                                 hoja_1.cell(1,1).string('N°')
                                 hoja_1.cell(1,2).string('USUARIO')
                                 hoja_1.cell(1,3).string('FOLIO')
@@ -1484,101 +1483,278 @@ module.exports = (app) => {
                                 hoja_1.cell(1,98).string('CODIGO DECODIFICADOR')
                                 hoja_1.cell(1,99).string('COORDENADAS')
                             }
-                            hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
-                            hoja_1.cell(i+2,3).number(parseInt(aux[84].respuesta) || 0)
-                            hoja_1.cell(i+2,4).number(parseInt(aux[83].respuesta) || 0)
-                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
-                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
-                            hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
 
-                            hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
-                            hoja_1.cell(i+2,16).string((aux[1].respuesta || '').toString())
-                            hoja_1.cell(i+2,17).string((aux[2].respuesta || '').toString())
-                            hoja_1.cell(i+2,18).string((aux[3].respuesta || '').toString())
-                            hoja_1.cell(i+2,19).string((aux[4].respuesta || '').toString())
-                            hoja_1.cell(i+2,20).string((aux[5].respuesta || '').toString())
-                            hoja_1.cell(i+2,21).string((aux[6].respuesta || '').toString())
-                            hoja_1.cell(i+2,22).string((aux[7].respuesta || '').toString())
-                            hoja_1.cell(i+2,23).string((aux[8].respuesta || '').toString())
-                            hoja_1.cell(i+2,24).string((aux[9].respuesta || '').toString())
-                            hoja_1.cell(i+2,25).string((aux[10].respuesta || '').toString())
-                            hoja_1.cell(i+2,26).string((aux[11].respuesta || '').toString())
-                            hoja_1.cell(i+2,27).string((aux[12].respuesta || '').toString())
-                            hoja_1.cell(i+2,28).string((aux[13].respuesta || '').toString())
-                            hoja_1.cell(i+2,29).string((aux[14].respuesta || '').toString())
-                            hoja_1.cell(i+2,30).string((aux[15].respuesta || '').toString())
-                            hoja_1.cell(i+2,31).string((aux[16].respuesta || '').toString())
-                            hoja_1.cell(i+2,32).string((aux[17].respuesta || '').toString())
-                            hoja_1.cell(i+2,33).string((aux[18].respuesta || '').toString())
-                            hoja_1.cell(i+2,34).string((aux[19].respuesta || '').toString())
-                            hoja_1.cell(i+2,35).string((aux[20].respuesta || '').toString())
-                            hoja_1.cell(i+2,36).string((aux[21].respuesta || '').toString())
-                            hoja_1.cell(i+2,37).string((aux[22].respuesta || '').toString())
-                            hoja_1.cell(i+2,38).string((aux[23].respuesta || '').toString())
-                            hoja_1.cell(i+2,39).string((aux[24].respuesta || '').toString())
-                            hoja_1.cell(i+2,40).string((aux[25].respuesta || '').toString())
-                            hoja_1.cell(i+2,41).string((aux[26].respuesta || '').toString())
-                            hoja_1.cell(i+2,42).string((aux[27].respuesta || '').toString())
-                            hoja_1.cell(i+2,43).string((aux[28].respuesta || '').toString())
-                            hoja_1.cell(i+2,44).string((aux[29].respuesta || '').toString())
-                            hoja_1.cell(i+2,45).string((aux[30].respuesta || '').toString())
-                            hoja_1.cell(i+2,46).string((aux[31].respuesta || '').toString())
-                            hoja_1.cell(i+2,47).string((aux[32].respuesta || '').toString())
-                            hoja_1.cell(i+2,48).string((aux[33].respuesta || '').toString())
-                            hoja_1.cell(i+2,49).string((aux[34].respuesta || '').toString())
-                            hoja_1.cell(i+2,50).string((aux[35].respuesta || '').toString())
-                            hoja_1.cell(i+2,51).string((aux[36].respuesta || '').toString())
-                            hoja_1.cell(i+2,52).string((aux[37].respuesta || '').toString())
-                            hoja_1.cell(i+2,53).string((aux[38].respuesta || '').toString())
-                            hoja_1.cell(i+2,54).string((aux[39].respuesta || '').toString())
-                            hoja_1.cell(i+2,55).string((aux[40].respuesta || '').toString())
-                            hoja_1.cell(i+2,56).string((aux[41].respuesta || '').toString())
-                            hoja_1.cell(i+2,57).string((aux[42].respuesta || '').toString())
-                            hoja_1.cell(i+2,58).string((aux[43].respuesta || '').toString())
-                            hoja_1.cell(i+2,59).string((aux[44].respuesta || '').toString())
-                            hoja_1.cell(i+2,60).string((aux[45].respuesta || '').toString())
-                            hoja_1.cell(i+2,61).string((aux[46].respuesta || '').toString())
-                            hoja_1.cell(i+2,62).string((aux[47].respuesta || '').toString())
-                            hoja_1.cell(i+2,63).string((aux[48].respuesta || '').toString())
-                            hoja_1.cell(i+2,64).string((aux[49].respuesta || '').toString())
-                            hoja_1.cell(i+2,65).string((aux[50].respuesta || '').toString())
-                            hoja_1.cell(i+2,66).string((aux[51].respuesta || '').toString())
-                            hoja_1.cell(i+2,67).string((aux[52].respuesta || '').toString())
-                            hoja_1.cell(i+2,68).string((aux[53].respuesta || '').toString())
-                            hoja_1.cell(i+2,69).string((aux[54].respuesta || '').toString())
-                            hoja_1.cell(i+2,70).string((aux[55].respuesta || '').toString())
-                            hoja_1.cell(i+2,71).string((aux[56].respuesta || '').toString())
-                            hoja_1.cell(i+2,72).string((aux[57].respuesta || '').toString())
-                            hoja_1.cell(i+2,73).string((aux[58].respuesta || '').toString())
-                            hoja_1.cell(i+2,74).string((aux[59].respuesta || '').toString())
-                            hoja_1.cell(i+2,75).string((aux[60].respuesta || '').toString())
-                            hoja_1.cell(i+2,76).string((aux[61].respuesta || '').toString())
-                            hoja_1.cell(i+2,77).string((aux[62].respuesta || '').toString())
-                            hoja_1.cell(i+2,78).string((aux[63].respuesta || '').toString())
-                            hoja_1.cell(i+2,79).string((aux[64].respuesta || '').toString())
-                            hoja_1.cell(i+2,80).string((aux[65].respuesta || '').toString())
-                            hoja_1.cell(i+2,81).string((aux[66].respuesta || '').toString())
-                            hoja_1.cell(i+2,82).string((aux[67].respuesta || '').toString())
-                            hoja_1.cell(i+2,83).string((aux[68].respuesta || '').toString())
-                            hoja_1.cell(i+2,84).string((aux[69].respuesta || '').toString())
-                            hoja_1.cell(i+2,85).string((aux[70].respuesta || '').toString())
-                            hoja_1.cell(i+2,86).string((aux[71].respuesta || '').toString())
-                            hoja_1.cell(i+2,87).string((aux[72].respuesta || '').toString())
-                            hoja_1.cell(i+2,88).string((aux[75].respuesta ||'').toString())
-                            hoja_1.cell(i+2,89).string((aux[73].respuesta ||'').toString())
-                            hoja_1.cell(i+2,90).string((aux[74].respuesta ||'').toString())
-                            hoja_1.cell(i+2,91).string((aux[76].respuesta ||'').toString())
-                            hoja_1.cell(i+2,92).string((aux[77].respuesta ||'').toString())
-                            hoja_1.cell(i+2,93).string((aux[78].respuesta ||'').toString())
-                            hoja_1.cell(i+2,94).string((aux[79].respuesta ||'').toString())
-                            hoja_1.cell(i+2,95).string((aux[80].respuesta ||'').toString())
-                            hoja_1.cell(i+2,96).string((aux[81].respuesta ||'').toString())
-                            hoja_1.cell(i+2,97).string((aux[82].respuesta ||'').toString())
-                            hoja_1.cell(i+2,98).string(('').toString())
-                            hoja_1.cell(i+2,99).string((aux[0].coordenadas || '').toString())
+                            aux.forEach(function(pregunta) {
+                                switch (parseInt(pregunta.id)) {
+                                    case 2:
+                                        hoja_1.cell(i + 2, 3).number(parseInt(pregunta.respuesta) || 0); //Folio
+                                        hoja_1.cell(i + 2, 5).date(moment(pregunta.create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
+                                        hoja_1.cell(i + 2, 6).date(moment(pregunta.create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
+                                        hoja_1.cell(i + 2, 99).string(pregunta.coordenadas); //Coordenadas
+                                        hoja_1.cell(i + 2, 2).string(pregunta.username); //Nombre de Usuario
+                                        break;
+                                    case 1:
+                                        hoja_1.cell(i + 2, 4).number(parseInt(pregunta.respuesta) || 0); //Folio
+                                        break;
+                                    case 118:
+                                        hoja_1.cell(i + 2, 15).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 119:
+                                        hoja_1.cell(i + 2, 16).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 120:
+                                        hoja_1.cell(i + 2, 17).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 121:
+                                        hoja_1.cell(i + 2, 18).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 122:
+                                        hoja_1.cell(i + 2, 19).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 123:
+                                        hoja_1.cell(i + 2, 20).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 124:
+                                        hoja_1.cell(i + 2, 21).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 125:
+                                        hoja_1.cell(i + 2, 22).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 126:
+                                        hoja_1.cell(i + 2, 23).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 127:
+                                        hoja_1.cell(i + 2, 24).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 128:
+                                        hoja_1.cell(i + 2, 25).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 129:
+                                        hoja_1.cell(i + 2, 26).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 130:
+                                        hoja_1.cell(i + 2, 27).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 131:
+                                        hoja_1.cell(i + 2, 28).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 132:
+                                        hoja_1.cell(i + 2, 29).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 133:
+                                        hoja_1.cell(i + 2, 30).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 134:
+                                        hoja_1.cell(i + 2, 31).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 135:
+                                        hoja_1.cell(i + 2, 32).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 136:
+                                        hoja_1.cell(i + 2, 33).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 137:
+                                        hoja_1.cell(i + 2, 34).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 138:
+                                        hoja_1.cell(i + 2, 35).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 139:
+                                        hoja_1.cell(i + 2, 36).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 140:
+                                        hoja_1.cell(i + 2, 37).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 141:
+                                        hoja_1.cell(i + 2, 38).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 142:
+                                        hoja_1.cell(i + 2, 39).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 143:
+                                        hoja_1.cell(i + 2, 40).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 144:
+                                        hoja_1.cell(i + 2, 41).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 145:
+                                        hoja_1.cell(i + 2, 42).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 146:
+                                        hoja_1.cell(i + 2, 43).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 147:
+                                        hoja_1.cell(i + 2, 44).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 148:
+                                        hoja_1.cell(i + 2, 45).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 149:
+                                        hoja_1.cell(i + 2, 46).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 150:
+                                        hoja_1.cell(i + 2, 47).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 151:
+                                        hoja_1.cell(i + 2, 48).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 152:
+                                        hoja_1.cell(i + 2, 49).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 153:
+                                        hoja_1.cell(i + 2, 50).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 154:
+                                        hoja_1.cell(i + 2, 51).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 155:
+                                        hoja_1.cell(i + 2, 52).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 156:
+                                        hoja_1.cell(i + 2, 53).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 157:
+                                        hoja_1.cell(i + 2, 54).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 158:
+                                        hoja_1.cell(i + 2, 55).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 159:
+                                        hoja_1.cell(i + 2, 56).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 160:
+                                        hoja_1.cell(i + 2, 57).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 161:
+                                        hoja_1.cell(i + 2, 58).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 162:
+                                        hoja_1.cell(i + 2, 59).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 163:
+                                        hoja_1.cell(i + 2, 60).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 164:
+                                        hoja_1.cell(i + 2, 61).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 165:
+                                        hoja_1.cell(i + 2, 62).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 166:
+                                        hoja_1.cell(i + 2, 63).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 167:
+                                        hoja_1.cell(i + 2, 64).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 168:
+                                        hoja_1.cell(i + 2, 65).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 169:
+                                        hoja_1.cell(i + 2, 66).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 170:
+                                        hoja_1.cell(i + 2, 67).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 171:
+                                        hoja_1.cell(i + 2, 68).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 172:
+                                        hoja_1.cell(i + 2, 69).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 173:
+                                        hoja_1.cell(i + 2, 70).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 174:
+                                        hoja_1.cell(i + 2, 71).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 175:
+                                        hoja_1.cell(i + 2, 72).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 176:
+                                        hoja_1.cell(i + 2, 73).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 177:
+                                        hoja_1.cell(i + 2, 74).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 178:
+                                        hoja_1.cell(i + 2, 75).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 179:
+                                        hoja_1.cell(i + 2, 76).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 180:
+                                        hoja_1.cell(i + 2, 77).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 181:
+                                        hoja_1.cell(i + 2, 78).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 182:
+                                        hoja_1.cell(i + 2, 79).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 183:
+                                        hoja_1.cell(i + 2, 80).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 184:
+                                        hoja_1.cell(i + 2, 81).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 185:
+                                        hoja_1.cell(i + 2, 82).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 186:
+                                        hoja_1.cell(i + 2, 83).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 187:
+                                        hoja_1.cell(i + 2, 84).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 188:
+                                        hoja_1.cell(i + 2, 85).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 52:
+                                        hoja_1.cell(i + 2, 86).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 189:
+                                        hoja_1.cell(i + 2, 87).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 54:
+                                        hoja_1.cell(i + 2, 88).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 190:
+                                        hoja_1.cell(i + 2, 89).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 191:
+                                        hoja_1.cell(i + 2, 90).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 192:
+                                        hoja_1.cell(i + 2, 91).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 193:
+                                        hoja_1.cell(i + 2, 92).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 194:
+                                        hoja_1.cell(i + 2, 93).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 195:
+                                        hoja_1.cell(i + 2, 94).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 196:
+                                        hoja_1.cell(i + 2, 95).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 197:
+                                        hoja_1.cell(i + 2, 96).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 198:
+                                        hoja_1.cell(i + 2, 97).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 199:
+                                        hoja_1.cell(i + 2, 98).string((pregunta.respuesta || '').toString());
+                                        break;
+
+                                }
+                            })
                         } else if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Claro')
                         {
                             if(i===0){
+                                tipoReporte = 'InstalacionClaro'
                                 hoja_1.cell(1,1).string('N°')
                                 hoja_1.cell(1,2).string('USUARIO')
                                 hoja_1.cell(1,3).string('FOLIO')
@@ -1687,108 +1863,296 @@ module.exports = (app) => {
                                 hoja_1.cell(1,106).string('COORDENADAS')
                             }
 
-                            hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
-                            hoja_1.cell(i+2,3).number(parseInt(aux[90].respuesta) || 0)
-                            hoja_1.cell(i+2,4).number(parseInt(aux[89].respuesta) || 0)
-                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
-                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
-                            hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
-                            hoja_1.cell(i+2,16).string((aux[1].respuesta || '').toString())
-                            hoja_1.cell(i+2,17).string((aux[2].respuesta || '').toString())
-                            hoja_1.cell(i+2,18).string((aux[3].respuesta || '').toString())
-                            hoja_1.cell(i+2,19).string((aux[4].respuesta || '').toString())
-                            hoja_1.cell(i+2,20).string((aux[5].respuesta || '').toString())
-                            hoja_1.cell(i+2,21).string((aux[6].respuesta || '').toString())
-                            hoja_1.cell(i+2,22).string((aux[7].respuesta || '').toString())
-                            hoja_1.cell(i+2,23).string((aux[8].respuesta || '').toString())
-                            hoja_1.cell(i+2,24).string((aux[9].respuesta || '').toString())
-                            hoja_1.cell(i+2,25).string((aux[10].respuesta || '').toString())
-                            hoja_1.cell(i+2,26).string((aux[11].respuesta || '').toString())
-                            hoja_1.cell(i+2,27).string((aux[12].respuesta || '').toString())
-                            hoja_1.cell(i+2,28).string((aux[13].respuesta || '').toString())
-                            hoja_1.cell(i+2,29).string((aux[14].respuesta || '').toString())
-                            hoja_1.cell(i+2,30).string((aux[15].respuesta || '').toString())
-                            hoja_1.cell(i+2,31).string((aux[16].respuesta || '').toString())
-                            hoja_1.cell(i+2,32).string((aux[17].respuesta || '').toString())
-                            hoja_1.cell(i+2,33).string((aux[18].respuesta || '').toString())
-                            hoja_1.cell(i+2,34).string((aux[19].respuesta || '').toString())
-                            hoja_1.cell(i+2,35).string((aux[20].respuesta || '').toString())
-                            hoja_1.cell(i+2,36).string((aux[21].respuesta || '').toString())
-                            hoja_1.cell(i+2,37).string((aux[22].respuesta || '').toString())
-                            hoja_1.cell(i+2,38).string((aux[23].respuesta || '').toString())
-                            hoja_1.cell(i+2,39).string((aux[24].respuesta || '').toString())
-                            hoja_1.cell(i+2,40).string((aux[25].respuesta || '').toString())
-                            hoja_1.cell(i+2,41).string((aux[26].respuesta || '').toString())
-                            hoja_1.cell(i+2,42).string((aux[27].respuesta || '').toString())
-                            hoja_1.cell(i+2,43).string((aux[28].respuesta || '').toString())
-                            hoja_1.cell(i+2,44).string((aux[29].respuesta || '').toString())
-                            hoja_1.cell(i+2,45).string((aux[30].respuesta || '').toString())
-                            hoja_1.cell(i+2,46).string((aux[31].respuesta || '').toString())
-                            hoja_1.cell(i+2,47).string((aux[32].respuesta || '').toString())
-                            hoja_1.cell(i+2,48).string((aux[33].respuesta || '').toString())
-                            hoja_1.cell(i+2,49).string((aux[34].respuesta || '').toString())
-                            hoja_1.cell(i+2,50).string((aux[35].respuesta || '').toString())
-                            hoja_1.cell(i+2,51).string((aux[36].respuesta || '').toString())
-                            hoja_1.cell(i+2,52).string((aux[37].respuesta || '').toString())
-                            hoja_1.cell(i+2,53).string((aux[38].respuesta || '').toString())
-                            hoja_1.cell(i+2,54).string((aux[39].respuesta || '').toString())
-                            hoja_1.cell(i+2,55).string((aux[40].respuesta || '').toString())
-                            hoja_1.cell(i+2,56).string((aux[41].respuesta || '').toString())
-                            hoja_1.cell(i+2,57).string((aux[42].respuesta || '').toString())
-                            hoja_1.cell(i+2,58).string((aux[43].respuesta || '').toString())
-                            hoja_1.cell(i+2,59).string((aux[44].respuesta || '').toString())
-                            hoja_1.cell(i+2,60).string((aux[45].respuesta || '').toString())
-                            hoja_1.cell(i+2,61).string((aux[46].respuesta || '').toString())
-                            hoja_1.cell(i+2,62).string((aux[47].respuesta || '').toString())
-                            hoja_1.cell(i+2,63).string((aux[48].respuesta || '').toString())
-                            hoja_1.cell(i+2,64).string((aux[49].respuesta || '').toString())
-                            hoja_1.cell(i+2,65).string((aux[50].respuesta || '').toString())
-                            hoja_1.cell(i+2,66).string((aux[51].respuesta || '').toString())
-                            hoja_1.cell(i+2,67).string((aux[52].respuesta || '').toString())
-                            hoja_1.cell(i+2,68).string((aux[53].respuesta || '').toString())
-                            hoja_1.cell(i+2,69).string((aux[54].respuesta || '').toString())
-                            hoja_1.cell(i+2,70).string((aux[55].respuesta || '').toString())
-                            hoja_1.cell(i+2,71).string((aux[56].respuesta || '').toString())
-                            hoja_1.cell(i+2,72).string((aux[57].respuesta || '').toString())
-                            hoja_1.cell(i+2,73).string((aux[58].respuesta || '').toString())
-                            hoja_1.cell(i+2,74).string((aux[59].respuesta || '').toString())
-                            hoja_1.cell(i+2,75).string((aux[60].respuesta || '').toString())
-                            hoja_1.cell(i+2,76).string(('').toString())
-                            hoja_1.cell(i+2,77).string((aux[61].respuesta || '').toString())
-                            hoja_1.cell(i+2,77).string((aux[61].respuesta || '').toString())
-                            hoja_1.cell(i+2,78).string((aux[62].respuesta || '').toString())
-                            hoja_1.cell(i+2,79).string((aux[63].respuesta || '').toString())
-                            hoja_1.cell(i+2,80).string((aux[64].respuesta || '').toString())
-                            hoja_1.cell(i+2,81).string((aux[65].respuesta || '').toString())
-                            hoja_1.cell(i+2,82).string((aux[66].respuesta || '').toString())
-                            hoja_1.cell(i+2,83).string((aux[67].respuesta || '').toString())
-                            hoja_1.cell(i+2,84).string((aux[68].respuesta || '').toString())
-                            hoja_1.cell(i+2,85).string((aux[69].respuesta || '').toString())
-                            hoja_1.cell(i+2,86).string((aux[70].respuesta || '').toString())
-                            hoja_1.cell(i+2,87).string((aux[71].respuesta || '').toString())
-                            hoja_1.cell(i+2,88).string((aux[72].respuesta || '').toString())
-                            hoja_1.cell(i+2,89).string((aux[73].respuesta || '').toString())
-                            hoja_1.cell(i+2,90).string((aux[74].respuesta || '').toString())
-                            hoja_1.cell(i+2,91).string((aux[75].respuesta || '').toString())
-                            hoja_1.cell(i+2,92).string((aux[76].respuesta || '').toString())
-                            hoja_1.cell(i+2,93).string((aux[77].respuesta || '').toString())
-                            hoja_1.cell(i+2,94).string((aux[78].respuesta || '').toString())
-                            hoja_1.cell(i+2,95).string((aux[79].respuesta || '').toString())
-                            hoja_1.cell(i+2,96).string((aux[80].respuesta || '').toString())
-                            hoja_1.cell(i+2,97).string((aux[81].respuesta || '').toString())
-                            hoja_1.cell(i+2,98).string((aux[82].respuesta || '').toString())
-                            hoja_1.cell(i+2,99).string((aux[83].respuesta || '').toString())
-                            hoja_1.cell(i+2,100).string((aux[84].respuesta || '').toString())
-                            hoja_1.cell(i+2,101).string((aux[85].respuesta || '').toString())
-                            hoja_1.cell(i+2,102).string((aux[86].respuesta || '').toString())
-                            hoja_1.cell(i+2,103).string((aux[87].respuesta || '').toString())
-                            hoja_1.cell(i+2,104).string((aux[88].respuesta || '').toString())
-                            hoja_1.cell(i+2,105).string(('').toString())
-                            hoja_1.cell(i+2,106).string((aux[90].coordenadas || '').toString())
+                            aux.forEach(function(pregunta) {
+                                switch (parseInt(pregunta.id)) {
+                                    case 2:
+                                        hoja_1.cell(i + 2, 3).number(parseInt(pregunta.respuesta) || 0); //Folio
+                                        hoja_1.cell(i + 2, 5).date(moment(pregunta.create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
+                                        hoja_1.cell(i + 2, 6).date(moment(pregunta.create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
+                                        hoja_1.cell(i + 2, 106).string(pregunta.coordenadas); //Coordenadas
+                                        hoja_1.cell(i + 2, 2).string(pregunta.username); //Nombre de Usuario
+                                        break;
+                                    case 1:
+                                        hoja_1.cell(i + 2, 4).number(parseInt(pregunta.respuesta) || 0); //Folio
+                                        break;
+                                    case 3:
+                                        hoja_1.cell(i + 2, 15).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 4:
+                                        hoja_1.cell(i + 2, 16).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 5:
+                                        hoja_1.cell(i + 2, 17).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 6:
+                                        hoja_1.cell(i + 2, 18).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 7:
+                                        hoja_1.cell(i + 2, 19).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 8:
+                                        hoja_1.cell(i + 2, 20).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 9:
+                                        hoja_1.cell(i + 2, 21).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 10:
+                                        hoja_1.cell(i + 2, 22).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 11:
+                                        hoja_1.cell(i + 2, 23).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 12:
+                                        hoja_1.cell(i + 2, 24).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 13:
+                                        hoja_1.cell(i + 2, 25).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 14:
+                                        hoja_1.cell(i + 2, 26).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 15:
+                                        hoja_1.cell(i + 2, 27).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 16:
+                                        hoja_1.cell(i + 2, 28).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 17:
+                                        hoja_1.cell(i + 2, 29).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 89:
+                                        hoja_1.cell(i + 2, 30).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 90:
+                                        hoja_1.cell(i + 2, 31).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 91:
+                                        hoja_1.cell(i + 2, 32).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 92:
+                                        hoja_1.cell(i + 2, 33).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 93:
+                                        hoja_1.cell(i + 2, 34).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 94:
+                                        hoja_1.cell(i + 2, 35).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 95:
+                                        hoja_1.cell(i + 2, 36).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 96:
+                                        hoja_1.cell(i + 2, 37).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 97:
+                                        hoja_1.cell(i + 2, 38).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 98:
+                                        hoja_1.cell(i + 2, 39).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 99:
+                                        hoja_1.cell(i + 2, 40).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 100:
+                                        hoja_1.cell(i + 2, 41).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 101:
+                                        hoja_1.cell(i + 2, 42).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 102:
+                                        hoja_1.cell(i + 2, 43).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 103:
+                                        hoja_1.cell(i + 2, 44).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 104:
+                                        hoja_1.cell(i + 2, 45).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 105:
+                                        hoja_1.cell(i + 2, 46).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 106:
+                                        hoja_1.cell(i + 2, 47).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 107:
+                                        hoja_1.cell(i + 2, 48).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 108:
+                                        hoja_1.cell(i + 2, 49).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 109:
+                                        hoja_1.cell(i + 2, 50).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 110:
+                                        hoja_1.cell(i + 2, 51).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 37:
+                                        hoja_1.cell(i + 2, 52).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 38:
+                                        hoja_1.cell(i + 2, 53).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 39:
+                                        hoja_1.cell(i + 2, 54).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 40:
+                                        hoja_1.cell(i + 2, 55).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 41:
+                                        hoja_1.cell(i + 2, 56).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 42:
+                                        hoja_1.cell(i + 2, 57).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 43:
+                                        hoja_1.cell(i + 2, 58).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 44:
+                                        hoja_1.cell(i + 2, 59).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 45:
+                                        hoja_1.cell(i + 2, 60).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 46:
+                                        hoja_1.cell(i + 2, 61).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 47:
+                                        hoja_1.cell(i + 2, 62).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 48:
+                                        hoja_1.cell(i + 2, 63).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 49:
+                                        hoja_1.cell(i + 2, 64).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 50:
+                                        hoja_1.cell(i + 2, 65).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 51:
+                                        hoja_1.cell(i + 2, 66).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 52:
+                                        hoja_1.cell(i + 2, 67).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 53:
+                                        hoja_1.cell(i + 2, 68).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 54:
+                                        hoja_1.cell(i + 2, 69).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 55:
+                                        hoja_1.cell(i + 2, 70).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 56:
+                                        hoja_1.cell(i + 2, 71).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 57:
+                                        hoja_1.cell(i + 2, 72).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 58:
+                                        hoja_1.cell(i + 2, 73).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 59:
+                                        hoja_1.cell(i + 2, 74).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 60:
+                                        hoja_1.cell(i + 2, 75).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 61:
+                                        hoja_1.cell(i + 2, 77).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 62:
+                                        hoja_1.cell(i + 2, 78).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 63:
+                                        hoja_1.cell(i + 2, 79).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 64:
+                                        hoja_1.cell(i + 2, 80).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 65:
+                                        hoja_1.cell(i + 2, 81).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 66:
+                                        hoja_1.cell(i + 2, 82).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 67:
+                                        hoja_1.cell(i + 2, 83).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 68:
+                                        hoja_1.cell(i + 2, 84).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 69:
+                                        hoja_1.cell(i + 2, 85).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 70:
+                                        hoja_1.cell(i + 2, 86).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 71:
+                                        hoja_1.cell(i + 2, 87).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 72:
+                                        hoja_1.cell(i + 2, 88).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 73:
+                                        hoja_1.cell(i + 2, 89).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 74:
+                                        hoja_1.cell(i + 2, 90).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 75:
+                                        hoja_1.cell(i + 2, 91).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 76:
+                                        hoja_1.cell(i + 2, 92).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 77:
+                                        hoja_1.cell(i + 2, 93).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 78:
+                                        hoja_1.cell(i + 2, 94).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 79:
+                                        hoja_1.cell(i + 2, 95).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 80:
+                                        hoja_1.cell(i + 2, 96).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 81:
+                                        hoja_1.cell(i + 2, 97).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 82:
+                                        hoja_1.cell(i + 2, 98).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 83:
+                                        hoja_1.cell(i + 2, 99).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 84:
+                                        hoja_1.cell(i + 2, 100).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 85:
+                                        hoja_1.cell(i + 2, 101).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 86:
+                                        hoja_1.cell(i + 2, 102).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 87:
+                                        hoja_1.cell(i + 2, 103).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 88:
+                                        hoja_1.cell(i + 2, 104).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 199:
+                                        hoja_1.cell(i + 2, 105).string((pregunta.respuesta || '').toString());
+                                        break;
+
+                                }
+                            })
 
                         } else if (data.tipo_formulario.toString() === 'mantencion')
                         {
                             if (i===0){
+                                tipoReporte = 'MantencionClaro'
                                 hoja_1.cell(1,1).string('N°')
                                 hoja_1.cell(1,2).string('USUARIO')
                                 hoja_1.cell(1,3).string('FOLIO')
@@ -1827,7 +2191,7 @@ module.exports = (app) => {
                                 hoja_1.cell(1,36).string('TÉCNICO CERTIFICA O CAMBIA CABLE PIN')
                                 hoja_1.cell(1,37).string('TÉCNICO CERTIFICA O CAMBIA ROSETA TELEFONICA')
                                 hoja_1.cell(1,38).string('TÉCNICO CERTIFICA O CAMBIA EQUIPO TELEFONICO')
-                                hoja_1.cell(1,39).string('TÉCNICO DEJA CONECTORES CORRECTAMENTE  TORQUEADOS')
+                                hoja_1.cell(1,39).string('TÉCNICO DEJA CONECTORES CORRECTAMENTE TORQUEADOS')
                                 hoja_1.cell(1,40).string('TÉCNICO CERTIFICA O CAMBIA CABLE HDMI')
                                 hoja_1.cell(1,41).string('TÉCNICO CERTIFICA O CAMBIA CABLE RCA')
                                 hoja_1.cell(1,42).string('TÉCNICO CERTIFICA O CAMBIA DECODIFICADOR/CMO MTA')
@@ -1892,106 +2256,278 @@ module.exports = (app) => {
                                 hoja_1.cell(1,101).string('CÓDIGO DECODIFICADOR')
                                 hoja_1.cell(1,102).string('COORDENADAS')
                             }
-                            //hoja_1.cell(i+2,1).number((aux[0].formulario_id))
-                            hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
-                            hoja_1.cell(i+2,3).number(parseInt(aux[88].respuesta) || 0)
-                            hoja_1.cell(i+2,4).number(parseInt(aux[87].respuesta) || 0)
-                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
-                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
-                            hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
-                            hoja_1.cell(i+2,16).string((aux[1].respuesta || '').toString())
-                            hoja_1.cell(i+2,17).string((aux[2].respuesta || '').toString())
-                            hoja_1.cell(i+2,18).string((aux[3].respuesta || '').toString())
-                            hoja_1.cell(i+2,19).string((aux[4].respuesta || '').toString())
-                            hoja_1.cell(i+2,20).string((aux[5].respuesta || '').toString())
-                            hoja_1.cell(i+2,21).string((aux[6].respuesta || '').toString())
-                            hoja_1.cell(i+2,22).string((aux[7].respuesta || '').toString())
-                            hoja_1.cell(i+2,23).string((aux[8].respuesta || '').toString())
-                            hoja_1.cell(i+2,24).string((aux[9].respuesta || '').toString())
-                            hoja_1.cell(i+2,25).string((aux[10].respuesta || '').toString())
-                            hoja_1.cell(i+2,26).string((aux[12].respuesta || '').toString())
-                            hoja_1.cell(i+2,27).string((aux[14].respuesta || '').toString())
-                            hoja_1.cell(i+2,28).string((aux[15].respuesta || '').toString())
-                            hoja_1.cell(i+2,29).string((aux[16].respuesta || '').toString())
-                            hoja_1.cell(i+2,30).string((aux[17].respuesta || '').toString())
-                            hoja_1.cell(i+2,31).string((aux[18].respuesta || '').toString())
-                            hoja_1.cell(i+2,32).string(('').toString())
-                            hoja_1.cell(i+2,33).string((aux[20].respuesta || '').toString())
-                            hoja_1.cell(i+2,34).string((aux[25].respuesta || '').toString())
-                            hoja_1.cell(i+2,35).string((aux[21].respuesta || '').toString())
-                            hoja_1.cell(i+2,36).string((aux[22].respuesta || '').toString())
-                            hoja_1.cell(i+2,37).string((aux[23].respuesta || '').toString())
-                            hoja_1.cell(i+2,38).string((aux[24].respuesta || '').toString())
-                            hoja_1.cell(i+2,39).string((aux[25].respuesta || '').toString())
-                            hoja_1.cell(i+2,40).string((aux[26].respuesta || '').toString())
-                            hoja_1.cell(i+2,41).string((aux[27].respuesta || '').toString())
-                            hoja_1.cell(i+2,42).string((aux[28].respuesta || '').toString())
-                            hoja_1.cell(i+2,43).string((aux[29].respuesta || '').toString())
-                            hoja_1.cell(i+2,44).string((aux[30].respuesta || '').toString())
-                            hoja_1.cell(i+2,45).string((aux[31].respuesta || '').toString())
-                            hoja_1.cell(i+2,46).string((aux[32].respuesta || '').toString())
-                            hoja_1.cell(i+2,47).string((aux[33].respuesta || '').toString())
-                            hoja_1.cell(i+2,48).string((aux[34].respuesta || '').toString())
-                            hoja_1.cell(i+2,49).string((aux[35].respuesta || '').toString())
-                            hoja_1.cell(i+2,50).string((aux[36].respuesta || '').toString())
-                            hoja_1.cell(i+2,51).string((aux[37].respuesta || '').toString())
-                            hoja_1.cell(i+2,52).string((aux[38].respuesta || '').toString())
-                            hoja_1.cell(i+2,53).string((aux[39].respuesta || '').toString())
-                            hoja_1.cell(i+2,54).string((aux[40].respuesta || '').toString())
-                            hoja_1.cell(i+2,55).string((aux[41].respuesta || '').toString())
-                            hoja_1.cell(i+2,56).string((aux[42].respuesta || '').toString())
-                            hoja_1.cell(i+2,57).string((aux[43].respuesta || '').toString())
-                            hoja_1.cell(i+2,58).string((aux[44].respuesta || '').toString())
-                            hoja_1.cell(i+2,59).string((aux[45].respuesta || '').toString())
-                            hoja_1.cell(i+2,60).string((aux[46].respuesta || '').toString())
-                            hoja_1.cell(i+2,61).string((aux[47].respuesta || '').toString())
-                            hoja_1.cell(i+2,62).string((aux[48].respuesta || '').toString())
-                            hoja_1.cell(i+2,63).string((aux[49].respuesta || '').toString())
-                            hoja_1.cell(i+2,64).string((aux[50].respuesta || '').toString())
-                            hoja_1.cell(i+2,65).string((aux[51].respuesta || '').toString())
-                            hoja_1.cell(i+2,66).string((aux[52].respuesta || '').toString())
-                            hoja_1.cell(i+2,67).string((aux[53].respuesta || '').toString())
-                            hoja_1.cell(i+2,68).string((aux[54].respuesta || '').toString())
-                            hoja_1.cell(i+2,69).string((aux[55].respuesta || '').toString())
-                            hoja_1.cell(i+2,70).string((aux[56].respuesta || '').toString())
-                            hoja_1.cell(i+2,71).string((aux[57].respuesta || '').toString())
-                            hoja_1.cell(i+2,72).string(('').toString())
-                            hoja_1.cell(i+2,73).string((aux[58].respuesta || '').toString())
-                            hoja_1.cell(i+2,74).string((aux[59].respuesta || '').toString())
-                            hoja_1.cell(i+2,75).string((aux[60].respuesta || '').toString())
-                            hoja_1.cell(i+2,76).string((aux[61].respuesta || '').toString())
-                            hoja_1.cell(i+2,77).string((aux[62].respuesta || '').toString())
-                            hoja_1.cell(i+2,78).string((aux[63].respuesta || '').toString())
-                            hoja_1.cell(i+2,79).string((aux[64].respuesta || '').toString())
-                            hoja_1.cell(i+2,80).string((aux[65].respuesta || '').toString())
-                            hoja_1.cell(i+2,81).string((aux[66].respuesta || '').toString())
-                            hoja_1.cell(i+2,82).string((aux[67].respuesta || '').toString())
-                            hoja_1.cell(i+2,83).string((aux[68].respuesta || '').toString())
-                            hoja_1.cell(i+2,84).string((aux[69].respuesta || '').toString())
-                            hoja_1.cell(i+2,85).string((aux[70].respuesta || '').toString())
-                            hoja_1.cell(i+2,86).string((aux[71].respuesta || '').toString())
-                            hoja_1.cell(i+2,87).string((aux[72].respuesta || '').toString())
-                            hoja_1.cell(i+2,88).string((aux[73].respuesta || '').toString())
-                            hoja_1.cell(i+2,89).string((aux[74].respuesta || '').toString())
-                            hoja_1.cell(i+2,90).string((aux[75].respuesta || '').toString())
-                            hoja_1.cell(i+2,91).string((aux[76].respuesta || '').toString())
-                            hoja_1.cell(i+2,92).string((aux[77].respuesta || '').toString())
-                            hoja_1.cell(i+2,93).string((aux[78].respuesta || '').toString())
-                            hoja_1.cell(i+2,94).string((aux[79].respuesta || '').toString())
-                            hoja_1.cell(i+2,95).string((aux[80].respuesta || '').toString())
-                            hoja_1.cell(i+2,96).string((aux[81].respuesta || '').toString())
-                            hoja_1.cell(i+2,97).string((aux[82].respuesta || '').toString())
-                            hoja_1.cell(i+2,98).string((aux[83].respuesta || '').toString())
-                            hoja_1.cell(i+2,99).string((aux[84].respuesta || '').toString())
-                            hoja_1.cell(i+2,100).string((aux[84].respuesta || '').toString())
-                            hoja_1.cell(i+2,101).string((aux[86].respuesta || '').toString())
-                            hoja_1.cell(i+2,102).string((aux[0].coordenadas || '').toString())
 
+                            aux.forEach(function(pregunta){
+                                switch(parseInt(pregunta.id)) {
+                                    case 2:
+                                        hoja_1.cell(i+2,3).number(parseInt(pregunta.respuesta) || 0); //Folio
+                                        hoja_1.cell(i+2,5).date(moment(pregunta.create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
+                                        hoja_1.cell(i+2,6).date(moment(pregunta.create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
+                                        hoja_1.cell(i+2,102).string(pregunta.coordenadas); //Coordenadas
+                                        hoja_1.cell(i+2,2).string(pregunta.username); //Nombre de Usuario
+                                        break;
+                                    case 1:
+                                        hoja_1.cell(i+2,4).number(parseInt(pregunta.respuesta) || 0); //Ot Servicorp
+                                        break;
+                                    case 3:
+                                        hoja_1.cell(i+2,15).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 4:
+                                        hoja_1.cell(i+2,16).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 5:
+                                        hoja_1.cell(i+2,17).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 6:
+                                        hoja_1.cell(i+2,18).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 7:
+                                        hoja_1.cell(i+2,19).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 8:
+                                        hoja_1.cell(i+2,20).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 9:
+                                        hoja_1.cell(i+2,21).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 10:
+                                        hoja_1.cell(i+2,22).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 11:
+                                        hoja_1.cell(i+2,23).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 12:
+                                        hoja_1.cell(i+2,24).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 13:
+                                        hoja_1.cell(i+2,25).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 15:
+                                        hoja_1.cell(i+2,26).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 17:
+                                        hoja_1.cell(i+2,27).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 18:
+                                        hoja_1.cell(i+2,28).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 19:
+                                        hoja_1.cell(i+2,29).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 20:
+                                        hoja_1.cell(i+2,30).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 21:
+                                        hoja_1.cell(i+2,31).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 23:
+                                        hoja_1.cell(i+2,33).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 28:
+                                        hoja_1.cell(i+2,34).string((pregunta.respuesta || '').toString());
+                                        hoja_1.cell(i+2,39).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 24:
+                                        hoja_1.cell(i+2,35).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 25:
+                                        hoja_1.cell(i+2,36).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 26:
+                                        hoja_1.cell(i+2,37).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 27:
+                                        hoja_1.cell(i+2,38).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 29:
+                                        hoja_1.cell(i+2,40).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 30:
+                                        hoja_1.cell(i+2,41).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 31:
+                                        hoja_1.cell(i+2,42).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 32:
+                                        hoja_1.cell(i+2,43).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 33:
+                                        hoja_1.cell(i+2,44).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 34:
+                                        hoja_1.cell(i+2,45).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 35:
+                                        hoja_1.cell(i+2,46).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 36:
+                                        hoja_1.cell(i+2,47).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 37:
+                                        hoja_1.cell(i+2,48).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 38:
+                                        hoja_1.cell(i+2,49).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 39:
+                                        hoja_1.cell(i+2,50).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 40:
+                                        hoja_1.cell(i+2,51).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 41:
+                                        hoja_1.cell(i+2,52).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 42:
+                                        hoja_1.cell(i+2,53).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 43:
+                                        hoja_1.cell(i+2,54).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 44:
+                                        hoja_1.cell(i+2,55).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 45:
+                                        hoja_1.cell(i+2,56).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 46:
+                                        hoja_1.cell(i+2,57).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 47:
+                                        hoja_1.cell(i+2,58).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 48:
+                                        hoja_1.cell(i+2,59).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 49:
+                                        hoja_1.cell(i+2,60).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 50:
+                                        hoja_1.cell(i+2,61).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 51:
+                                        hoja_1.cell(i+2,62).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 52:
+                                        hoja_1.cell(i+2,63).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 53:
+                                        hoja_1.cell(i+2,64).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 54:
+                                        hoja_1.cell(i+2,65).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 55:
+                                        hoja_1.cell(i+2,66).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 56:
+                                        hoja_1.cell(i+2,67).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 57:
+                                        hoja_1.cell(i+2,68).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 58:
+                                        hoja_1.cell(i+2,69).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 59:
+                                        hoja_1.cell(i+2,70).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 60:
+                                        hoja_1.cell(i+2,71).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 61:
+                                        hoja_1.cell(i+2,73).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 62:
+                                        hoja_1.cell(i+2,74).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 63:
+                                        hoja_1.cell(i+2,75).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 64:
+                                        hoja_1.cell(i+2,76).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 65:
+                                        hoja_1.cell(i+2,77).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 66:
+                                        hoja_1.cell(i+2,78).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 67:
+                                        hoja_1.cell(i+2,79).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 68:
+                                        hoja_1.cell(i+2,80).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 69:
+                                        hoja_1.cell(i+2,81).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 70:
+                                        hoja_1.cell(i+2,82).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 71:
+                                        hoja_1.cell(i+2,83).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 72:
+                                        hoja_1.cell(i+2,84).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 73:
+                                        hoja_1.cell(i+2,85).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 74:
+                                        hoja_1.cell(i+2,86).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 75:
+                                        hoja_1.cell(i+2,87).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 76:
+                                        hoja_1.cell(i+2,88).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 77:
+                                        hoja_1.cell(i+2,89).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 78:
+                                        hoja_1.cell(i+2,90).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 79:
+                                        hoja_1.cell(i+2,91).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 80:
+                                        hoja_1.cell(i+2,92).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 81:
+                                        hoja_1.cell(i+2,93).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 82:
+                                        hoja_1.cell(i+2,94).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 83:
+                                        hoja_1.cell(i+2,95).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 84:
+                                        hoja_1.cell(i+2,96).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 85:
+                                        hoja_1.cell(i+2,97).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 86:
+                                        hoja_1.cell(i+2,98).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 87:
+                                        hoja_1.cell(i+2,99).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 88:
+                                        hoja_1.cell(i+2,100).string((pregunta.respuesta || '').toString());
+                                        break;
+                                    case 199:
+                                        hoja_1.cell(i+2,101).string((pregunta.respuesta || '').toString());
+                                        break;
+                                }
+                            });
 
-                        } else if(data.tipo_formulario.toString() === 'desconexion')
-                        {
+                        } else if(data.tipo_formulario.toString() === 'desconexion') {
                             if (i===0){
-                                tipoReporte = 'Desconexion'
+                                tipoReporte = 'DesconexionClaro'
                                 console.log('entró')
                                 hoja_1.cell(1,1).string('N°')
                                 hoja_1.cell(1,2).string('USUARIO')
@@ -2019,20 +2555,45 @@ module.exports = (app) => {
                             }
 
                             //hoja_1.cell(i+2,1).number((aux[0].formulario_id))
-                            hoja_1.cell(i+2,2).string((aux[0].username || '').toString())
-                            hoja_1.cell(i+2,3).number(parseInt(aux[9].respuesta) || 0)
-                            hoja_1.cell(i+2,4).number(parseInt(aux[8].respuesta) || 0)
-                            hoja_1.cell(i+2,5).date(moment(aux[0].create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
-                            hoja_1.cell(i+2,6).date(moment(aux[0].create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
-                            hoja_1.cell(i+2,15).string((aux[0].respuesta || '').toString())
-                            hoja_1.cell(i+2,16).string((aux[1].respuesta || '').toString())
-                            hoja_1.cell(i+2,17).string((aux[2].respuesta || '').toString())
-                            hoja_1.cell(i+2,18).string((aux[3].respuesta || '').toString())
-                            hoja_1.cell(i+2,19).string((aux[4].respuesta || '').toString())
-                            hoja_1.cell(i+2,20).string((aux[5].respuesta || '').toString())
-                            hoja_1.cell(i+2,21).string((aux[6].respuesta || '').toString())
-                            hoja_1.cell(i+2,22).string((aux[7].respuesta || '').toString())
-                            hoja_1.cell(i+2,23).string((aux[7].coordenadas || '').toString())
+                            aux.forEach(function(pregunta){
+                                switch(parseInt(pregunta.id)){
+                                    case 2:
+                                        hoja_1.cell(i+2,3).number(parseInt(pregunta.respuesta) || 0); //Folio
+                                        hoja_1.cell(i+2,5).date(moment(pregunta.create_time,'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'dd-mm-yyyy'})
+                                        hoja_1.cell(i+2,6).date(moment(pregunta.create_time, 'YYYY-MM-DDTHH:mm:ss:SSSZ').subtract(timezone, 'hours').format()).style({numberFormat: 'HH:MM'})
+                                        hoja_1.cell(i+2,23).string(pregunta.coordenadas); //Coordenadas
+                                        hoja_1.cell(i+2,2).string(pregunta.username); //Nombre de Usuario
+                                        break;
+                                    case 1:
+                                        hoja_1.cell(i+2,4).number(parseInt(pregunta.respuesta) || 0); //Ot Servicorp
+                                        break;
+                                    case 111:
+                                        hoja_1.cell(i+2,15).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 112:
+                                        hoja_1.cell(i+2,16).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 113:
+                                        hoja_1.cell(i+2,17).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 114:
+                                        hoja_1.cell(i+2,18).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 115:
+                                        hoja_1.cell(i+2,19).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 116:
+                                        hoja_1.cell(i+2,20).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 117:
+                                        hoja_1.cell(i+2,21).string((pregunta.respuesta || '').toString())
+                                        break;
+                                    case 52:
+                                        hoja_1.cell(i+2,22).string((pregunta.respuesta || '').toString())
+                                        break;
+
+                                }
+                            });
                         }
 
                         if (i === formsId.length-1){
