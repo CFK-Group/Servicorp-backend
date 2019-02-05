@@ -3,7 +3,7 @@ let formularioModel = {}
 const decodeImg = require('./../middlewares/decodeAndSave.js')
 
 formularioModel.getPreguntas = (callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM srv_pregunta ORDER BY id', (err, row) => {
             if(err){
                 callback(err, null)
@@ -13,11 +13,12 @@ formularioModel.getPreguntas = (callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getRespuestas = (callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM srv_respuesta ORDER BY id', (err, row) => {
             if(err){
                 callback(err, null)
@@ -27,11 +28,12 @@ formularioModel.getRespuestas = (callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.createForm = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let empresa = ''
         let values = [
             req.latitud, 
@@ -486,11 +488,12 @@ formularioModel.createForm = (req, callback) => {
                 })
             })
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getFormularios = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let data = [
             req.tipo_formulario_id,
             req.usuario_id
@@ -506,11 +509,12 @@ formularioModel.getFormularios = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getResponsesByFormId = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let formulario_id = req
         console.log(formulario_id)
         connection.query(`SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?`, formulario_id, (err, row) => {
@@ -523,11 +527,12 @@ formularioModel.getResponsesByFormId = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getQuestionsByFormId = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let formulario_id = req
         connection.query(`select glosa, respuesta, respuestas.id from srv_pregunta 
         inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
@@ -540,11 +545,12 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getTotalFormsByUserId = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let usuario_id = req
         connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=1 
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=2
@@ -561,11 +567,12 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getTotalFormsByUserIdAndDate = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let data = req
         prueba = connection.query(`SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=1 and (create_time BETWEEN ? AND ?)
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=2 and (create_time BETWEEN ? AND ?)
@@ -592,7 +599,8 @@ formularioModel.getTotalFormsByUserIdAndDate = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getTotalFormsByDate = (req, callback) => {
@@ -609,7 +617,7 @@ formularioModel.getTotalFormsByDate = (req, callback) => {
             query = query.concat(` UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id=6 AND create_time BETWEEN '${req.fechas[i]}' AND '${req.fechas[i+1]}'`)
         }
     }
-    if(connection){
+    pool.getConnection(function(err, connection){
         prueba = connection.query(query, fechas, (err, row) => {
             if(err){
                 console.log(`Error en getTotalFormsByDate: ${err.message}`)
@@ -620,12 +628,12 @@ formularioModel.getTotalFormsByDate = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
-
+        connection.release()
+    })
 }
 
 formularioModel.getZips = (callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         connection.query(`SELECT * FROM cfk_servicorp.srv_img_descarga WHERE estado='Activo'`, (err, row) => {
             if(err){
                 console.log(`Error en getZips: ${err.message}`)
@@ -636,12 +644,13 @@ formularioModel.getZips = (callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getReporte = (req, callback) => {
     let values = req
-    if(connection){
+    pool.getConnection(function(err, connection){
         prueba = connection.query(`select srv_pregunta.glosa,srv_pregunta.id, srv_respuesta.respuesta,srv_respuesta.create_time,formulario_id,formulario_tipo_formulario_id,username, concat(srv_formulario.latitud, ',', srv_formulario.longitud) as coordenadas from srv_respuesta
         inner join srv_pregunta
         on srv_respuesta.pregunta_id=srv_pregunta.id
@@ -659,11 +668,12 @@ formularioModel.getReporte = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getFormulariosId = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         prueba = connection.query('SELECT srv_formulario.id FROM srv_formulario inner join srv_usuario on srv_formulario.usuario_id = srv_usuario.id WHERE tipo_formulario_id in (SELECT srv_tipo_formulario.id FROM cfk_servicorp.srv_tipo_formulario  where srv_tipo_formulario.empresa like lower(?) and nombre like lower(?)) and srv_usuario.empresa like lower(?) and (srv_formulario.create_time >= (?) and srv_formulario.create_time <= (?));', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%', '%'+req.empresa+'%', req.fechaInicio, req.fechaFin], (err, row) => {
             if(err){
                 //console.log('Error en getFormulariosId', err.message)
@@ -674,11 +684,12 @@ formularioModel.getFormulariosId = (req, callback) => {
             }
             console.log(prueba.sql)
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.getFormularioImgs = (req, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         prueba = connection.query('SELECT ruta FROM srv_imagen WHERE formulario_id=?', req, (err, row) => {
             if(err){
                 console.log('Error en getFormularioImgs', err.message)
@@ -687,11 +698,12 @@ formularioModel.getFormularioImgs = (req, callback) => {
                 callback(null, row)
             }
         })
-    }
+        connection.release()
+    })
 }
 
 formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
-    if(connection){
+    pool.getConnection(function(err, connection){
         let values = []
         if(idTipoFormulario == 1 || idTipoFormulario == 2){
             values.respuestas = [
@@ -5132,7 +5144,8 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                 })
             })
         }
-    }
+        connection.release()
+    })
 }
 
 module.exports = formularioModel
