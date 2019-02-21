@@ -1,4 +1,5 @@
 let userModel = {};
+var log = require('./logger').Logger;
 
 userModel.getUsers = (callback) => {
     pool.getConnection(function(err, connection){
@@ -6,7 +7,7 @@ userModel.getUsers = (callback) => {
             (err, row) => {
                 if(err){
                     callback(err, null)
-                    console.log(`Error en getUsers: ${err.message}`)
+                    log.error(`Error en getUsers: ${err.message}`)
                 }
                 if(!err){
                     callback(null, row)
@@ -23,7 +24,7 @@ userModel.getUserById = (id, callback) => {
             (err, row) => {
                 if(err){
                     callback(err, null)
-                    console.log(`Error en getUserById: ${err.message}`)
+                    log.error(`Error en getUserById: ${err.message}`)
                 }
                 if(!err){
                     callback(null, row)
@@ -40,7 +41,7 @@ userModel.getUserByUsername = (user, callback) => {
             (err, row) => {
                 if(err){
                     callback(err, null);
-                    console.log(`Error en getUserByUsername: ${err.message}`)
+                    log.error(`Error en getUserByUsername: ${err.message}`)
                 }
                 if(!err) callback(null, row);
             }
@@ -56,7 +57,7 @@ userModel.createUser = (userData, callback) => {
             (err, row) => {
                 if(err){
                     callback(err, null)
-                    console.log(`Error en createUser: ${err.message}`)
+                    log.error(`Error en createUser: ${err.message}`)
                 }
                 if(!err) callback(null, row)
             }
@@ -72,7 +73,7 @@ userModel.saveToken = (userData, callback) => {
             (err, row) => {
                 if(err){
                     callback(err, null)
-                    console.log(`Error en saveToken: ${err.message}`)
+                    log.error(`Error en saveToken: ${err.message}`)
                 }
                 if(!err) callback(null, row)
             }

@@ -1,13 +1,14 @@
 let fs = require('fs')
 let formularioModel = {}
 const decodeImg = require('./../middlewares/decodeAndSave.js')
+var log = require('./logger').Logger;
 
 formularioModel.getPreguntas = (callback) => {
     pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM srv_pregunta ORDER BY id', (err, row) => {
             if(err){
                 callback(err, null)
-                console.log(`Error en getPreguntas: ${err.message}`)
+                log.error(`Error en getPreguntas: ${err.message}`)
             }
             if(!err){
                 callback(null, row)
@@ -22,7 +23,7 @@ formularioModel.getRespuestas = (callback) => {
         connection.query('SELECT * FROM srv_respuesta ORDER BY id', (err, row) => {
             if(err){
                 callback(err, null)
-                console.log(`Error en getRespuestas: ${err.message}`)
+                log.error(`Error en getRespuestas: ${err.message}`)
             }
             if(!err){
                 callback(null, row)
@@ -43,19 +44,18 @@ formularioModel.createForm = (req, callback) => {
         ]
         connection.beginTransaction((err) => {
             if (err) { 
-                console.log(err)
+                log.error(err)
             }
 
             // inserción de un nuevo formulario
             connection.query('INSERT INTO srv_formulario (latitud, longitud, tipo_formulario_id, usuario_id) VALUES (?)', [values], (err, result) => {
                 if(err)  {  
                     connection. rollback ( function ( )  { 
-                        console.log('Error al crear nuevo formulario: ' + err.message)
+                        log.error('Error al crear nuevo formulario: ' + err.message)
                         throw err
                     }) 
                 }
                 let formulario_id = result.insertId || null
-                console.log(formulario_id+'++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 
                 // evaluamos que tipo de formulario acabamos de recibir
                 switch(req.tipo_formulario_id){
@@ -359,7 +359,7 @@ formularioModel.createForm = (req, callback) => {
                         ]
                     break
                     default:
-                        console.log('Error en el id de formulario')
+                        log.error('Error en el id de formulario')
                     break
                 }
 
@@ -367,7 +367,7 @@ formularioModel.createForm = (req, callback) => {
                 connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES ?', [values], (err, result) => {
                     if (err) { 
                         return connection.rollback(() => {
-                            console.log('Error al insertar respuestas: ' + err.message)
+                            log.error('Error al insertar respuestas: ' + err.message)
                             throw err
                         })
                     } 
@@ -448,40 +448,38 @@ formularioModel.createForm = (req, callback) => {
                     if(typeof(imgs.imagen_10) !== 'undefined' && imgs.imagen_10 !== ''){
                         values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img10', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img10' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
-                    console.log('cantidad de imagenes a guardar en la bdd: ' + values.length)
-                    console.log(values)
                     
                     if(values.length > 0){
                         // guardando las rutas de las imágenes en la bdd
                         connection.query('INSERT INTO srv_imagen (nombre_imagen, ruta, formulario_id, formulario_tipo_formulario_id, formulario_usuario_id) VALUES ?', [values], (err, result) => {
                             if (err) {
                                 return connection.rollback(function() {
-                                    console.log('Error al guardar la(s) imagen(es) en la bdd: ' + err.message)
+                                    log.error('Error al guardar la(s) imagen(es) en la bdd: ' + err.message)
                                     throw err
                                 })
                             }
                             connection.commit(function (err) {
-                                console.log('Commiting transaction.....');
+                                log.info('Commiting transaction.....');
                                 if (err) {
                                     return connection.rollback(function () {
                                         throw err
                                     })
                                 }
     
-                                console.log('Transaction Complete.')
+                                log.info('Transaction Complete.')
                                 callback(null, result);
                             })
                         })
                     }else{
                         connection.commit(function (err) {
-                            console.log('Commiting transaction.....')
+                            log.info('Commiting transaction.....')
                             if (err) {
                                 return connection.rollback(function () {
                                     throw err
                                 })
                             }
 
-                            console.log('Transaction Complete.')
+                            log.info('Transaction Complete.')
                             callback(null, result)
                         });
                     }
@@ -498,14 +496,12 @@ formularioModel.getFormularios = (req, callback) => {
             req.tipo_formulario_id,
             req.usuario_id
         ]
-        console.log(data)
         connection.query(`SELECT * FROM srv_formulario WHERE tipo_formulario_id=? and usuario_id=?`, data, (err, row) => {
             if(err){
                 callback(err, null)
-                console.log(`Error en getFormularios: ${err.message}`)
+                log.error(`Error en getFormularios: ${err.message}`)
             }
             if(!err){
-                console.log(row)
                 callback(null, row)
             }
         })
@@ -516,14 +512,12 @@ formularioModel.getFormularios = (req, callback) => {
 formularioModel.getResponsesByFormId = (req, callback) => {
     pool.getConnection(function(err, connection){
         let formulario_id = req
-        console.log(formulario_id)
         connection.query(`SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?`, formulario_id, (err, row) => {
             if(err){
                 callback(err, null)
-                console.log(`Error en getFormularios: ${err.message}`)
+                log.error(`Error en getFormularios: ${err.message}`)
             }
             if(!err){
-                console.log(row)
                 callback(null, row)
             }
         })
@@ -537,11 +531,10 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
         connection.query(`select glosa, respuesta, respuestas.id from srv_pregunta 
         inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
             if(err){
-                console.log(`Error en getFormularios: ${err.message}`)
+                log.error(`Error en getFormularios: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
-                console.log(row)
                 callback(null, row)
             }
         })
@@ -559,11 +552,10 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=6;`, [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
             if(err){
-                console.log(`Error en getTotalFormsByUserId: ${err.message}`)
+                log.error(`Error en getTotalFormsByUserId: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
-                console.log(row)
                 callback(null, row)
             }
         })
@@ -587,15 +579,11 @@ formularioModel.getTotalFormsByUserIdAndDate = (req, callback) => {
             data.usuario_id, data.fechaInicio, data.fechaFin,
             data.usuario_id, data.fechaInicio, data.fechaFin
         ], (err, row) => {
-            console.log('**************************************')
-            console.log(prueba.sql)
-            console.log('**************************************')
             if(err){
-                console.log(`Error en getTotalFormsByUserId: ${err.message}`)
+                log.error(`Error en getTotalFormsByUserId: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
-                console.log(row)
                 callback(null, row)
             }
         })
@@ -620,8 +608,7 @@ formularioModel.getTotalFormsByDate = (req, callback) => {
     pool.getConnection(function(err, connection){
         prueba = connection.query(query, fechas, (err, row) => {
             if(err){
-                console.log(`Error en getTotalFormsByDate: ${err.message}`)
-                console.log(prueba.sql)
+                log.error(`Error en getTotalFormsByDate: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
@@ -636,11 +623,10 @@ formularioModel.getZips = (callback) => {
     pool.getConnection(function(err, connection){
         connection.query(`SELECT * FROM cfk_servicorp.srv_img_descarga WHERE estado='Activo'`, (err, row) => {
             if(err){
-                console.log(`Error en getZips: ${err.message}`)
+                log.error(`Error en getZips: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
-                console.log(row)
                 callback(null, row)
             }
         })
@@ -660,11 +646,10 @@ formularioModel.getReporte = (req, callback) => {
         on srv_respuesta.formulario_id=srv_formulario.id
         where formulario_id='?' and srv_usuario.empresa like lower(?)`, [values.formulario_id, '%'+values.empresa+'%'], (err, row) => {
             if(err){
-                console.log(`Error en getReporte: ${err.message}`)
+                log.error(`Error en getReporte: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
-                console.log(prueba.sql)
                 callback(null, row)
             }
         })
@@ -676,13 +661,12 @@ formularioModel.getFormulariosId = (req, callback) => {
     pool.getConnection(function(err, connection){
         prueba = connection.query('SELECT srv_formulario.id FROM srv_formulario inner join srv_usuario on srv_formulario.usuario_id = srv_usuario.id WHERE tipo_formulario_id in (SELECT srv_tipo_formulario.id FROM cfk_servicorp.srv_tipo_formulario  where srv_tipo_formulario.empresa like lower(?) and nombre like lower(?)) and srv_usuario.empresa like lower(?) and (srv_formulario.create_time >= (?) and srv_formulario.create_time <= (?));', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%', '%'+req.empresa+'%', req.fechaInicio, req.fechaFin], (err, row) => {
             if(err){
-                //console.log('Error en getFormulariosId', err.message)
+                //log.error('Error en getFormulariosId', err.message)
                 callback(err, null)
             }
             if(!err){
                 callback(null, row)
             }
-            console.log(prueba.sql)
         })
         connection.release()
     })
@@ -692,7 +676,7 @@ formularioModel.getFormularioImgs = (req, callback) => {
     pool.getConnection(function(err, connection){
         prueba = connection.query('SELECT ruta FROM srv_imagen WHERE formulario_id=?', req, (err, row) => {
             if(err){
-                console.log('Error en getFormularioImgs', err.message)
+                log.error('Error en getFormularioImgs', err.message)
             }
             if(!err){
                 callback(null, row)
@@ -894,13 +878,13 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
             ]
             connection.beginTransaction((err) => {
                 if (err) { 
-                    console.log(err, err.message)
+                    log.error(err, err.message)
                 }
                 let query = new Promise((resolve, reject) => {
                     connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
                         if (err) { 
                             return connection.rollback(() => {
-                                console.log('Error al editar respuestas: ' + err.message)
+                                log.error('Error al editar respuestas: ' + err.message)
                                 reject(new Error('Error'))
                             })
                         }else{
@@ -915,7 +899,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -929,7 +913,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -943,7 +927,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -957,7 +941,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -971,7 +955,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -985,7 +969,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -999,7 +983,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1013,7 +997,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1027,7 +1011,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1041,7 +1025,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[10], values.ids[10]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1055,7 +1039,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[11], values.ids[11]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1069,7 +1053,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[12], values.ids[12]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1083,7 +1067,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[13], values.ids[13]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1097,7 +1081,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[14], values.ids[14]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1111,7 +1095,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[15], values.ids[15]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1125,7 +1109,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[16], values.ids[16]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1139,7 +1123,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[17], values.ids[17]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1153,7 +1137,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[18], values.ids[18]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1167,7 +1151,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[19], values.ids[19]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1181,7 +1165,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[20], values.ids[20]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1195,7 +1179,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[21], values.ids[21]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1209,7 +1193,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[22], values.ids[22]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1223,7 +1207,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[23], values.ids[23]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1237,7 +1221,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[24], values.ids[24]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1251,7 +1235,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[25], values.ids[25]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1265,7 +1249,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[26], values.ids[26]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1279,7 +1263,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[27], values.ids[27]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1293,7 +1277,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[28], values.ids[28]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1307,7 +1291,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[29], values.ids[29]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1321,7 +1305,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[30], values.ids[30]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1335,7 +1319,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[31], values.ids[31]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1349,7 +1333,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[32], values.ids[32]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1363,7 +1347,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[33], values.ids[33]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1377,7 +1361,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[34], values.ids[34]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1391,7 +1375,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[35], values.ids[35]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1405,7 +1389,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[36], values.ids[36]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1419,7 +1403,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[37], values.ids[37]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1433,7 +1417,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[38], values.ids[38]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1447,7 +1431,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[39], values.ids[39]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1461,7 +1445,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[40], values.ids[40]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1475,7 +1459,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[41], values.ids[41]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1489,7 +1473,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[42], values.ids[42]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1503,7 +1487,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[43], values.ids[43]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1517,7 +1501,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[44], values.ids[44]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1531,7 +1515,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[45], values.ids[45]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1545,7 +1529,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[46], values.ids[46]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1559,7 +1543,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[47], values.ids[47]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1573,7 +1557,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[48], values.ids[48]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1587,7 +1571,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[49], values.ids[49]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1601,7 +1585,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[50], values.ids[50]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1615,7 +1599,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[51], values.ids[51]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1629,7 +1613,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[52], values.ids[52]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1643,7 +1627,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[53], values.ids[53]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1657,7 +1641,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[54], values.ids[54]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1671,7 +1655,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[55], values.ids[55]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1685,7 +1669,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[56], values.ids[56]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1699,7 +1683,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[57], values.ids[57]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1713,7 +1697,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[58], values.ids[58]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1727,7 +1711,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[59], values.ids[59]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1741,7 +1725,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[60], values.ids[60]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1755,7 +1739,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[61], values.ids[61]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1769,7 +1753,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[62], values.ids[62]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1783,7 +1767,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[63], values.ids[63]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1797,7 +1781,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[64], values.ids[64]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1811,7 +1795,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[65], values.ids[65]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1825,7 +1809,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[66], values.ids[66]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1839,7 +1823,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[67], values.ids[67]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1853,7 +1837,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[68], values.ids[68]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1867,7 +1851,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[69], values.ids[69]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1881,7 +1865,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[70], values.ids[70]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1895,7 +1879,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[71], values.ids[71]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1909,7 +1893,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[72], values.ids[72]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1923,7 +1907,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[73], values.ids[73]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1937,7 +1921,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[74], values.ids[74]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1951,7 +1935,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[75], values.ids[75]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1965,7 +1949,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[76], values.ids[76]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1979,7 +1963,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[77], values.ids[77]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -1993,7 +1977,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[78], values.ids[78]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2007,7 +1991,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[79], values.ids[79]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2021,7 +2005,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[80], values.ids[80]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2035,7 +2019,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[81], values.ids[81]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2049,7 +2033,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[82], values.ids[82]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2063,7 +2047,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[83], values.ids[83]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2077,7 +2061,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[84], values.ids[84]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2091,7 +2075,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[85], values.ids[85]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2105,7 +2089,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[86], values.ids[86]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2119,7 +2103,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[87], values.ids[87]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2133,7 +2117,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[88], values.ids[88]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2147,7 +2131,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[89], values.ids[89]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2163,11 +2147,12 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                                 throw err
                             })
                         }
-                        console.log('Transaction Complete.')
+                        log.info('Transaction Complete.')
                         callback(null)
                     })
                 })
                 .catch(err => {
+                    log.error(err)
                     callback(err, null)
                 })
             })
@@ -2354,13 +2339,13 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
             ]
             connection.beginTransaction((err) => {
                 if (err) { 
-                    console.log(err, err.message)
+                    log.error(err, err.message)
                 }
                 let query = new Promise((resolve, reject) => {
                     connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
                         if (err) { 
                             return connection.rollback(() => {
-                                console.log('Error al editar respuestas: ' + err.message)
+                                log.error('Error al editar respuestas: ' + err.message)
                                 reject(new Error('Error'))
                             })
                         }else{
@@ -2375,7 +2360,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2389,7 +2374,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2403,7 +2388,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2417,7 +2402,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2431,7 +2416,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2445,7 +2430,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2459,7 +2444,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2473,7 +2458,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2487,7 +2472,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2501,7 +2486,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[10], values.ids[10]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2515,7 +2500,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[11], values.ids[11]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2529,7 +2514,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[12], values.ids[12]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2543,7 +2528,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[13], values.ids[13]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2557,7 +2542,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[14], values.ids[14]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2571,7 +2556,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[15], values.ids[15]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2585,7 +2570,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[16], values.ids[16]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2599,7 +2584,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[17], values.ids[17]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2613,7 +2598,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[18], values.ids[18]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2627,7 +2612,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[19], values.ids[19]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2641,7 +2626,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[20], values.ids[20]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2655,7 +2640,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[21], values.ids[21]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2669,7 +2654,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[22], values.ids[22]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2683,7 +2668,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[23], values.ids[23]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2697,7 +2682,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[24], values.ids[24]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2711,7 +2696,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[25], values.ids[25]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2725,7 +2710,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[26], values.ids[26]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2739,7 +2724,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[27], values.ids[27]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2753,7 +2738,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[28], values.ids[28]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2767,7 +2752,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[29], values.ids[29]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2781,7 +2766,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[30], values.ids[30]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2795,7 +2780,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[31], values.ids[31]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2809,7 +2794,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[32], values.ids[32]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2823,7 +2808,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[33], values.ids[33]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2837,7 +2822,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[34], values.ids[34]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2851,7 +2836,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[35], values.ids[35]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2865,7 +2850,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[36], values.ids[36]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2879,7 +2864,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[37], values.ids[37]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2893,7 +2878,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[38], values.ids[38]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2907,7 +2892,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[39], values.ids[39]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2921,7 +2906,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[40], values.ids[40]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2935,7 +2920,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[41], values.ids[41]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2949,7 +2934,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[42], values.ids[42]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2963,7 +2948,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[43], values.ids[43]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2977,7 +2962,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[44], values.ids[44]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -2991,7 +2976,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[45], values.ids[45]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3005,7 +2990,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[46], values.ids[46]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3019,7 +3004,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[47], values.ids[47]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3033,7 +3018,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[48], values.ids[48]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3047,7 +3032,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[49], values.ids[49]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3061,7 +3046,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[50], values.ids[50]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3075,7 +3060,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[51], values.ids[51]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3089,7 +3074,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[52], values.ids[52]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3103,7 +3088,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[53], values.ids[53]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3117,7 +3102,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[54], values.ids[54]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3131,7 +3116,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[55], values.ids[55]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3145,7 +3130,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[56], values.ids[56]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3159,7 +3144,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[57], values.ids[57]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3173,7 +3158,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[58], values.ids[58]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3187,7 +3172,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[59], values.ids[59]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3201,7 +3186,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[60], values.ids[60]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3215,7 +3200,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[61], values.ids[61]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3229,7 +3214,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[62], values.ids[62]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3243,7 +3228,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[63], values.ids[63]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3257,7 +3242,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[64], values.ids[64]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3271,7 +3256,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[65], values.ids[65]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3285,7 +3270,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[66], values.ids[66]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3299,7 +3284,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[67], values.ids[67]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3313,7 +3298,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[68], values.ids[68]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3327,7 +3312,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[69], values.ids[69]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3341,7 +3326,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[70], values.ids[70]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3355,7 +3340,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[71], values.ids[71]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3369,7 +3354,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[72], values.ids[72]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3383,7 +3368,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[73], values.ids[73]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3397,7 +3382,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[74], values.ids[74]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3411,7 +3396,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[75], values.ids[75]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3425,7 +3410,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[76], values.ids[76]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3439,7 +3424,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[77], values.ids[77]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3453,7 +3438,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[78], values.ids[78]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3467,7 +3452,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[79], values.ids[79]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3481,7 +3466,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[80], values.ids[80]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3495,7 +3480,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[81], values.ids[81]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3509,7 +3494,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[82], values.ids[82]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3523,7 +3508,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[83], values.ids[83]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3537,7 +3522,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[84], values.ids[84]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3551,7 +3536,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[85], values.ids[85]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3565,7 +3550,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[86], values.ids[86]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3581,11 +3566,12 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                                 throw err
                             })
                         }
-                        console.log('Transaction Complete.')
+                        log.info('Transaction Complete.')
                         callback(null)
                     })
                 })
                 .catch(err => {
+                    log.error(err)
                     callback(err, null)
                 })
             })
@@ -3616,13 +3602,13 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
             ]
             connection.beginTransaction((err) => {
                 if (err) { 
-                    console.log(err, err.message)
+                    log.error(err, err.message)
                 }
                 let query = new Promise((resolve, reject) => {
                     connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
                         if (err) { 
                             return connection.rollback(() => {
-                                console.log('Error al editar respuestas: ' + err.message)
+                                log.error('Error al editar respuestas: ' + err.message)
                                 reject(new Error('Error'))
                             })
                         }else{
@@ -3637,7 +3623,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3651,7 +3637,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3665,7 +3651,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3679,7 +3665,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3693,7 +3679,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3707,7 +3693,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3721,7 +3707,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3735,7 +3721,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3749,7 +3735,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3765,11 +3751,12 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                                 throw err
                             })
                         }
-                        console.log('Transaction Complete.')
+                        log.info('Transaction Complete.')
                         callback(null)
                     })
                 })
                 .catch(err => {
+                    log.error(err)
                     callback(err, null)
                 })
             })
@@ -3950,13 +3937,13 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
             ]
             connection.beginTransaction((err) => {
                 if (err) { 
-                    console.log(err, err.message)
+                    log.error(err, err.message)
                 }
                 let query = new Promise((resolve, reject) => {
                     connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[0], values.ids[0]], (err, result) => {
                         if (err) { 
                             return connection.rollback(() => {
-                                console.log('Error al editar respuestas: ' + err.message)
+                                log.error('Error al editar respuestas: ' + err.message)
                                 reject(new Error('Error'))
                             })
                         }else{
@@ -3971,7 +3958,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[1], values.ids[1]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3985,7 +3972,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[2], values.ids[2]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -3999,7 +3986,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[3], values.ids[3]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4013,7 +4000,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[4], values.ids[4]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4027,7 +4014,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[5], values.ids[5]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4041,7 +4028,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[6], values.ids[6]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4055,7 +4042,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[7], values.ids[7]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4069,7 +4056,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[8], values.ids[8]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4083,7 +4070,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[9], values.ids[9]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4097,7 +4084,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[10], values.ids[10]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4111,7 +4098,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[11], values.ids[11]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4125,7 +4112,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[12], values.ids[12]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4139,7 +4126,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[13], values.ids[13]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4153,7 +4140,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[14], values.ids[14]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4167,7 +4154,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[15], values.ids[15]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4181,7 +4168,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[16], values.ids[16]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4195,7 +4182,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[17], values.ids[17]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4209,7 +4196,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[18], values.ids[18]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4223,7 +4210,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[19], values.ids[19]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4237,7 +4224,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[20], values.ids[20]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4251,7 +4238,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[21], values.ids[21]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4265,7 +4252,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[22], values.ids[22]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4279,7 +4266,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[23], values.ids[23]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4293,7 +4280,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[24], values.ids[24]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4307,7 +4294,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[25], values.ids[25]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4321,7 +4308,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[26], values.ids[26]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4335,7 +4322,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[27], values.ids[27]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4349,7 +4336,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[28], values.ids[28]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4363,7 +4350,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[29], values.ids[29]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4377,7 +4364,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[30], values.ids[30]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4391,7 +4378,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[31], values.ids[31]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4405,7 +4392,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[32], values.ids[32]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4419,7 +4406,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[33], values.ids[33]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4433,7 +4420,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[34], values.ids[34]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4447,7 +4434,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[35], values.ids[35]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4461,7 +4448,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[36], values.ids[36]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4475,7 +4462,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[37], values.ids[37]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4489,7 +4476,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[38], values.ids[38]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4503,7 +4490,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[39], values.ids[39]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4517,7 +4504,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[40], values.ids[40]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4531,7 +4518,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[41], values.ids[41]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4545,7 +4532,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[42], values.ids[42]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4559,7 +4546,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[43], values.ids[43]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4573,7 +4560,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[44], values.ids[44]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4587,7 +4574,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[45], values.ids[45]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4601,7 +4588,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[46], values.ids[46]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4615,7 +4602,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[47], values.ids[47]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4629,7 +4616,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[48], values.ids[48]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4643,7 +4630,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[49], values.ids[49]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4657,7 +4644,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[50], values.ids[50]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4671,7 +4658,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[51], values.ids[51]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4685,7 +4672,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[52], values.ids[52]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4699,7 +4686,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[53], values.ids[53]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4713,7 +4700,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[54], values.ids[54]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4727,7 +4714,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[55], values.ids[55]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4741,7 +4728,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[56], values.ids[56]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4755,7 +4742,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[57], values.ids[57]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4769,7 +4756,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[58], values.ids[58]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4783,7 +4770,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[59], values.ids[59]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4797,7 +4784,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[60], values.ids[60]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4811,7 +4798,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[61], values.ids[61]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4825,7 +4812,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[62], values.ids[62]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4839,7 +4826,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[63], values.ids[63]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4853,7 +4840,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[64], values.ids[64]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4867,7 +4854,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[65], values.ids[65]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4881,7 +4868,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[66], values.ids[66]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4895,7 +4882,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[67], values.ids[67]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4909,7 +4896,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[68], values.ids[68]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4923,7 +4910,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[69], values.ids[69]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4937,7 +4924,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[70], values.ids[70]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4951,7 +4938,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[71], values.ids[71]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4965,7 +4952,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[72], values.ids[72]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4979,7 +4966,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[73], values.ids[73]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -4993,7 +4980,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[74], values.ids[74]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5007,7 +4994,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[75], values.ids[75]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5021,7 +5008,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[76], values.ids[76]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5035,7 +5022,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[77], values.ids[77]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5049,7 +5036,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[78], values.ids[78]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5063,7 +5050,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[79], values.ids[79]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5077,7 +5064,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[80], values.ids[80]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5091,7 +5078,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[81], values.ids[81]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5105,7 +5092,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[82], values.ids[82]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5119,7 +5106,7 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                         connection.query("UPDATE srv_respuesta SET respuesta=? WHERE id=?", [values.respuestas[83], values.ids[83]], (err, result) => {
                             if (err) { 
                                 return connection.rollback(() => {
-                                    console.log('Error al editar respuestas: ' + err.message)
+                                    log.error('Error al editar respuestas: ' + err.message)
                                     reject(new Error('Error'))
                                 })
                             }else{
@@ -5135,11 +5122,12 @@ formularioModel.editFormulario = (req, idTipoFormulario, callback) => {
                                 throw err
                             })
                         }
-                        console.log('Transaction Complete.')
+                        log.info('Transaction Complete.')
                         callback(null)
                     })
                 })
                 .catch(err => {
+                    log.error(err)
                     callback(err, null)
                 })
             })

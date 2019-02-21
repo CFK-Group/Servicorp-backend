@@ -1,3 +1,4 @@
+var log = require('./logger').Logger;
 module.exports = function(imagen_base_64, name){
     try{
         function decodeBase64Image(dataString) {
@@ -37,14 +38,14 @@ module.exports = function(imagen_base_64, name){
         try{
             require('fs').writeFile(userUploadedImagePath, imageBuffer.data,  
             function() {
-                console.log('DEBUG - feed:message: Saved to disk image attached by user:', userUploadedImagePath)
+                log.debug('DEBUG - feed:message: Saved to disk image attached by user:', userUploadedImagePath)
             })
         }
         catch(error){
-            console.log('ERROR:', error)
+            log.error('ERROR:', error)
         }
     }
     catch(err){
-        console.log('no se pudo decodificar y/o guardar el archivo')
+        log.error('no se pudo decodificar y/o guardar el archivo')
     }
 }
