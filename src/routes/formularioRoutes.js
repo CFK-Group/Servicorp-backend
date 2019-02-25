@@ -14,7 +14,8 @@ module.exports = (app) => {
     // Formulario de mantencion hfc id=3
     app.post('/formulario/claro/mantencion/hfc', (req, res) => {
         log.info('post: /formulario/claro/mantencion/hfc')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
@@ -155,6 +156,7 @@ module.exports = (app) => {
                     success: true,
                     message: `Formulario guardado con éxito`
                 })
+                log.info('res: Formulario guardado con éxito')
             })
 
             // manejamos algún posible error
@@ -170,7 +172,8 @@ module.exports = (app) => {
     // Formulario de mantencion dth id=4
     app.post('/formulario/claro/mantencion/dth', (req, res) => {
         log.info('post: /formulario/claro/mantencion/dth')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
@@ -310,6 +313,7 @@ module.exports = (app) => {
                     success: true,
                     message: `Formulario guardado con éxito`
                 })
+                log.info('res: Formulario guardado con éxito')
             })
 
             // manejamos algún posible error
@@ -325,7 +329,8 @@ module.exports = (app) => {
     // Formulario de instalacion hfc id=1
     app.post('/formulario/claro/instalacion/hfc', (req, res) => {
         log.info('post: /formulario/claro/instalacion/hfc')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
@@ -466,6 +471,7 @@ module.exports = (app) => {
                     success: true,
                     message: `Formulario guardado con éxito`
                 })
+                log.info('res: Formulario guardado con éxito')
             })
 
             // manejamos algún posible error
@@ -481,7 +487,8 @@ module.exports = (app) => {
     // Formulario de instalacion dth id=2
     app.post('/formulario/claro/instalacion/dth', (req, res) => {
         log.info('post: /formulario/claro/instalacion/dth')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
@@ -622,6 +629,7 @@ module.exports = (app) => {
                     success: true,
                     message: `Formulario guardado con éxito`
                 })
+                log.info('res: Formulario guardado con éxito')
             })
 
             // manejamos algún posible error
@@ -637,7 +645,8 @@ module.exports = (app) => {
     // Formulario de desconexion id=5
     app.post('/formulario/claro/desconexion', (req, res) => {
         log.info('post: /formulario/claro/desconexion')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
@@ -696,6 +705,7 @@ module.exports = (app) => {
                     success: true,
                     message: `Formulario guardado con éxito`
                 })
+                log.info('res: Formulario guardado con éxito')
             })
 
             // manejamos algún posible error
@@ -713,7 +723,8 @@ module.exports = (app) => {
     // Formulario de instalacion dth id=6
     app.post('/formulario/entel/instalacion/dth', (req, res) => {
         log.info('post: /formulario/entel/instalacion/dth')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         const respuestas = {
             fecha: Math.floor(Date.now() / 1000),
             ot_servicorp: req.body.ot_servicorp,
@@ -849,6 +860,7 @@ module.exports = (app) => {
                     success: true,
                     message: `Formulario guardado con éxito`
                 })
+                log.info('res: Formulario guardado con éxito')
             })
 
             // manejamos algún posible error
@@ -864,7 +876,7 @@ module.exports = (app) => {
     // Get de formularios
     app.get('/formulario/:empresa/:tipoFormulario/:subtipoFormulario/:token', (req, res) => {
         log.info('get: /formulario/:empresa/:tipoFormulario/:subtipoFormulario/:token')
-        log.info(req.body)
+        
         let data = {
             tipo_formulario_id: null,
             usuario_id: null,
@@ -911,6 +923,8 @@ module.exports = (app) => {
                 message: `Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} ${req.params.empresa} del usuario con id = ${data.usuario_id}`,
                 data: resolved
             })
+            log.info(`Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} ${req.params.empresa} del usuario con id = ${data.usuario_id}`)
+            log.info(`res: ${resolved}`)
         })
 
         // manejamos algún posible error
@@ -926,7 +940,7 @@ module.exports = (app) => {
     // Get de formularios de desconexion
     app.get('/formulario/claro/desconexion/:token', (req, res) => {
         log.info('get: /formulario/claro/desconexion/:token')
-        log.info(req.body)
+        
         let data = {
             tipo_formulario_id: 5,
             usuario_id: null,
@@ -961,6 +975,8 @@ module.exports = (app) => {
                     message: `Formularios de desconexion del usuario con id = ${data.usuario_id}`,
                     data: resolved
                 })
+                log.info(`Formularios de desconexion del usuario con id = ${data.usuario_id}`)
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -976,7 +992,7 @@ module.exports = (app) => {
     // Get respuestas por id de formulario
     app.get('/respuestas/:idFormulario/:token', (req, res) => {
         log.info('get: /respuestas/:idFormulario/:token')
-        log.info(req.body)
+        
         let formulario_id = req.params.idFormulario
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1007,6 +1023,8 @@ module.exports = (app) => {
                     message: `Respuestas del formulario con id = ${req.params.idFormulario}`,
                     data: resolved
                 })
+                log.info(`Respuestas del formulario con id = ${req.params.idFormulario}`)
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -1022,7 +1040,7 @@ module.exports = (app) => {
     // Get preguntas por id de formulario
     app.get('/preguntas/:idFormulario/:token', (req, res) => {
         log.info('get: /preguntas/:idFormulario/:token')
-        log.info(req.body)
+        
         let formulario_id = req.params.idFormulario
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1053,6 +1071,8 @@ module.exports = (app) => {
                     message: `Preguntas del formulario con id = ${req.params.idFormulario}`,
                     data: resolved
                 })
+                log.info(`Preguntas del formulario con id = ${req.params.idFormulario}`)
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -1068,7 +1088,7 @@ module.exports = (app) => {
     // Get cantidad de formularios por id de usuario
     app.get('/formularios/:userId/:token', (req, res) => {
         log.info('get: /formularios/:userId/:token')
-        log.info(req.body)
+        
         let usuario_id = req.params.userId
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1107,6 +1127,7 @@ module.exports = (app) => {
                         "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
                     }
                 })
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -1122,7 +1143,7 @@ module.exports = (app) => {
     // Get cantidad de formularios por id de usuario entre fechas
     app.get('/formularios/:userId/:fechaInicio/:fechaFin/:token', (req, res) => {
         log.info('get: /formularios/:userId/:fechaInicio/:fechaFin/:token')
-        log.info(req.body)
+        
         let data = {
             usuario_id: req.params.userId,
             fechaInicio: req.params.fechaInicio,
@@ -1166,6 +1187,7 @@ module.exports = (app) => {
                         "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
                     }
                 })
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -1181,7 +1203,8 @@ module.exports = (app) => {
     // 'Get' cantidad de formularios desde x fecha
     app.post('/formularios/:empresa/:token', (req, res) => {
         log.info('post: /formularios/:empresa/:token')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         let fechas = req.body
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1213,6 +1236,8 @@ module.exports = (app) => {
                 message: `Cantidad de formularios de claro`,
                 data: resolved
             })
+            log.info(`Cantidad de formularios de claro`)
+            log.info(`res: ${resolved}`)
         })
 
         // manejamos algún posible error
@@ -1228,7 +1253,7 @@ module.exports = (app) => {
     // Get cantidad de formularios desde x fecha
     app.get('/formularios/:empresa/fechas/:inicio/:fin/:token', (req, res) => {
         log.info('get: /formularios/:empresa/fechas/:inicio/:fin/:token')
-        log.info(req.body)
+        
         let data = {
             inicio: req.params.inicio,
             fin: req.params.fin,
@@ -1281,6 +1306,7 @@ module.exports = (app) => {
                         }
                     })
                 }
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -1296,7 +1322,7 @@ module.exports = (app) => {
     // Get zips imagenes
     app.get('/zips-imgs/:token', (req, res) => {
         log.info('get: /zips-imgs/:token')
-        log.info(req.body)
+        
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -1326,6 +1352,8 @@ module.exports = (app) => {
                     message: `Zips con imágenes`,
                     data: resolved
                 })
+                log.info(`Zips con imágenes`)
+                log.info(`res: ${resolved}`)
             })
 
             // manejamos algún posible error
@@ -1341,7 +1369,7 @@ module.exports = (app) => {
     // Get reporte segun tipo de formulario y rango de fecha
     app.get('/reporte/:tipoFormulario/:empresa/:inicio/:fin/:token', (req, res) => {
         log.info('get: /reporte/:tipoFormulario/:empresa/:inicio/:fin/:token')
-        log.info(req.body)
+        
 
         // Creamos un libro de excel
         let xl = new excel.Workbook()
@@ -2646,7 +2674,7 @@ module.exports = (app) => {
     // Get imgs segun id formulario
     app.get('/imgs/:idFormulario/:token', (req, res) => {
         log.info('get: /imgs/:idFormulario/:token')
-        log.info(req.body)
+        
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -2674,6 +2702,8 @@ module.exports = (app) => {
                 message: `Imágenes del furmulario con id = ${req.params.idFormulario}`,
                 data: resolved
             })
+            log.info(`Imágenes del furmulario con id = ${req.params.idFormulario}`)
+            log.info(`res: ${resolved}`)
         })
 
         // manejamos algún posible error
@@ -2688,7 +2718,8 @@ module.exports = (app) => {
 
     app.put('/edit-form/:idTipoFormulario/:token', (req, res) => {
         log.info('put: /edit-form/:idTipoFormulario/:token')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -2718,6 +2749,8 @@ module.exports = (app) => {
                 message: `Formulario Editado`,
                 data: resolved
             })
+            log.info('Formulario Editado')
+            log.info(`res: ${resolved}`)
         })
 
         // manejamos algún posible error

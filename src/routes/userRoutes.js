@@ -7,15 +7,14 @@ const log = require('../logging-system/logger').Logger;
 module.exports = (app) => {
     app.get('/users', (req, res) => {
         log.info('get: /users')
-        log.info(req.body)
         user.getUsers((err, data) => {
             res.status(200).json(data)
+            log.info('res: ' + JSON.stringify(data))
         })
     })
 
     app.get("/user/id/:id", (req, res) => {
         log.info('get: /user/id/:id')
-        log.info(req.body)
         //id del usuario
         let id = req.params.id
         //solo actualizamos si la id es un número
@@ -24,43 +23,49 @@ module.exports = (app) => {
                 //si el usuario existe lo mostramos en formato json
                 if (typeof data !== 'undefined' && data.length > 0) {
                     res.status(200).json(data)
+                    log.info('res: ' + JSON.stringify(data))
                 }
                 //en otro caso mostramos una respuesta conforme no existe
                 else {
                     res.status(404).json({
                         "msg":`No existe el usuario con id = ${req.params.id}`
                     })
+                    log.error(`No existe el usuario con id = ${req.params.id}`)
                 }
             })
         }
         //si hay algún error
         else {
             res.status(500).json({"msg":"Error"})
+            log.error('Error al hacer get de usuarios por id')
         }
     })
 
     app.get("/user/:userName", (req, res) => {
         log.info('get: /user/:userName')
-        log.info(req.body)
+        log.info('res: ' + JSON.stringify(res))
         //id del usuario
         let userName = req.params.userName
         user.getUserByUsername(userName, (err, data) => {
             //si el usuario existe lo mostramos en formato json
             if (typeof data !== 'undefined' && data.length > 0) {
                 res.status(200).json(data)
+                log.info('res: ' + JSON.stringify(data))
             }
             //en otro caso mostramos una respuesta conforme no existe
             else {
                 res.status(404).json({
                     "msg":`No existe el usuario con userName = ${req.params.userName}`
                 })
+                log.error(`No existe el usuario con userName = ${req.params.userName}`)
             }
         })
     })
 
     app.post('/login', (req, res) => {
         log.info('post: /login')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        log.info('res: ' + JSON.stringify(res))
         let username = req.body.username
         let password = req.body.password
         global.auth(username, password, res)
@@ -69,7 +74,8 @@ module.exports = (app) => {
     // crear nuevo usuario
     app.post('/new/user/:token', (req, res) => {
         log.info('post: /new/user/:token')
-        log.info(req.body)
+        log.info('req: ' + JSON.stringify(req.body))
+        log.info('res: ' + JSON.stringify(res))
         const userData = {
             'id': null,
             'username': req.body.username,
@@ -107,6 +113,7 @@ module.exports = (app) => {
                     success: true,
                     msg: 'Usuario creado'
                 })
+                log.info('res: Usuario creado')
             })
             .catch(err => {
                 log.error(err)
