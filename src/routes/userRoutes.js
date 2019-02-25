@@ -64,8 +64,8 @@ module.exports = (app) => {
 
     app.post('/login', (req, res) => {
         log.info('post: /login')
-        log.info('req: "username:"' + req.body.username)
-        log.info('res: usuario' + req.body.username + 'logueado')
+        log.info('req: "username": ' + req.body.username)
+        log.info('res: usuario ' + req.body.username + ' logueado')
         let username = req.body.username
         let password = req.body.password
         global.auth(username, password, res)
