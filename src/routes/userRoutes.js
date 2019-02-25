@@ -103,7 +103,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     user.createUser(userData, (err, data) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo usuario')) : resolve(res)
                     })
                 })

@@ -144,7 +144,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -301,7 +303,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -459,7 +463,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -617,7 +623,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -693,7 +701,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -848,7 +858,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -910,7 +922,9 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.getFormularios(data, (err, res) => {
-                    log.error(err)
+                    if(err){
+                        log.error(err)
+                    }
                     return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
                 })
             })
@@ -962,7 +976,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getFormularios(data, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
                     })
                 })
@@ -1010,7 +1026,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getResponsesByFormId(formulario_id, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido leer respuestas del formulario con id = ${req.params.idFormulario} de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1058,7 +1076,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getQuestionsByFormId(formulario_id, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido leer preguntas del formulario con id = ${req.params.idFormulario} de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1106,7 +1126,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getTotalFormsByUserId(usuario_id, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1166,7 +1188,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getTotalFormsByUserIdAndDate(data, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1223,7 +1247,9 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.getTotalFormsByDate({empresa: req.params.empresa, fechas: fechas}, (err, res) => {
-                    log.error(err)
+                    if(err){
+                        log.error(err)
+                    }
                     return (err) ? reject(new Error(err.message)) : resolve(res)
                 })
             })
@@ -1275,7 +1301,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getTotalFormsByDate(data, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1339,7 +1367,9 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getZips((err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido leer los zips de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1405,7 +1435,9 @@ module.exports = (app) => {
                 return new Promise( (resolve, reject) => {
                     log.info('iniciando busqueda de formularios')
                     formulario.getFormulariosId(data, (err, res) => {
-                        log.error(err)
+                        if(err){
+                            log.error(err)
+                        }
                         return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                     })
                 })
@@ -1422,7 +1454,9 @@ module.exports = (app) => {
                         return new Promise( (resolve, reject) => {
                             data.formulario_id = formsId[i]
                             formulario.getReporte(data, (err, res) => {
-                                log.error(err)
+                                if(err){
+                                    log.error(err)
+                                }
                                 return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                             })
                         })
@@ -2690,7 +2724,9 @@ module.exports = (app) => {
         .then((resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.getFormularioImgs(req.params.idFormulario, (err, res) => {
-                    log.error(err)
+                    if(err){
+                        log.error(err)
+                    }
                     return (err) ? reject(new Error(`No se ha podido leer las imágenes en la base de datos`)) : resolve(res)
                 })
             })
@@ -2736,7 +2772,9 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.editFormulario(req.body, req.params.idTipoFormulario, (err, res) => {
-                    log.error(err)
+                    if(err){
+                        log.error(err)
+                    }
                     return (err) ? reject(new Error(`No se ha podido editar el formulario`)) : resolve(res)
                 })
             })
