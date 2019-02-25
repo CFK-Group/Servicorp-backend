@@ -8,7 +8,6 @@ const log = require('../logging-system/logger').Logger;
 global.auth = (username, password, res) => {
 
     user.getUserByUsername(username, (err, userData) => {
-        log.info(userData)
         if (err) return res.status(500).send({auth: false, token: null, message: 'Error en getUserByUsername.'})
         userData = userData[0]
         if (!userData) return res.status(401).send({auth: false, token: null, message: 'Usuario no autorizado.'})
@@ -24,7 +23,6 @@ global.auth = (username, password, res) => {
         }
         return user.saveToken(userD, (err, data) => {
             if(data && data.affectedRows > 0){
-                log.info(userData.empresa)
                 return res.status(200).json({
                     success: true,
                     msg: 'Token guardado',
