@@ -6,12 +6,16 @@ const log = require('../logging-system/logger').Logger;
 
 module.exports = (app) => {
     app.get('/users', (req, res) => {
+        log.info('get: /users')
+        log.info(req.body)
         user.getUsers((err, data) => {
             res.status(200).json(data)
         })
     })
 
     app.get("/user/id/:id", (req, res) => {
+        log.info('get: /user/id/:id')
+        log.info(req.body)
         //id del usuario
         let id = req.params.id
         //solo actualizamos si la id es un número
@@ -36,6 +40,8 @@ module.exports = (app) => {
     })
 
     app.get("/user/:userName", (req, res) => {
+        log.info('get: /user/:userName')
+        log.info(req.body)
         //id del usuario
         let userName = req.params.userName
         user.getUserByUsername(userName, (err, data) => {
@@ -53,6 +59,8 @@ module.exports = (app) => {
     })
 
     app.post('/login', (req, res) => {
+        log.info('post: /login')
+        log.info(req.body)
         let username = req.body.username
         let password = req.body.password
         global.auth(username, password, res)
@@ -60,6 +68,8 @@ module.exports = (app) => {
 
     // crear nuevo usuario
     app.post('/new/user/:token', (req, res) => {
+        log.info('post: /new/user/:token')
+        log.info(req.body)
         const userData = {
             'id': null,
             'username': req.body.username,
