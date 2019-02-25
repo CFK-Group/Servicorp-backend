@@ -875,7 +875,7 @@ module.exports = (app) => {
 
     // Get de formularios
     app.get('/formulario/:empresa/:tipoFormulario/:subtipoFormulario/:token', (req, res) => {
-        log.info('get: /formulario/:empresa/:tipoFormulario/:subtipoFormulario/:token')
+        log.info(`get: /formulario/${req.params.empresa}/${req.params.tipoFormulario}/${req.params.subtipoFormulario}/${req.params.token}`)
         
         let data = {
             tipo_formulario_id: null,
@@ -939,7 +939,7 @@ module.exports = (app) => {
 
     // Get de formularios de desconexion
     app.get('/formulario/claro/desconexion/:token', (req, res) => {
-        log.info('get: /formulario/claro/desconexion/:token')
+        log.info(`get: /formulario/claro/desconexion/${req.params.token}`)
         
         let data = {
             tipo_formulario_id: 5,
@@ -991,7 +991,7 @@ module.exports = (app) => {
 
     // Get respuestas por id de formulario
     app.get('/respuestas/:idFormulario/:token', (req, res) => {
-        log.info('get: /respuestas/:idFormulario/:token')
+        log.info(`get: /respuestas/${req.params.tipoFormulario}/${req.params.token}`)
         
         let formulario_id = req.params.idFormulario
         let auth = new Promise ( (resolve, reject) => {
@@ -1039,7 +1039,7 @@ module.exports = (app) => {
 
     // Get preguntas por id de formulario
     app.get('/preguntas/:idFormulario/:token', (req, res) => {
-        log.info('get: /preguntas/:idFormulario/:token')
+        log.info(`get: /preguntas/${req.params.tipoFormulario}/${req.params.token}`)
         
         let formulario_id = req.params.idFormulario
         let auth = new Promise ( (resolve, reject) => {
@@ -1087,7 +1087,7 @@ module.exports = (app) => {
 
     // Get cantidad de formularios por id de usuario
     app.get('/formularios/:userId/:token', (req, res) => {
-        log.info('get: /formularios/:userId/:token')
+        log.info(`get: /formularios/${req.params.userId}/${req.params.token}`)
         
         let usuario_id = req.params.userId
         let auth = new Promise ( (resolve, reject) => {
@@ -1142,7 +1142,7 @@ module.exports = (app) => {
 
     // Get cantidad de formularios por id de usuario entre fechas
     app.get('/formularios/:userId/:fechaInicio/:fechaFin/:token', (req, res) => {
-        log.info('get: /formularios/:userId/:fechaInicio/:fechaFin/:token')
+        log.info(`get: /formularios/${req.params.userId}/${req.params.fechaInicio}/${req.params.fechaFin}/${req.params.token}`)
         
         let data = {
             usuario_id: req.params.userId,
@@ -1252,7 +1252,7 @@ module.exports = (app) => {
 
     // Get cantidad de formularios desde x fecha
     app.get('/formularios/:empresa/fechas/:inicio/:fin/:token', (req, res) => {
-        log.info('get: /formularios/:empresa/fechas/:inicio/:fin/:token')
+        log.info(`get: /formularios/${req.params.empresa}/fechas/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
         
         let data = {
             inicio: req.params.inicio,
@@ -1321,7 +1321,7 @@ module.exports = (app) => {
 
     // Get zips imagenes
     app.get('/zips-imgs/:token', (req, res) => {
-        log.info('get: /zips-imgs/:token')
+        log.info(`get: /zips-imgs/${req.params.token}`)
         
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -1368,7 +1368,7 @@ module.exports = (app) => {
 
     // Get reporte segun tipo de formulario y rango de fecha
     app.get('/reporte/:tipoFormulario/:empresa/:inicio/:fin/:token', (req, res) => {
-        log.info('get: /reporte/:tipoFormulario/:empresa/:inicio/:fin/:token')
+        log.info(`get: /reporte/${req.params.tipoFormulario}/${req.params.empresa}/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
         
 
         // Creamos un libro de excel
@@ -2673,7 +2673,7 @@ module.exports = (app) => {
 
     // Get imgs segun id formulario
     app.get('/imgs/:idFormulario/:token', (req, res) => {
-        log.info('get: /imgs/:idFormulario/:token')
+        log.info(`get: /imgs/${req.params.idFormulario}/${req.params.token}`)
         
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
@@ -2717,7 +2717,7 @@ module.exports = (app) => {
     })
 
     app.put('/edit-form/:idTipoFormulario/:token', (req, res) => {
-        log.info('put: /edit-form/:idTipoFormulario/:token')
+        log.info(`put: /edit-form/${req.params.idFormulario}/${req.params.token}`)
         log.info('req: ' + JSON.stringify(req.body))
         
         let auth = new Promise ( (resolve, reject) => {

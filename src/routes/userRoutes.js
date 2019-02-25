@@ -14,7 +14,7 @@ module.exports = (app) => {
     })
 
     app.get("/user/id/:id", (req, res) => {
-        log.info('get: /user/id/:id')
+        log.info(`get: /user/id/${req.params.id}`)
         //id del usuario
         let id = req.params.id
         //solo actualizamos si la id es un número
@@ -42,7 +42,7 @@ module.exports = (app) => {
     })
 
     app.get("/user/:userName", (req, res) => {
-        log.info('get: /user/:userName')
+        log.info(`get: /user/id/${req.params.userName}`)
         log.info('res: ' + JSON.stringify(res))
         //id del usuario
         let userName = req.params.userName
@@ -73,7 +73,7 @@ module.exports = (app) => {
 
     // crear nuevo usuario
     app.post('/new/user/:token', (req, res) => {
-        log.info('post: /new/user/:token')
+        log.info(`post: /new/user/${req.params.token}`)
         log.info('req: ' + JSON.stringify(req.body))
         log.info('res: ' + JSON.stringify(res))
         const userData = {
