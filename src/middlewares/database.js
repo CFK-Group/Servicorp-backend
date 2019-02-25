@@ -3,6 +3,6 @@ const mysql = require('mysql')
 pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'colseco',
+    password: '',
     database: 'cfk_servicorp'
 })

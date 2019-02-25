@@ -25,19 +25,19 @@ var debugStream = fs.createWriteStream('logs/debug.txt');
 // their own log files along with the current date as an
 // iso string and a \n newline character
 Logger.info = function(msg) {
-    console.log(msg)
+  console.log(msg)
   var message = new Date().toISOString() + " : " + msg + "\n";
   infoStream.write(message);
 };
 
 Logger.debug = function(msg) {
-    console.log(msg)
+  console.log(msg)
   var message = new Date().toISOString() + " : " + msg + "\n";
   debugStream.write(message);
 };
 
 Logger.error = function(msg) {
-    console.log(msg)
+  console.log(msg)
   var message = new Date().toISOString() + " : " + msg + "\n";
   errorStream.write(message);
 };

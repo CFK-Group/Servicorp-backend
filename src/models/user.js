@@ -1,5 +1,5 @@
 let userModel = {};
-var log = require('./logger').Logger;
+const log = require('../logging-system/logger').Logger;
 
 userModel.getUsers = (callback) => {
     pool.getConnection(function(err, connection){

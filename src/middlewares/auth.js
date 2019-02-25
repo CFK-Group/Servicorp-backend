@@ -3,7 +3,7 @@ const user = require('../models/user')
 const bcrypt = require('bcrypt-nodejs')
 const jwt = require('jsonwebtoken')
 let global = {}
-var log = require('./logger').Logger;
+const log = require('../logging-system/logger').Logger;
 
 global.auth = (username, password, res) => {
 

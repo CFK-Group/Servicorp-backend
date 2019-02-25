@@ -2,6 +2,7 @@ const user = require('../models/user')
 const global = require('../middlewares/auth')
 const bcrypt = require('bcrypt-nodejs')
 const path = require('path')
+const log = require('../logging-system/logger').Logger;
 
 module.exports = (app) => {
     app.get('/users', (req, res) => {
@@ -72,10 +73,10 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     return resolve(true)
                 }else{
-                    console.log(err)
+                    log.error(err)
                     statusError = 401
                     reject(new Error('Token inválido'))
                 }
@@ -86,6 +87,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     user.createUser(userData, (err, data) => {
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo usuario')) : resolve(res)
                     })
                 })
@@ -97,7 +99,7 @@ module.exports = (app) => {
                 })
             })
             .catch(err => {
-                console.log(err)
+                log.error(err)
                 res.status(500).json({
                     success: false,
                     msg: `Error al crear nuevo usuario: ${err.message}`

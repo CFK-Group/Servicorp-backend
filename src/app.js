@@ -5,6 +5,7 @@ const morgan = require('morgan') // para mostrar peticiones por consola en modo 
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const db = require('./middlewares/database')
+const log = require('./logging-system/logger').Logger
 
 //settings
 const port = process.env.PORT || 3001
@@ -33,6 +34,6 @@ require('./routes/formularioRoutes')(app)
 //require('./routes/backoffice')(app)
 
 app.listen(app.get('port'), () => {
-    console.log(`Servidor iniciado en el puerto ${port}`)
+    log.info(`Servidor iniciado en el puerto ${port}`)
 })
 

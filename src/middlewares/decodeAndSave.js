@@ -1,4 +1,4 @@
-var log = require('./logger').Logger;
+const log = require('../logging-system/logger').Logger;
 module.exports = function(imagen_base_64, name){
     try{
         function decodeBase64Image(dataString) {

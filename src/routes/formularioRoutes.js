@@ -4,7 +4,7 @@ const excel = require('excel4node')
 const path = require('path')
 const moment = require('moment')
 const timezone = 3
-
+const log = require('../logging-system/logger').Logger;
 
 module.exports = (app) => {
     let statusError = 500
@@ -125,11 +125,12 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
+                    log.error('Token Inválido')
                     reject(new Error('Token inválido'))
                 }
             })
@@ -140,10 +141,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        console.log('-----------------------------')
-                        console.log(err)
-                        console.log(res)
-                        console.log('-----------------------------')
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -159,7 +157,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -280,11 +278,12 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
+                    log.error('Toke Inválido')
                     reject(new Error('Token inválido'))
                 }
             })
@@ -295,10 +294,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        console.log('-----------------------------')
-                        console.log(err)
-                        console.log(res)
-                        console.log('-----------------------------')
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -314,7 +310,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -436,11 +432,12 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
+                    log.error('Token Inválido')
                     reject(new Error('Token inválido'))
                 }
             })
@@ -451,10 +448,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        console.log('-----------------------------')
-                        console.log(err)
-                        console.log(res)
-                        console.log('-----------------------------')
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -470,7 +464,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -592,11 +586,12 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
                     statusError = 401
+                    log.error('Token Inválido')
                     reject(new Error('Token inválido'))
                 }
             })
@@ -607,6 +602,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -622,7 +618,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -663,7 +659,7 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
@@ -678,10 +674,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        console.log('-----------------------------')
-                        console.log(err)
-                        console.log(res)
-                        console.log('-----------------------------')
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -697,7 +690,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -817,7 +810,7 @@ module.exports = (app) => {
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
                 if(!err){
-                    console.log('usuario autorizado')
+                    log.info('usuario autorizado')
                     respuestas.usuario_id = response.userId
                     return resolve(true)
                 }else{
@@ -832,10 +825,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.createForm(respuestas, (err, res) => {
-                        console.log('-----------------------------')
-                        console.log(err)
-                        console.log(res)
-                        console.log('-----------------------------')
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
                     })
                 })
@@ -851,7 +841,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -894,6 +884,7 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.getFormularios(data, (err, res) => {
+                    log.error(err)
                     return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
                 })
             })
@@ -901,7 +892,6 @@ module.exports = (app) => {
         
         // entregamos los formularios correspondientes
         .then( (resolved, rejected) => {
-            console.log(data.tipo_formulario_id)
             res.status(200).json({
                 success: true,
                 message: `Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} ${req.params.empresa} del usuario con id = ${data.usuario_id}`,
@@ -911,7 +901,7 @@ module.exports = (app) => {
 
         // manejamos algún posible error
         .catch( (err) => {
-            console.log(err.message)
+            log.error(err)
             res.status(statusError).json({
                 success: false,
                 message: err.message
@@ -942,6 +932,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getFormularios(data, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error('No se ha podido leer los formularios de la base de datos')) : resolve(res)
                     })
                 })
@@ -958,7 +949,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -985,6 +976,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getResponsesByFormId(formulario_id, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido leer respuestas del formulario con id = ${req.params.idFormulario} de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1001,7 +993,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -1028,6 +1020,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getQuestionsByFormId(formulario_id, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido leer preguntas del formulario con id = ${req.params.idFormulario} de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1044,7 +1037,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -1071,6 +1064,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getTotalFormsByUserId(usuario_id, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1095,7 +1089,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -1127,6 +1121,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getTotalFormsByUserIdAndDate(data, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1151,7 +1146,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -1179,6 +1174,7 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.getTotalFormsByDate({empresa: req.params.empresa, fechas: fechas}, (err, res) => {
+                    log.error(err)
                     return (err) ? reject(new Error(err.message)) : resolve(res)
                 })
             })
@@ -1195,7 +1191,7 @@ module.exports = (app) => {
 
         // manejamos algún posible error
         .catch( (err) => {
-            console.log(err.message)
+            log.error(err)
             res.status(statusError).json({
                 success: false,
                 message: err.message
@@ -1226,6 +1222,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getTotalFormsByDate(data, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido leer la cantidad de formularios de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1260,7 +1257,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -1286,6 +1283,7 @@ module.exports = (app) => {
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
                     formulario.getZips((err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido leer los zips de la base de datos`)) : resolve(res)
                     })
                 })
@@ -1302,7 +1300,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -1320,7 +1318,7 @@ module.exports = (app) => {
         let hoja_1 = xl.addWorksheet('Hoja 100')
 
 
-        console.log("Iniciando solicitud de reporte")
+        log.info("Iniciando solicitud de reporte")
         let data = {
             tipo_formulario: req.params.tipoFormulario,
             fechaInicio: req.params.inicio,
@@ -1328,14 +1326,14 @@ module.exports = (app) => {
             formulario_id: '',
             empresa: req.params.empresa
         }
-        console.log(data)
         let auth = new Promise ( (resolve, reject) => {
-            console.log('validando token')
+            log.info('validando token')
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
                     return resolve(true)
                 }else{
                     statusError = 401
+                    log.error('Token Inválido')
                     reject(new Error('Token inválido'))
                 }
             })
@@ -1345,8 +1343,9 @@ module.exports = (app) => {
             // buscamos los formularios en la bdd
             .then( (resolved, rejected) => {
                 return new Promise( (resolve, reject) => {
-                    console.log('iniciando busqueda de formularios')
+                    log.info('iniciando busqueda de formularios')
                     formulario.getFormulariosId(data, (err, res) => {
+                        log.error(err)
                         return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                     })
                 })
@@ -1357,28 +1356,19 @@ module.exports = (app) => {
                 for(let j=0; j<resolved.length; j++){
                     formsId.push(JSON.parse(JSON.stringify(resolved[j].id)))
                 }
-                console.log('++++')
-                console.log('ids de formularios', formsId)
-                console.log('++++')
-                console.log('ids de formularios', formsId.length)
                 for(let i=0; i<formsId.length; i++){ //formsId.length
                     auth
                     .then( (resolved, rejected) => {
                         return new Promise( (resolve, reject) => {
                             data.formulario_id = formsId[i]
                             formulario.getReporte(data, (err, res) => {
+                                log.error(err)
                                 return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                             })
                         })
                     })
                     .then( (resolved, rejected) => {
                         aux = JSON.parse(JSON.stringify(resolved))
-                        // console.log('------------------------------')
-                        // console.log(aux[i+1].formulario_id)
-                        // console.log(aux[i+1].respuesta)
-                        // console.log('++++++++++++++++++++++++++++++')
-                        // console.log(data)
-                        // console.log(data.tipo_formulario === 'instalacion')
                         if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Entel')
                         {
                             if(i===0){
@@ -2528,7 +2518,6 @@ module.exports = (app) => {
                         } else if(data.tipo_formulario.toString() === 'desconexion') {
                             if (i===0){
                                 tipoReporte = 'DesconexionClaro'
-                                console.log('entró')
                                 hoja_1.cell(1,1).string('N°')
                                 hoja_1.cell(1,2).string('USUARIO')
                                 hoja_1.cell(1,3).string('FOLIO')
@@ -2597,14 +2586,14 @@ module.exports = (app) => {
                         }
 
                         if (i === formsId.length-1){
-                            console.log('terminando de escribir en el excel')
+                            log.info('terminando de escribir en el excel')
                             xl.write(`reporte-${tipoReporte}.xlsx`, res)
                         }
                     })
 
                     // manejamos algún posible error
                     .catch( (err) => {
-                        console.log(err.message)
+                        log.error(err)
                     })
 
 
@@ -2614,7 +2603,7 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
-                console.log(err.message)
+                log.error(err)
                 res.status(statusError).json({
                     success: false,
                     message: err.message
@@ -2639,6 +2628,7 @@ module.exports = (app) => {
         .then((resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.getFormularioImgs(req.params.idFormulario, (err, res) => {
+                    log.error(err)
                     return (err) ? reject(new Error(`No se ha podido leer las imágenes en la base de datos`)) : resolve(res)
                 })
             })
@@ -2654,7 +2644,7 @@ module.exports = (app) => {
 
         // manejamos algún posible error
         .catch( (err) => {
-            console.log(err.message)
+            log.error(err)
             res.status(statusError).json({
                 success: false,
                 message: err.message
@@ -2663,7 +2653,6 @@ module.exports = (app) => {
     })
 
     app.put('/edit-form/:idTipoFormulario/:token', (req, res) => {
-        console.log(req.body)
         let auth = new Promise ( (resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -2680,6 +2669,7 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             return new Promise( (resolve, reject) => {
                 formulario.editFormulario(req.body, req.params.idTipoFormulario, (err, res) => {
+                    log.error(err)
                     return (err) ? reject(new Error(`No se ha podido editar el formulario`)) : resolve(res)
                 })
             })
@@ -2696,7 +2686,7 @@ module.exports = (app) => {
 
         // manejamos algún posible error
         .catch( (err) => {
-            console.log(err.message)
+            log.error(err)
             res.status(statusError).json({
                 success: false,
                 message: err.message
