@@ -924,7 +924,7 @@ module.exports = (app) => {
                 data: resolved
             })
             log.info(`Formularios de ${req.params.tipoFormulario} ${req.params.subtipoFormulario} ${req.params.empresa} del usuario con id = ${data.usuario_id}`)
-            log.info(`res: ${resolved}`)
+            log.info(`res: ${JSON.stringify(resolved)}`)
         })
 
         // manejamos algún posible error
@@ -976,7 +976,7 @@ module.exports = (app) => {
                     data: resolved
                 })
                 log.info(`Formularios de desconexion del usuario con id = ${data.usuario_id}`)
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -1024,7 +1024,7 @@ module.exports = (app) => {
                     data: resolved
                 })
                 log.info(`Respuestas del formulario con id = ${req.params.idFormulario}`)
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -1072,7 +1072,7 @@ module.exports = (app) => {
                     data: resolved
                 })
                 log.info(`Preguntas del formulario con id = ${req.params.idFormulario}`)
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -1127,7 +1127,7 @@ module.exports = (app) => {
                         "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
                     }
                 })
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -1187,7 +1187,7 @@ module.exports = (app) => {
                         "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
                     }
                 })
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -1237,7 +1237,7 @@ module.exports = (app) => {
                 data: resolved
             })
             log.info(`Cantidad de formularios de ${req.params.empresa}`)
-            log.info(`res: ${resolved}`)
+            log.info(`res: ${JSON.stringify(resolved)}`)
         })
 
         // manejamos algún posible error
@@ -1306,7 +1306,7 @@ module.exports = (app) => {
                         }
                     })
                 }
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -1353,7 +1353,7 @@ module.exports = (app) => {
                     data: resolved
                 })
                 log.info(`Zips con imágenes`)
-                log.info(`res: ${resolved}`)
+                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
@@ -2703,7 +2703,7 @@ module.exports = (app) => {
                 data: resolved
             })
             log.info(`Imágenes del furmulario con id = ${req.params.idFormulario}`)
-            log.info(`res: ${resolved}`)
+            log.info(`res: ${JSON.stringify(resolved)}`)
         })
 
         // manejamos algún posible error
@@ -2750,7 +2750,7 @@ module.exports = (app) => {
                 data: resolved
             })
             log.info('Formulario Editado')
-            log.info(`res: ${resolved}`)
+            log.info(`res: ${JSON.stringify(resolved)}`)
         })
 
         // manejamos algún posible error
