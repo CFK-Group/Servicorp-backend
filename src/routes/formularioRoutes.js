@@ -1233,10 +1233,10 @@ module.exports = (app) => {
         .then( (resolved, rejected) => {
             res.status(200).json({
                 success: true,
-                message: `Cantidad de formularios de ${req.body.empresa}`,
+                message: `Cantidad de formularios de ${req.params.empresa}`,
                 data: resolved
             })
-            log.info(`Cantidad de formularios de ${req.body.empresa}`)
+            log.info(`Cantidad de formularios de ${req.params.empresa}`)
             log.info(`res: ${resolved}`)
         })
 
