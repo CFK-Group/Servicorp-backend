@@ -1202,7 +1202,7 @@ module.exports = (app) => {
 
     // 'Get' cantidad de formularios desde x fecha
     app.post('/formularios/:empresa/:token', (req, res) => {
-        log.info('post: /formularios/:empresa/:token')
+        log.info(`post: /formularios/${req.params.empresa}/${req.params.token}`)
         log.info('req: ' + JSON.stringify(req.body))
         
         let fechas = req.body
