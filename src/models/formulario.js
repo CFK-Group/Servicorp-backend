@@ -968,7 +968,7 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
             UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=6
             UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=7
             UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=8;`, 
-            [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
+            [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
             if(err){
                 log.error(`Error en getTotalFormsByUserId: ${err.message}`)
                 callback(err, null)
