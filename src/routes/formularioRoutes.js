@@ -1210,7 +1210,9 @@ module.exports = (app) => {
                         "mantencionDth": resolved[3].cantidad,
                         "desconexion": resolved[4].cantidad,
                         "instalacionDthEntel": resolved[5].cantidad,
-                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad
+                        "BAFIEntel": resolved[6].cantidad,
+                        "DUOEntel": resolved[7].cantidad,
+                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad
                     }
                 })
                 log.info(`res: ${JSON.stringify(resolved)}`)
@@ -1331,8 +1333,10 @@ module.exports = (app) => {
                         success: true,
                         message: `Cantidad de formularios de entel con fecha = ${data.inicio}`,
                         data: {
-                            "instalacion-dth": resolved[5].cantidad,
-                            "total": resolved[5].cantidad
+                            "instalacionDthEntel": resolved[5].cantidad,
+                            "BAFIEntel": resolved[6].cantidad,
+                            "DUOEntel": resolved[7].cantidad,
+                            "total": resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad
                         }
                     })
                 }
