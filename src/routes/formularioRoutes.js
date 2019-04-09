@@ -1813,8 +1813,7 @@ module.exports = (app) => {
                     })
                     .then( (resolved, rejected) => {
                         aux = JSON.parse(JSON.stringify(resolved))
-                        if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Entel')
-                        {
+                        if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Entel'){
                             if(i===0){
                                 tipoReporte = 'InstalacionEntel'
                                 hoja_1.cell(1,1).string('N°')
@@ -2185,8 +2184,7 @@ module.exports = (app) => {
 
                                 }
                             })
-                        } else if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Claro')
-                        {
+                        } else if (data.tipo_formulario.toString() === 'instalacion' && data.empresa.toString() === 'Claro'){
                             if(i===0){
                                 tipoReporte = 'InstalacionClaro'
                                 hoja_1.cell(1,1).string('N°')
@@ -2583,8 +2581,7 @@ module.exports = (app) => {
                                 }
                             })
 
-                        } else if (data.tipo_formulario.toString() === 'mantencion')
-                        {
+                        } else if (data.tipo_formulario.toString() === 'mantencion'){
                             if (i===0){
                                 tipoReporte = 'MantencionClaro'
                                 hoja_1.cell(1,1).string('N°')
@@ -2959,7 +2956,7 @@ module.exports = (app) => {
                                 }
                             });
 
-                        } else if(data.tipo_formulario.toString() === 'desconexion') {
+                        } else if(data.tipo_formulario.toString() === 'desconexion'){
                             if (i===0){
                                 tipoReporte = 'DesconexionClaro'
                                 hoja_1.cell(1,1).string('N°')

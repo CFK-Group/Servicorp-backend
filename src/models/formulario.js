@@ -957,6 +957,22 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
     })
 }
 
+formularioModel.getQuestionsAndResponsesByFormTypeId = (req, callback) => {
+    poll.getConnection(function(err, connection) {
+        let formulario_tipo_formulario_id = req
+        connection.query(`select formulario_id, formulario_tipo_formulario_id as 'tipo formulario', glosa, respuesta from srv_pregunta inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_tipo_formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id order by formulario_id;`, formulario_tipo_formulario_id, (err, row) => {
+            if(err){
+                log.error(`Error en getQuestionsAndResponsesByFormTypeId: ${err.message}`)
+                callback(null, error)
+            }
+            if(!err){
+                callback(null, row)
+            }
+        })
+        connection.release()
+    })
+}
+
 formularioModel.getTotalFormsByUserId = (req, callback) => {
     pool.getConnection(function(err, connection){
         let usuario_id = req
