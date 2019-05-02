@@ -1,10 +1,9 @@
 const formulario = require('../models/formulario')
 const global = require('../middlewares/auth')
-const excel = require('excel4node')
-const path = require('path')
 const moment = require('moment')
 const timezone = 3
-const log = require('../logging-system/logger').Logger;
+const log = require('../logging-system/logger').Logger
+const excel = require('exceljs')
 
 module.exports = (app) => {
     let statusError = 500
@@ -3044,6 +3043,80 @@ module.exports = (app) => {
 
             // manejamos algún posible error
             .catch( (err) => {
+                log.error(err)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // Get reporte segun tipo formulario y rango de fecha
+    app.get('/reporte/:idTipoFormulario/:inicio/:fin/:token', (req, res) => {
+        log.info(`get: /reporte/${req.params.idTipoFormulario}/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
+
+        data = {
+            id_tipo_formulario: req.params.idTipoFormulario,
+            inicio: req.params.inicio,
+            fin: req.params.fin
+        }
+
+        let auth = new Promise((resolve, reject) => {
+            global.validateToken(req.params.token, (response, err) => {
+                if(!err){
+                    return resolve(true)
+                }else{
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // buscamos los formularios con sus preguntas y respuestas en la bdd
+            .then((resolved, rejected) => {
+                return new Promise ((resolve, reject) => {
+                    formulario.getReporteByFormType(data, (err, res) => {
+                        if (err) {
+                            log.error(err)
+                        }
+                        return (err) ? reject(new Error(`No se ha podido leer los formularios de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
+            // generamos el excel con los resultados
+            .then((resolved, rejected) => {
+                return new Promise((resolve, reject) => {
+                    data = JSON.parse(JSON.stringify(resolved))
+
+                    let workbook = new excel.Workbook() //creating workbook
+                    let worksheet = workbook.addWorksheet('Reporte')
+                    
+                    // Creamos la fila principal
+                    worksheet.columns = [
+                        {header: 'id_formulario'}, 
+                        {header: 'tipo_formulario'}, 
+                        {header: 'username'}, 
+                        {header: 'glosa'}, 
+                        {header: 'respuesta'}, 
+                        {header: 'latitud'}, 
+                        {header: 'longitud'}, 
+                        {header: 'fecha'}
+                    ]
+
+                    // Agregamos los datos de la bdd
+                    worksheet.addRows(data)
+                
+                    // Creamos el archivo
+                    workbook.xlsx.writeFile("reporte.xlsx")
+                    .then(() => {
+                        console.log("reporte creado!")
+                    })
+                })
+            })
+
+            .catch(err => {
                 log.error(err)
                 res.status(statusError).json({
                     success: false,

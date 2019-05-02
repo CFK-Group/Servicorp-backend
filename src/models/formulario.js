@@ -1096,6 +1096,37 @@ formularioModel.getReporte = (req, callback) => {
     })
 }
 
+formularioModel.getReporteByFormType = (req, callback) => {
+    let values
+    if(req.idTipoFormulario > 0 && req.idTipoFormulario < 6){
+        values = {
+            inicio: req.inicio,
+            fin: req.fin,
+            formTypeBeggin: 1,
+            formTypeEnd: 5
+        }
+    }else{
+        values = {
+            inicio: req.inicio,
+            fin: req.fin,
+            formTypeBeggin: 6,
+            formTypeEnd: 8
+        }
+    }
+    pool.getConnection(function(err, connection){
+        connection.query(`select srv_formulario.id as 'id_formulario', srv_formulario.tipo_formulario_id as 'tipo_formulario', srv_usuario.username, srv_pregunta.glosa, srv_respuesta.respuesta,srv_formulario.latitud,srv_formulario.longitud,srv_formulario.create_time as 'fecha' from srv_pregunta cross join srv_respuesta on srv_pregunta.id=srv_respuesta.pregunta_id cross join srv_formulario on srv_respuesta.formulario_id=srv_formulario.id cross join srv_usuario on srv_formulario.usuario_id=srv_usuario.id where srv_formulario.create_time between '?' and '?' and srv_formulario.tipo_formulario_id between ? and ? order by srv_formulario.id`, [values], (err, row) => {
+            if(err){
+                log.error(`Error en getReporteByFormType: ${err.message}`)
+                callback(err, null)
+            }
+            if(!err){
+                callback(null, row)
+            }
+        })
+        connection.release()
+    })
+}
+
 formularioModel.getFormulariosId = (req, callback) => {
     pool.getConnection(function(err, connection){
         prueba = connection.query('SELECT srv_formulario.id FROM srv_formulario inner join srv_usuario on srv_formulario.usuario_id = srv_usuario.id WHERE tipo_formulario_id in (SELECT srv_tipo_formulario.id FROM cfk_servicorp.srv_tipo_formulario  where srv_tipo_formulario.empresa like lower(?) and nombre like lower(?)) and srv_usuario.empresa like lower(?) and (srv_formulario.create_time >= (?) and srv_formulario.create_time <= (?));', ['%'+req.empresa+'%', '%'+req.tipo_formulario+'%', '%'+req.empresa+'%', req.fechaInicio, req.fechaFin], (err, row) => {
