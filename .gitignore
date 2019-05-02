@@ -13,8 +13,6 @@ src/public/
 
 \.idea/workspace\.xml
 
-src/middlewares/database\.js
-
 \.idea/Servicorp-backend\.iml
 
 \.idea/misc\.xml
