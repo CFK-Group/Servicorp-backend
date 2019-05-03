@@ -24,3 +24,7 @@ reporte-\.xlsx
 ~\$reporte-\.xlsx
 
 *.xlsx
+
+logging-system/
+
+middlewares/database\.js
