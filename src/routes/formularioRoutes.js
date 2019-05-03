@@ -3036,7 +3036,6 @@ module.exports = (app) => {
                         log.error(err)
                     })
 
-
                 }
 
             })
@@ -3054,9 +3053,12 @@ module.exports = (app) => {
     // Get reporte segun tipo formulario y rango de fecha
     app.get('/reporte/:idTipoFormulario/:inicio/:fin/:token', (req, res) => {
         log.info(`get: /reporte/${req.params.idTipoFormulario}/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
+        log.debug('Procesando solicitud')
+        let workbook = new excel.Workbook() //creating workbook
+        let worksheet = workbook.addWorksheet('Reporte')
 
         data = {
-            id_tipo_formulario: req.params.idTipoFormulario,
+            idTipoFormulario: req.params.idTipoFormulario,
             inicio: req.params.inicio,
             fin: req.params.fin
         }
@@ -3075,8 +3077,9 @@ module.exports = (app) => {
         auth
             // buscamos los formularios con sus preguntas y respuestas en la bdd
             .then((resolved, rejected) => {
+                log.debug('trayendo datos de la bdd')
                 return new Promise ((resolve, reject) => {
-                    formulario.getReporteByFormType(data, (err, res) => {
+                    formulario.getReporteByFormTypeId(data, (err, res) => {
                         if (err) {
                             log.error(err)
                         }
@@ -3089,29 +3092,38 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = JSON.parse(JSON.stringify(resolved))
-
-                    let workbook = new excel.Workbook() //creating workbook
-                    let worksheet = workbook.addWorksheet('Reporte')
-                    
+                    log.debug(`datos de la bdd: ${data}`)
                     // Creamos la fila principal
                     worksheet.columns = [
-                        {header: 'id_formulario'}, 
-                        {header: 'tipo_formulario'}, 
-                        {header: 'username'}, 
-                        {header: 'glosa'}, 
-                        {header: 'respuesta'}, 
-                        {header: 'latitud'}, 
-                        {header: 'longitud'}, 
-                        {header: 'fecha'}
+                        {header: 'id_formulario', key: 'id_formulario'}, 
+                        {header: 'tipo_formulario', key: 'tipo_formulario'}, 
+                        {header: 'username', key: 'username'}, 
+                        {header: 'glosa', key: 'glosa'}, 
+                        {header: 'respuesta', key: 'respuesta'}, 
+                        {header: 'latitud', key: 'latitud'}, 
+                        {header: 'longitud', key: 'longitud'}, 
+                        {header: 'fecha', key: 'fecha'}
                     ]
 
                     // Agregamos los datos de la bdd
+                    log.debug(`creando excel con los sgts. datos: ${data}`)
                     worksheet.addRows(data)
-                
                     // Creamos el archivo
                     workbook.xlsx.writeFile("reporte.xlsx")
                     .then(() => {
-                        console.log("reporte creado!")
+                        log.debug("reporte creado!")
+                        res.download('reporte.xlsx', (err) => {
+                            if (err) {
+                                res.status(500).json({
+                                    success: false,
+                                    message: 'Error al generar reporte'
+                                })
+                            } 
+                        })
+                        /* res.status(200).json({
+                            success: true,
+                            message: 'reporte creado'
+                        }) */
                     })
                 })
             })
