@@ -1,7 +1,7 @@
 let fs = require('fs')
 let formularioModel = {}
 const decodeImg = require('./../middlewares/decodeAndSave.js')
-const log = require('../logging-system/logger').Logger;
+const log = require('../logging-system/logger').Logger
 
 formularioModel.getPreguntas = (callback) => {
     pool.getConnection(function(err, connection){
@@ -946,7 +946,23 @@ formularioModel.getQuestionsByFormId = (req, callback) => {
         connection.query(`select glosa, respuesta, respuestas.id from srv_pregunta 
         inner join (SELECT * FROM cfk_servicorp.srv_respuesta WHERE formulario_id=?) as respuestas on srv_pregunta.id=respuestas.pregunta_id;`, formulario_id, (err, row) => {
             if(err){
-                log.error(`Error en getFormularios: ${err.message}`)
+                log.error(`Error en getQuestionsByFormId: ${err.message}`)
+                callback(err, null)
+            }
+            if(!err){
+                callback(null, row)
+            }
+        })
+        connection.release()
+    })
+}
+
+formularioModel.getQuestionsByFormTypeId = (req, callback) => {
+    pool.getConnection(function(err, connection){
+        let idTipoFormulario = req
+        connection.query(`SELECT * FROM srv_pregunta where tipo_formulario_id=?;`, idTipoFormulario, (err, row) => {
+            if(err){
+                log.error(`Error en getQuestionsByFormTypeId: ${err.message}`)
                 callback(err, null)
             }
             if(!err){
@@ -1099,7 +1115,7 @@ formularioModel.getReporte = (req, callback) => {
 formularioModel.getReporteByFormTypeId = (req, callback) => {
     let values = req
     pool.getConnection(function(err, connection){
-        prueba = connection.query(`select srv_formulario.id as 'id_formulario', srv_formulario.tipo_formulario_id as 'tipo_formulario', srv_usuario.username, srv_pregunta.glosa, srv_respuesta.respuesta,srv_formulario.latitud,srv_formulario.longitud,srv_formulario.create_time as 'fecha' from srv_pregunta cross join srv_respuesta on srv_pregunta.id=srv_respuesta.pregunta_id cross join srv_formulario on srv_respuesta.formulario_id=srv_formulario.id cross join srv_usuario on srv_formulario.usuario_id=srv_usuario.id where srv_formulario.create_time between ? and ? and srv_formulario.tipo_formulario_id=? order by srv_formulario.id`, [values.inicio, values.fin, values.idTipoFormulario], (err, row) => {
+        connection.query(`select srv_formulario.id as 'id_formulario', srv_formulario.tipo_formulario_id as 'tipo_formulario', srv_usuario.username, srv_pregunta.glosa, srv_respuesta.respuesta,srv_formulario.latitud,srv_formulario.longitud,srv_formulario.create_time as 'fecha' from srv_pregunta cross join srv_respuesta on srv_pregunta.id=srv_respuesta.pregunta_id cross join srv_formulario on srv_respuesta.formulario_id=srv_formulario.id cross join srv_usuario on srv_formulario.usuario_id=srv_usuario.id where srv_formulario.create_time between ? and ? and srv_formulario.tipo_formulario_id=? order by srv_formulario.id`, [values.inicio, values.fin, values.idTipoFormulario], (err, row) => {
             if(err){
                 log.error(`Error en getReporteByFormType: ${err.message}`)
                 callback(err, null)
@@ -1109,7 +1125,6 @@ formularioModel.getReporteByFormTypeId = (req, callback) => {
                 callback(null, row)
             }
         })
-        console.log('sql:', prueba.sql)
         connection.release()
     })
 }

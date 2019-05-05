@@ -3075,6 +3075,27 @@ module.exports = (app) => {
         })
 
         auth
+            // traemos las preguntas de el formulario solicitado para crear las columnas del excel
+            .then((resolved, rejected) => {
+                return new Promise((resolve, reject) => {
+                    formulario.getQuestionsByFormTypeId(req.params.idTipoFormulario, (err, res) => {
+                        if (err) {
+                            log.error(err)
+                        }else{
+                            // Creamos la cabezera de la tabla del reporte
+                            format = []
+                            worksheet.columns = []
+                            res.forEach(element => {
+                                format.push({header: element.glosa, key: element.glosa})
+                            })
+                            worksheet.columns = format
+                            log.debug(`preguntas dedel reporte: ${format}`)
+                        }
+                        return (err) ? reject(new Error(`No se ha podido leer las preguntas de los formularios de la base de datos`)) : resolve(res)
+                    })
+                })
+            })
+
             // buscamos los formularios con sus preguntas y respuestas en la bdd
             .then((resolved, rejected) => {
                 log.debug('trayendo datos de la bdd')
@@ -3088,42 +3109,45 @@ module.exports = (app) => {
                 })
             })
 
+
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = JSON.parse(JSON.stringify(resolved))
-                    log.debug(`datos de la bdd: ${data}`)
-                    // Creamos la fila principal
-                    worksheet.columns = [
-                        {header: 'id_formulario', key: 'id_formulario'}, 
+                    
+                    /* worksheet.columns = [
+                        {header: 'id_formulario',   key: 'id_formulario'}, 
                         {header: 'tipo_formulario', key: 'tipo_formulario'}, 
-                        {header: 'username', key: 'username'}, 
-                        {header: 'glosa', key: 'glosa'}, 
-                        {header: 'respuesta', key: 'respuesta'}, 
-                        {header: 'latitud', key: 'latitud'}, 
-                        {header: 'longitud', key: 'longitud'}, 
-                        {header: 'fecha', key: 'fecha'}
-                    ]
+                        {header: 'username',        key: 'username'}, 
+                        {header: 'glosa',           key: 'glosa'}, 
+                        {header: 'respuesta',       key: 'respuesta'}, 
+                        {header: 'latitud',         key: 'latitud'}, 
+                        {header: 'longitud',        key: 'longitud'}, 
+                        {header: 'fecha',           key: 'fecha'}
+                    ] */
 
                     // Agregamos los datos de la bdd
                     log.debug(`creando excel con los sgts. datos: ${data}`)
+                    
                     worksheet.addRows(data)
                     // Creamos el archivo
                     workbook.xlsx.writeFile("reporte.xlsx")
                     .then(() => {
                         log.debug("reporte creado!")
-                        res.download('reporte.xlsx', (err) => {
+                        /* res.download('reporte.xlsx', (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
                                     message: 'Error al generar reporte'
                                 })
                             } 
-                        })
-                        /* res.status(200).json({
-                            success: true,
-                            message: 'reporte creado'
                         }) */
+                        res.status(200).json({
+                            success: true,
+                            message: 'reporte creado',
+                            //columnas: [JSON.parse(worksheet.columns)],
+                            reporte: data
+                        })
                     })
                 })
             })
