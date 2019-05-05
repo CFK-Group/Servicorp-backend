@@ -3085,11 +3085,16 @@ module.exports = (app) => {
                             // Creamos la cabezera de la tabla del reporte
                             format = []
                             worksheet.columns = []
+                            format.push({header:'Usuario', key:'Usuario'})
+                            format.push({header:'Formulario', key:'Formulario'})
+                            format.push({header:'ID', key:'ID'})
                             res.forEach(element => {
                                 format.push({header: element.glosa, key: element.glosa})
                             })
+                            format.push({header:'latitud', key:'latitud'})
+                            format.push({header:'longitud', key:'longitud'})
+                            format.push({header:'fecha', key:'fecha'})
                             worksheet.columns = format
-                            log.debug(`preguntas dedel reporte: ${format}`)
                         }
                         return (err) ? reject(new Error(`No se ha podido leer las preguntas de los formularios de la base de datos`)) : resolve(res)
                     })
@@ -3114,24 +3119,15 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = JSON.parse(JSON.stringify(resolved))
-                    
-                    /* worksheet.columns = [
-                        {header: 'id_formulario',   key: 'id_formulario'}, 
-                        {header: 'tipo_formulario', key: 'tipo_formulario'}, 
-                        {header: 'username',        key: 'username'}, 
-                        {header: 'glosa',           key: 'glosa'}, 
-                        {header: 'respuesta',       key: 'respuesta'}, 
-                        {header: 'latitud',         key: 'latitud'}, 
-                        {header: 'longitud',        key: 'longitud'}, 
-                        {header: 'fecha',           key: 'fecha'}
-                    ] */
+                    /* row = []
+                    for(let i=data[0].id_formulario; i<data.length; i++){
+                        row.push()
+                    } */
 
                     // Agregamos los datos de la bdd
-                    log.debug(`creando excel con los sgts. datos: ${data}`)
-                    
                     worksheet.addRows(data)
                     // Creamos el archivo
-                    workbook.xlsx.writeFile("reporte.xlsx")
+                    workbook.xlsx.writeFile(`src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
                         /* res.download('reporte.xlsx', (err) => {
@@ -3145,9 +3141,12 @@ module.exports = (app) => {
                         res.status(200).json({
                             success: true,
                             message: 'reporte creado',
-                            //columnas: [JSON.parse(worksheet.columns)],
                             reporte: data
                         })
+                    })
+                    .catch(err => {
+                        log.error(err)
+                        reject(new Error(`No se ha podido enviar el reporte`))
                     })
                 })
             })
