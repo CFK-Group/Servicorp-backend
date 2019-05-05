@@ -100,3 +100,6 @@ src/middlewares/database.js
 
 # Basura de VScode
 .idea
+
+# Zips con fotos
+src/public/Zips/

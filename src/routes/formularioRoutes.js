@@ -3050,12 +3050,13 @@ module.exports = (app) => {
             })
     })
 
-    // Get reporte segun tipo formulario y rango de fecha
+    // Get reporte segun tipo formulario y rango de fecha (*** NUEVO ***)
     app.get('/reporte/:idTipoFormulario/:inicio/:fin/:token', (req, res) => {
         log.info(`get: /reporte/${req.params.idTipoFormulario}/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
         log.debug('Procesando solicitud')
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
+        let formIds
 
         data = {
             idTipoFormulario: req.params.idTipoFormulario,
@@ -3075,13 +3076,28 @@ module.exports = (app) => {
         })
 
         auth
+            // buscamos los formularios en la bdd
+            .then( (resolved, rejected) => {
+                return new Promise( (resolve, reject) => {
+                    log.info('iniciando busqueda de formularios')
+                    formulario.getFormulariosId(data, (err, res) => {
+                        if(err){
+                            log.error(err)
+                        }
+                        return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
+                    })
+                })
+            })
+
             // traemos las preguntas de el formulario solicitado para crear las columnas del excel
             .then((resolved, rejected) => {
+                formIds = resolved
                 return new Promise((resolve, reject) => {
                     formulario.getQuestionsByFormTypeId(req.params.idTipoFormulario, (err, res) => {
                         if (err) {
                             log.error(err)
                         }else{
+
                             // Creamos la cabezera de la tabla del reporte
                             format = []
                             worksheet.columns = []
@@ -3119,13 +3135,19 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = JSON.parse(JSON.stringify(resolved))
-                    /* row = []
-                    for(let i=data[0].id_formulario; i<data.length; i++){
-                        row.push()
-                    } */
 
                     // Agregamos los datos de la bdd
-                    worksheet.addRows(data)
+                    row = []
+                    for(let i=formIds[0].id_formulario; i<row.length; i++){
+                        for(let j=0; j<data.length; j++){
+                            row.push(data[j].respuesta)
+                        }
+                        worksheet.addRows(row)
+                        row = []
+                    }
+
+                    /* worksheet.addRows(data) */
+                    
                     // Creamos el archivo
                     workbook.xlsx.writeFile(`src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`)
                     .then(() => {
