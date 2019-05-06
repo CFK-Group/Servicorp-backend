@@ -3056,7 +3056,7 @@ module.exports = (app) => {
         log.debug('Procesando solicitud')
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
-        let formIds
+        let formIds = []
 
         data = {
             idTipoFormulario: req.params.idTipoFormulario,
@@ -3091,7 +3091,7 @@ module.exports = (app) => {
 
             // traemos las preguntas de el formulario solicitado para crear las columnas del excel
             .then((resolved, rejected) => {
-                formIds = resolved
+                this.formIds = resolved
                 return new Promise((resolve, reject) => {
                     formulario.getQuestionsByFormTypeId(req.params.idTipoFormulario, (err, res) => {
                         if (err) {
@@ -3138,13 +3138,23 @@ module.exports = (app) => {
 
                     // Agregamos los datos de la bdd
                     row = []
-                    for(let i=formIds[0].id_formulario; i<row.length; i++){
+                    console.log('formsId:', this.formIds)
+                    console.log('********************************************')
+                    for(let i=0; i<1; i++){
+                        row.push(data[0].username)
+                        row.push(data[0].tipo_formulario)
+                        row.push(data[0].id_formulario)
                         for(let j=0; j<data.length; j++){
                             row.push(data[j].respuesta)
                         }
-                        worksheet.addRows(row)
+                        row.push(data[0].latitud)
+                        row.push(data[0].longitud)
+                        row.push(data[0].fecha)
+                        console.log('fila:', row)
+                        worksheet.addRows([row])
                         row = []
                     }
+                    console.log('********************************************')
 
                     /* worksheet.addRows(data) */
                     
