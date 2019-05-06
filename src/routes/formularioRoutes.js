@@ -3138,13 +3138,11 @@ module.exports = (app) => {
 
                     // Agregamos los datos de la bdd
                     row = []
-                    console.log('formsId:', this.formIds)
-                    console.log('********************************************')
                     for(let i=0; i<1; i++){
                         row.push(data[0].username)
                         row.push(data[0].tipo_formulario)
                         row.push(data[0].id_formulario)
-                        for(let j=0; j<data.length; j++){
+                        for(let j=0; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                             row.push(data[j].respuesta)
                         }
                         row.push(data[0].latitud)
@@ -3154,26 +3152,18 @@ module.exports = (app) => {
                         worksheet.addRows([row])
                         row = []
                     }
-                    console.log('********************************************')
-
-                    /* worksheet.addRows(data) */
                     
                     // Creamos el archivo
                     workbook.xlsx.writeFile(`src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
-                        /* res.download('reporte.xlsx', (err) => {
+                        res.download('reporte.xlsx', (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
                                     message: 'Error al generar reporte'
                                 })
                             } 
-                        }) */
-                        res.status(200).json({
-                            success: true,
-                            message: 'reporte creado',
-                            reporte: data
                         })
                     })
                     .catch(err => {
