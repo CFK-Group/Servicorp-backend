@@ -3139,7 +3139,7 @@ module.exports = (app) => {
                     // Agregamos los datos de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
-                        if(data[0].id_formulario != aux){
+                        if(data[i].id_formulario != aux){
                             row.push(data[i].username)
                             row.push(data[i].tipo_formulario)
                             row.push(data[i].id_formulario)
