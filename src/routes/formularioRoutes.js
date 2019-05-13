@@ -3142,7 +3142,7 @@ module.exports = (app) => {
                         if(i = 0){
                             aux = 0
                         }else{
-                            aux = data[i-1].id_formulario
+                            aux = data[(i-1)].id_formulario
                         }
                         if(data[i].id_formulario !== aux){
                             row.push(data[i].username)
