@@ -3143,7 +3143,9 @@ module.exports = (app) => {
                         row.push(data[i].tipo_formulario)
                         row.push(data[i].id_formulario)
                         for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
-                            row.push(data[j].respuesta)
+                            if(data[i].id_formulario == data[j].id_formulario){
+                                row.push(data[j].respuesta)
+                            }
                         }
                         row.push(data[i].latitud)
                         row.push(data[i].longitud)
