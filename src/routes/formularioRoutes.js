@@ -3139,15 +3139,15 @@ module.exports = (app) => {
                     // Agregamos los datos de la bdd
                     row = []
                     for(let i=0; i<2; i++){
-                        row.push(data[0].username)
-                        row.push(data[0].tipo_formulario)
-                        row.push(data[0].id_formulario)
-                        for(let j=0; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
+                        row.push(data[i].username)
+                        row.push(data[i].tipo_formulario)
+                        row.push(data[i].id_formulario)
+                        for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                             row.push(data[j].respuesta)
                         }
-                        row.push(data[0].latitud)
-                        row.push(data[0].longitud)
-                        row.push(data[0].fecha)
+                        row.push(data[i].latitud)
+                        row.push(data[i].longitud)
+                        row.push(data[i].fecha)
                         console.log('fila:', row)
                         worksheet.addRows([row])
                         row = []
