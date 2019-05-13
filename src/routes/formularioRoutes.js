@@ -3139,20 +3139,23 @@ module.exports = (app) => {
                     // Agregamos los datos de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
-                        row.push(data[i].username)
-                        row.push(data[i].tipo_formulario)
-                        row.push(data[i].id_formulario)
-                        for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
-                            if(data[i].id_formulario == data[j].id_formulario){
-                                row.push(data[j].respuesta)
+                        aux = data[i].id_formulario || 0
+                        if(data[i].id_formulario !== aux){
+                            row.push(data[i].username)
+                            row.push(data[i].tipo_formulario)
+                            row.push(data[i].id_formulario)
+                            for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
+                                if(data[i].id_formulario == data[j].id_formulario){
+                                    row.push(data[j].respuesta)
+                                }
                             }
+                            row.push(data[i].latitud)
+                            row.push(data[i].longitud)
+                            row.push(data[i].fecha)
+                            console.log('fila:', row)
+                            worksheet.addRows([row])
+                            row = []
                         }
-                        row.push(data[i].latitud)
-                        row.push(data[i].longitud)
-                        row.push(data[i].fecha)
-                        console.log('fila:', row)
-                        worksheet.addRows([row])
-                        row = []
                     }
                     
                     // Creamos el archivo
