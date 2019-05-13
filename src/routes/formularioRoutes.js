@@ -3157,16 +3157,13 @@ module.exports = (app) => {
                     workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
-                        /* res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`, (err) => {
+                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`, (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
                                     message: 'Error al generar reporte'
                                 })
                             } 
-                        }) */
-                        res.status(200).json({
-                            preguntas: format
                         })
                     })
                     .catch(err => {
