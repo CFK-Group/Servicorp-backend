@@ -3135,7 +3135,7 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = JSON.parse(JSON.stringify(resolved))
-                    aux = 0
+                    aux = 0 // aquí guardaré el id_formulario para que genere una sola fila con cada formulario
                     // Agregamos los datos de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
