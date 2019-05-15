@@ -3061,6 +3061,34 @@ module.exports = (app) => {
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
         let formIds = []
+        let tipoFormulario
+
+        switch(req.params.idTipoFormulario){
+            case 1:
+                tipoFormulario = 'instalaciones-HFC'
+            break
+            case 2:
+                tipoFormulario = 'instalaciones-DTH'
+            break
+            case 3:
+                tipoFormulario = 'mantenciones-HFC'
+            break
+            case 4:
+                tipoFormulario = 'mantenciones-DTH'
+            break
+            case 5:
+                tipoFormulario = 'desconexiones'
+            break
+            case 6:
+                tipoFormulario = 'instalaciones-DTH'
+            break
+            case 7:
+                tipoFormulario = 'BAFI'
+            break
+            case 8:
+                tipoFormulario = 'DUO'
+            break
+        }
 
         data = {
             idTipoFormulario: req.params.idTipoFormulario,
@@ -3107,12 +3135,10 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Usuario', key:'Usuario'})
                             format.push({header:'Formulario', key:'Formulario'})
-                            format.push({header:'ID', key:'ID'})
                             res.forEach(element => {
                                 format.push({header: element.glosa, key: element.glosa})
                             })
-                            format.push({header:'latitud', key:'latitud'})
-                            format.push({header:'longitud', key:'longitud'})
+                            format.push({header:'GPS', key:'GPS'})
                             format.push({header:'fecha', key:'fecha'})
                             worksheet.columns = format
                         }
@@ -3146,15 +3172,13 @@ module.exports = (app) => {
                         if(data[i].id_formulario != aux){
                             row.push(data[i].username)
                             row.push(data[i].tipo_formulario)
-                            row.push(data[i].id_formulario)
                             for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                                 if(data[i].id_formulario == data[j].id_formulario){
                                     row.push(data[j].respuesta)
                                 }
                             }
-                            row.push(data[i].latitud)
-                            row.push(data[i].longitud)
-                            row.push(data[i].fecha)
+                            row.push(data[i].latitud + ',' + data[i].longitud)
+                            row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
                             console.log('fila:', row)
                             worksheet.addRows([row])
                             row = []
@@ -3163,10 +3187,10 @@ module.exports = (app) => {
                     }
                     
                     // Creamos el archivo
-                    workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`)
+                    workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${tipoFormulario}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
-                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${req.params.idTipoFormulario}.xlsx`, (err) => {
+                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${tipoFormulario}.xlsx`, (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
