@@ -3169,7 +3169,6 @@ module.exports = (app) => {
                             }
                             row.push(data[i].latitud + ',' + data[i].longitud)
                             row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
-                            console.log('fila:', row)
                             worksheet.addRows([row])
                             row = []
                             aux = data[i].id_formulario
@@ -3180,7 +3179,7 @@ module.exports = (app) => {
                     workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
-                        res.download(`./../reportes/${formName}.xlsx`, (err) => {
+                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`, (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
