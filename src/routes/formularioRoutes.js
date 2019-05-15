@@ -3180,7 +3180,7 @@ module.exports = (app) => {
                     workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
-                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`, (err) => {
+                        res.download(`./../reportes/${formName}.xlsx`, (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
