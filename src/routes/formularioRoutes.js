@@ -3156,31 +3156,31 @@ module.exports = (app) => {
                             aux = data[i].id_formulario
                         }
                     }
-                    
-                    let tipoFormulario
+
+                    let formName
                     if(data.idTipoFormulario == 1){
-                        tipoFormulario = 'instalaciones-HFC'
+                        formName = 'reporte_instalaciones-HFC'
                     }else if(data.idTipoFormulario == 2){
-                        tipoFormulario = 'instalaciones-DTH'
+                        formName = 'reporte_instalaciones-DTH'
                     }else if(data.idTipoFormulario == 3){
-                        tipoFormulario = 'mantenciones-HFC'
+                        formName = 'reporte_mantenciones-HFC'
                     }else if(data.idTipoFormulario == 4){
-                        tipoFormulario = 'mantenciones-DTH'
+                        formName = 'reporte_mantenciones-DTH'
                     }else if(data.idTipoFormulario == 5){
-                        tipoFormulario = 'desconexiones'
+                        formName = 'reporte_desconexiones'
                     }else if(data.idTipoFormulario == 6){
-                        tipoFormulario = 'instalaciones-DTH'
+                        formName = 'reporte_instalaciones-DTH'
                     }else if(data.idTipoFormulario == 7){
-                        tipoFormulario = 'BAFI'
+                        formName = 'reporte_BAFI'
                     }else if(data.idTipoFormulario == 8){
-                        tipoFormulario = 'DUO'
+                        formName = 'reporte_DUO'
                     }
                     
                     // Creamos el archivo
-                    workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${tipoFormulario}.xlsx`)
+                    workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`)
                     .then(() => {
                         log.debug("reporte creado!")
-                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/reporte_${tipoFormulario}.xlsx`, (err) => {
+                        res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`, (err) => {
                             if (err) {
                                 res.status(500).json({
                                     success: false,
