@@ -3165,7 +3165,7 @@ module.exports = (app) => {
                             for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                                 if(data[i].id_formulario == data[j].id_formulario){
                                     row.push(data[j].respuesta)
-                                    console.log(`Respuesta ${j}: ${data[j]}`)
+                                    console.log(`Respuesta ${j}: ${JSON.stringify(data[j])}`)
                                 }
                             }
                             row.push(data[i].latitud + ',' + data[i].longitud)
