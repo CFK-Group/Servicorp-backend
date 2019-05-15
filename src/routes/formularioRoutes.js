@@ -3063,37 +3063,28 @@ module.exports = (app) => {
         let formIds = []
         let tipoFormulario
 
-        switch(req.params.idTipoFormulario){
-            case 1:
-                tipoFormulario = 'instalaciones-HFC'
-            break
-            case 2:
-                tipoFormulario = 'instalaciones-DTH'
-            break
-            case 3:
-                tipoFormulario = 'mantenciones-HFC'
-            break
-            case 4:
-                tipoFormulario = 'mantenciones-DTH'
-            break
-            case 5:
-                tipoFormulario = 'desconexiones'
-            break
-            case 6:
-                tipoFormulario = 'instalaciones-DTH'
-            break
-            case 7:
-                tipoFormulario = 'BAFI'
-            break
-            case 8:
-                tipoFormulario = 'DUO'
-            break
-        }
-
         data = {
             idTipoFormulario: req.params.idTipoFormulario,
             inicio: req.params.inicio,
             fin: req.params.fin
+        }
+
+        if(idTipoFormulario == 1){
+            tipoFormulario = 'instalaciones-HFC'
+        }else if(idTipoFormulario == 2){
+            tipoFormulario = 'instalaciones-DTH'
+        }else if(idTipoFormulario == 3){
+            tipoFormulario = 'mantenciones-HFC'
+        }else if(idTipoFormulario == 4){
+            tipoFormulario = 'mantenciones-DTH'
+        }else if(idTipoFormulario == 5){
+            tipoFormulario = 'desconexiones'
+        }else if(idTipoFormulario == 6){
+            tipoFormulario = 'instalaciones-DTH'
+        }else if(idTipoFormulario == 7){
+            tipoFormulario = 'BAFI'
+        }else if(idTipoFormulario == 8){
+            tipoFormulario = 'DUO'
         }
 
         let auth = new Promise((resolve, reject) => {
