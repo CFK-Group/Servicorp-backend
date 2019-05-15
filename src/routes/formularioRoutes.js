@@ -3154,7 +3154,7 @@ module.exports = (app) => {
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    console.log(`Respuesta ${j}: ${JSON.stringify(resolved)}`)
+                    console.log(`Respuesta: ${JSON.stringify(resolved)}`)
                     data = JSON.parse(JSON.stringify(resolved))
                     aux = 0 // aquí guardaré el id_formulario para que genere una sola fila con cada formulario
                     // Agregamos los datos de la bdd
