@@ -3069,21 +3069,21 @@ module.exports = (app) => {
             fin: req.params.fin
         }
 
-        if(idTipoFormulario == 1){
+        if(data.idTipoFormulario == 1){
             tipoFormulario = 'instalaciones-HFC'
-        }else if(idTipoFormulario == 2){
+        }else if(data.idTipoFormulario == 2){
             tipoFormulario = 'instalaciones-DTH'
-        }else if(idTipoFormulario == 3){
+        }else if(data.idTipoFormulario == 3){
             tipoFormulario = 'mantenciones-HFC'
-        }else if(idTipoFormulario == 4){
+        }else if(data.idTipoFormulario == 4){
             tipoFormulario = 'mantenciones-DTH'
-        }else if(idTipoFormulario == 5){
+        }else if(data.idTipoFormulario == 5){
             tipoFormulario = 'desconexiones'
-        }else if(idTipoFormulario == 6){
+        }else if(data.idTipoFormulario == 6){
             tipoFormulario = 'instalaciones-DTH'
-        }else if(idTipoFormulario == 7){
+        }else if(data.idTipoFormulario == 7){
             tipoFormulario = 'BAFI'
-        }else if(idTipoFormulario == 8){
+        }else if(data.idTipoFormulario == 8){
             tipoFormulario = 'DUO'
         }
 
