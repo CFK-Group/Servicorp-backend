@@ -3061,30 +3061,10 @@ module.exports = (app) => {
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
         let formIds = []
-        let tipoFormulario
-
         data = {
             idTipoFormulario: req.params.idTipoFormulario,
             inicio: req.params.inicio,
             fin: req.params.fin
-        }
-
-        if(data.idTipoFormulario == 1){
-            tipoFormulario = 'instalaciones-HFC'
-        }else if(data.idTipoFormulario == 2){
-            tipoFormulario = 'instalaciones-DTH'
-        }else if(data.idTipoFormulario == 3){
-            tipoFormulario = 'mantenciones-HFC'
-        }else if(data.idTipoFormulario == 4){
-            tipoFormulario = 'mantenciones-DTH'
-        }else if(data.idTipoFormulario == 5){
-            tipoFormulario = 'desconexiones'
-        }else if(data.idTipoFormulario == 6){
-            tipoFormulario = 'instalaciones-DTH'
-        }else if(data.idTipoFormulario == 7){
-            tipoFormulario = 'BAFI'
-        }else if(data.idTipoFormulario == 8){
-            tipoFormulario = 'DUO'
         }
 
         let auth = new Promise((resolve, reject) => {
@@ -3175,6 +3155,25 @@ module.exports = (app) => {
                             row = []
                             aux = data[i].id_formulario
                         }
+                    }
+                    
+                    let tipoFormulario
+                    if(data.idTipoFormulario == 1){
+                        tipoFormulario = 'instalaciones-HFC'
+                    }else if(data.idTipoFormulario == 2){
+                        tipoFormulario = 'instalaciones-DTH'
+                    }else if(data.idTipoFormulario == 3){
+                        tipoFormulario = 'mantenciones-HFC'
+                    }else if(data.idTipoFormulario == 4){
+                        tipoFormulario = 'mantenciones-DTH'
+                    }else if(data.idTipoFormulario == 5){
+                        tipoFormulario = 'desconexiones'
+                    }else if(data.idTipoFormulario == 6){
+                        tipoFormulario = 'instalaciones-DTH'
+                    }else if(data.idTipoFormulario == 7){
+                        tipoFormulario = 'BAFI'
+                    }else if(data.idTipoFormulario == 8){
+                        tipoFormulario = 'DUO'
                     }
                     
                     // Creamos el archivo
