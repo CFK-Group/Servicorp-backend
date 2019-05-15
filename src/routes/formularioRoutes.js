@@ -3067,6 +3067,25 @@ module.exports = (app) => {
             fin: req.params.fin
         }
 
+        let formName
+        if(data.idTipoFormulario == 1){
+            formName = 'reporte_instalaciones-HFC'
+        }else if(data.idTipoFormulario == 2){
+            formName = 'reporte_instalaciones-DTH'
+        }else if(data.idTipoFormulario == 3){
+            formName = 'reporte_mantenciones-HFC'
+        }else if(data.idTipoFormulario == 4){
+            formName = 'reporte_mantenciones-DTH'
+        }else if(data.idTipoFormulario == 5){
+            formName = 'reporte_desconexiones'
+        }else if(data.idTipoFormulario == 6){
+            formName = 'reporte_instalaciones-DTH'
+        }else if(data.idTipoFormulario == 7){
+            formName = 'reporte_BAFI'
+        }else if(data.idTipoFormulario == 8){
+            formName = 'reporte_DUO'
+        }
+
         let auth = new Promise((resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {
                 if(!err){
@@ -3155,25 +3174,6 @@ module.exports = (app) => {
                             row = []
                             aux = data[i].id_formulario
                         }
-                    }
-
-                    let formName
-                    if(data.idTipoFormulario == 1){
-                        formName = 'reporte_instalaciones-HFC'
-                    }else if(data.idTipoFormulario == 2){
-                        formName = 'reporte_instalaciones-DTH'
-                    }else if(data.idTipoFormulario == 3){
-                        formName = 'reporte_mantenciones-HFC'
-                    }else if(data.idTipoFormulario == 4){
-                        formName = 'reporte_mantenciones-DTH'
-                    }else if(data.idTipoFormulario == 5){
-                        formName = 'reporte_desconexiones'
-                    }else if(data.idTipoFormulario == 6){
-                        formName = 'reporte_instalaciones-DTH'
-                    }else if(data.idTipoFormulario == 7){
-                        formName = 'reporte_BAFI'
-                    }else if(data.idTipoFormulario == 8){
-                        formName = 'reporte_DUO'
                     }
                     
                     // Creamos el archivo
