@@ -3123,6 +3123,9 @@ module.exports = (app) => {
                             // Creamos la cabezera de la tabla del reporte
                             format = []
                             worksheet.columns = []
+                            format.push({header:'', key:''})
+                            format.push({header:'', key:''})
+                            format.push({header:'', key:''})
                             format.push({header:'Usuario', key:'Usuario'})
                             format.push({header:'Formulario', key:'Formulario'})
                             res.forEach(element => {
@@ -3160,6 +3163,11 @@ module.exports = (app) => {
                     // Agregamos los datos de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
+                        if(i == 0){
+                            row.push('')
+                            row.push('')
+                            row.push('')
+                        }
                         if(data[i].id_formulario != aux){
                             row.push(data[i].username)
                             row.push(data[i].tipo_formulario)
