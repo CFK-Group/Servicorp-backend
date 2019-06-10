@@ -803,65 +803,65 @@ formularioModel.createForm = (req, callback) => {
                     }
                     // decodificamos la img y la guardamos
                     if (typeof(imgs.imagen_1 ) !== 'undefined' && req.imagen_1 !== ''){
-                        decodeImg(req.imagen_1, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img1')
+                        decodeImg(req.imagen_1, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_1')
                     }
                     if (typeof(req.imagen_2) !== 'undefined' && req.imagen_2 !== ''){
-                        decodeImg(req.imagen_2, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img2')
+                        decodeImg(req.imagen_2, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_2')
                     }
                     if (typeof(req.imagen_3) !== 'undefined' && req.imagen_3 !== ''){
-                        decodeImg(req.imagen_3, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img3')
+                        decodeImg(req.imagen_3, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_3')
                     }
                     if (typeof(req.imagen_4) !== 'undefined' && req.imagen_4 !== ''){
-                        decodeImg(req.imagen_4, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img4')
+                        decodeImg(req.imagen_4, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_4')
                     }
                     if (typeof(req.imagen_5) !== 'undefined' && req.imagen_5 !== ''){
-                        decodeImg(req.imagen_5, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img5')
+                        decodeImg(req.imagen_5, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_5')
                     }
                     if (typeof(req.imagen_6) !== 'undefined' && req.imagen_6 !== ''){
-                        decodeImg(req.imagen_6, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img6')
+                        decodeImg(req.imagen_6, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_6')
                     }
                     if (typeof(req.imagen_7) !== 'undefined' && req.imagen_7 !== ''){
-                        decodeImg(req.imagen_7, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img7')
+                        decodeImg(req.imagen_7, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_7')
                     }
                     if (typeof(req.imagen_8) !== 'undefined' && req.imagen_8 !== ''){
-                        decodeImg(req.imagen_8, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img8')
+                        decodeImg(req.imagen_8, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_8')
                     }
                     if (typeof(req.imagen_9) !== 'undefined' && req.imagen_9 !== ''){
-                        decodeImg(req.imagen_9, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img9')
+                        decodeImg(req.imagen_9, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_9')
                     }
                     if (typeof(req.imagen_10) !== 'undefined' && req.imagen_10 !== ''){
-                        decodeImg(req.imagen_10, req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img10')
+                        decodeImg(req.imagen_10, req.folio_servicio + '_' + empresa + '_' + req.fecha + '_10')
                     }
                     values = []
                     if(typeof(imgs.imagen_1) !== 'undefined' && imgs.imagen_1 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img1', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img1' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_1', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_1' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_2) !== 'undefined' && imgs.imagen_2 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img2', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img2' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_2', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_2' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_3) !== 'undefined' && imgs.imagen_3 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img3', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img3' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_3', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_3' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_4) !== 'undefined' && imgs.imagen_4 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img4', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img4' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_4', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_4' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_5) !== 'undefined' && imgs.imagen_5 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img5', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img5' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_5', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_5' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_6) !== 'undefined' && imgs.imagen_6 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img6', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img6' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_6', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_6' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_7) !== 'undefined' && imgs.imagen_7 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img7', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img7' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_7', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_7' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_8) !== 'undefined' && imgs.imagen_8 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img8', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img8' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_8', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_8' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_9) !== 'undefined' && imgs.imagen_9 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img9', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img9' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_9', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_9' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     if(typeof(imgs.imagen_10) !== 'undefined' && imgs.imagen_10 !== ''){
-                        values.push([req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img10', 'img/' + req.ot_servicorp + '_' + empresa + '_' + req.fecha + '_img10' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
+                        values.push([req.folio_servicio + '_' + empresa + '_' + req.fecha + '_10', 'img/' + req.folio_servicio + '_' + empresa + '_' + req.fecha + '_10' + '.jpeg', formulario_id, req.tipo_formulario_id, req.usuario_id])
                     }
                     
                     if(values.length > 0){
