@@ -3163,12 +3163,10 @@ module.exports = (app) => {
                     // Agregamos los datos de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
-                        if(i == 0){
-                            row.push('')
-                            row.push('')
-                            row.push('')
-                        }
                         if(data[i].id_formulario != aux){
+                            row.push('')
+                            row.push('')
+                            row.push('')
                             row.push(data[i].username)
                             row.push(data[i].tipo_formulario)
                             for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
