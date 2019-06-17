@@ -3170,9 +3170,6 @@ module.exports = (app) => {
                             row.push(data[i].username)
                             row.push(data[i].tipo_formulario)
                             for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
-                                row.push('')
-                                row.push('')
-                                row.push('')
                                 if(data[i].id_formulario == data[j].id_formulario){
                                     row.push(data[j].respuesta)
                                     console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}`)
