@@ -3123,16 +3123,14 @@ module.exports = (app) => {
                             // Creamos la cabezera de la tabla del reporte
                             format = []
                             worksheet.columns = []
-                            format.push({header:'', key:''})
-                            format.push({header:'', key:''})
-                            format.push({header:'', key:''})
+                            format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:'Formulario', key:'Formulario'})
+                            format.push({header:'Fecha', key:'Fecha'})
+                            format.push({header:'Hora', key:'Hora'})
                             res.forEach(element => {
                                 format.push({header: element.glosa, key: element.glosa})
                             })
                             format.push({header:'GPS', key:'GPS'})
-                            format.push({header:'fecha', key:'fecha'})
                             worksheet.columns = format
                         }
                         return (err) ? reject(new Error(`No se ha podido leer las preguntas de los formularios de la base de datos`)) : resolve(res)
@@ -3165,10 +3163,9 @@ module.exports = (app) => {
                     for(let i=0; i<data.length; i++){
                         if(data[i].id_formulario != aux){
                             row.push('')
-                            row.push('')
-                            row.push('')
                             row.push(data[i].username)
-                            row.push(data[i].tipo_formulario)
+                            row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
+                            row.push(moment(data[i].fecha).format('LTS'))
                             for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                                 if(data[i].id_formulario == data[j].id_formulario){
                                     row.push(data[j].respuesta)
@@ -3176,7 +3173,6 @@ module.exports = (app) => {
                                 }
                             }
                             row.push(data[i].latitud + ',' + data[i].longitud)
-                            row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
                             worksheet.addRows([row])
                             row = []
                             aux = data[i].id_formulario
