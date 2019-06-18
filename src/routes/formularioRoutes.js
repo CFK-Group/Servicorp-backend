@@ -3168,7 +3168,7 @@ module.exports = (app) => {
                             row.push(data[i].username)
                             /* row.push(data[1].respuesta)
                             row.push(data[0].respuesta) */
-                            if(data[i].glosa == 'FOLIO DE SERVICIO'){
+                            if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
                                 row.push(data[i].respuesta)
                             }else{
                                 row.push('')
