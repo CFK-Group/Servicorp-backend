@@ -3172,6 +3172,8 @@ module.exports = (app) => {
                                 row.push(data[i+1].respuesta)
                             }else if(data[i].glosa == 'OT SERVICORP'){
                                 row.push(data[i].respuesta)
+                            }else{
+                                row.push('')
                             }
                             row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
                             row.push(moment(data[i].fecha).format('LTS'))
