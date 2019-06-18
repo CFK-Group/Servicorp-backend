@@ -3125,11 +3125,13 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
+                            format.push({header:'Folio', key:'Folio'})
+                            format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
-                            res.forEach(element => {
-                                format.push({header: element.glosa, key: element.glosa})
-                            })
+                            for (let i=2; i<res.length; i++){
+                                format.push({header: res.glosa, key: res.glosa})
+                            }
                             format.push({header:'GPS', key:'GPS'})
                             worksheet.columns = format
                         }
@@ -3164,9 +3166,11 @@ module.exports = (app) => {
                         if(data[i].id_formulario != aux){
                             row.push('')
                             row.push(data[i].username)
+                            row.push(data[1].respuesta)
+                            row.push(data[0].respuesta)
                             row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
                             row.push(moment(data[i].fecha).format('LTS'))
-                            for(let j=i; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
+                            for(let j=i+2; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                                 if(data[i].id_formulario == data[j].id_formulario){
                                     row.push(data[j].respuesta)
                                     console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}`)
