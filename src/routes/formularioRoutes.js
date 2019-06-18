@@ -3140,7 +3140,7 @@ module.exports = (app) => {
                             for (let i=2; i<res.length; i++){
                                 format.push({header: res[i].glosa, key: res[i].glosa})
                             }
-                            format.push({header:'GPS', key:'GPS'})
+                            format.push({header:'Coordenadas', key:'Coordenadas'})
                             worksheet.columns = format
                         }
                         return (err) ? reject(new Error(`No se ha podido leer las preguntas de los formularios de la base de datos`)) : resolve(res)
@@ -3198,7 +3198,11 @@ module.exports = (app) => {
                             row.push('')
                             for(let j=i+2; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                                 if(data[i].id_formulario == data[j].id_formulario){
-                                    row.push(data[j].respuesta)
+                                    if(data[j].glosa == 'Código Decodificador' && data[j].respuesta == ''){
+                                        row.push('Sin código')
+                                    }else{
+                                        row.push(data[j].respuesta)
+                                    }
                                     console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}`)
                                 }
                             }
