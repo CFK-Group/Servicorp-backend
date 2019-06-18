@@ -3129,6 +3129,14 @@ module.exports = (app) => {
                             format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
+                            format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
+                            format.push({header:'Rut', key:'Rut'})
+                            format.push({header:'Dirección', key:'Dirección'})
+                            format.push({header:'Comuna', key:'Comuna'})
+                            format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
+                            format.push({header:'Técnico', key:'Técnico'})
+                            format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
+                            format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
                             for (let i=2; i<res.length; i++){
                                 format.push({header: res[i].glosa, key: res[i].glosa})
                             }
@@ -3180,6 +3188,14 @@ module.exports = (app) => {
                             }
                             row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
                             row.push(moment(data[i].fecha).format('LTS'))
+                            row.push('')
+                            row.push('')
+                            row.push('')
+                            row.push('')
+                            row.push('')
+                            row.push('')
+                            row.push('')
+                            row.push('')
                             for(let j=i+2; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
                                 if(data[i].id_formulario == data[j].id_formulario){
                                     row.push(data[j].respuesta)
