@@ -3125,8 +3125,8 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
+                            format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
                             for (let i=2; i<res.length; i++){
@@ -3168,7 +3168,7 @@ module.exports = (app) => {
                             row.push(data[i].username)
                             /* row.push(data[1].respuesta)
                             row.push(data[0].respuesta) */
-                            if(data[i].glosa == 'FOLIO DE SERVICIO'){
+                            if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
                                 row.push(data[i+1].respuesta)
                             }else if(data[i].glosa == 'OT SERVICORP'){
                                 row.push(data[i].respuesta)
