@@ -3169,7 +3169,7 @@ module.exports = (app) => {
                             /* row.push(data[1].respuesta)
                             row.push(data[0].respuesta) */
                             if(data[i].glosa == 'FOLIO DE SERVICIO'){
-                                row.push(data[i].respuesta)
+                                row.push(data[i+1].respuesta)
                             }else if(data[i].glosa == 'OT SERVICORP'){
                                 row.push(data[i].respuesta)
                             }
