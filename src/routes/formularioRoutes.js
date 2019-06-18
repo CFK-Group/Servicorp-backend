@@ -3130,7 +3130,7 @@ module.exports = (app) => {
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
                             for (let i=2; i<res.length; i++){
-                                format.push({header: res.glosa, key: res.glosa})
+                                format.push({header: res[i].glosa, key: res[i].glosa})
                             }
                             format.push({header:'GPS', key:'GPS'})
                             worksheet.columns = format
@@ -3166,8 +3166,13 @@ module.exports = (app) => {
                         if(data[i].id_formulario != aux){
                             row.push('')
                             row.push(data[i].username)
-                            row.push(data[1].respuesta)
-                            row.push(data[0].respuesta)
+                            /* row.push(data[1].respuesta)
+                            row.push(data[0].respuesta) */
+                            if(data[i].glosa == 'FOLIO DE SERVICIO'){
+                                row.push(data[i].respuesta)
+                            }else if(data[i].glosa == 'OT SERVICORP'){
+                                row.push(data[i].respuesta)
+                            }
                             row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
                             row.push(moment(data[i].fecha).format('LTS'))
                             for(let j=i+2; j<data.length; j++){ // este for llena las respuestas sin hacer un match con las preguntas
