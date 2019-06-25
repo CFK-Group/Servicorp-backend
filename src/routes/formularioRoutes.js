@@ -1905,9 +1905,7 @@ module.exports = (app) => {
                                     if(data[j].glosa == 'Código Decodificador' && data[j].respuesta == ''){
                                         row.push('Sin código')
                                     }else{
-                                        if(data[j].glosa != 'Tiene filtro Hum en Instalación de TV' || data[j].glosa != 'Deja  equipo Modo Nat ( CM-Emta)'){
-                                            row.push(data[j].respuesta)
-                                        }
+                                        row.push(data[j].respuesta)
                                     }
                                     console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}`)
                                 }
