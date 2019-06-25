@@ -1769,23 +1769,23 @@ module.exports = (app) => {
             formName = 'reporte_instalacion'
             data.dataInicio = 1
             data.dataFin = 2
-        }else if(data.idTipoFormulario == 'mantencion'){
+        }else if(data.tipoFormulario == 'mantencion'){
             formName = 'reporte_mantencion'
             data.dataInicio = 3
             data.dataFin = 4
-        }else if(data.idTipoFormulario == 'desconexion'){
+        }else if(data.tipoFormulario == 'desconexion'){
             formName = 'reporte_desconexion'
             data.dataInicio = 5
             data.dataFin = 5
-        }else if(data.idTipoFormulario == 'instalacion-dth'){
+        }else if(data.tipoFormulario == 'instalacion-dth'){
             formName = 'reporte_instalacion-DTH'
             data.dataInicio = 6
             data.dataFin = 6
-        }else if(data.idTipoFormulario == 'bafi'){
+        }else if(data.tipoFormulario == 'bafi'){
             formName = 'reporte_BAFI'
             data.dataInicio = 7
             data.dataFin = 7
-        }else if(data.idTipoFormulario == 'duo'){
+        }else if(data.tipoFormulario == 'duo'){
             formName = 'reporte_DUO'
             data.dataInicio = 8
             data.dataFin = 8
@@ -1820,7 +1820,7 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 this.formIds = resolved
                 return new Promise((resolve, reject) => {
-                    formulario.getQuestionsByFormTypeId(req.params.idTipoFormulario, (err, res) => {
+                    formulario.getQuestionsByFormTypeId(data.dataInicio, (err, res) => {
                         if (err) {
                             log.error(err)
                         }else{
