@@ -1755,8 +1755,7 @@ module.exports = (app) => {
         log.debug('Procesando solicitud')
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
-        let formIds = []
-        data = {
+        let data = {
             tipoFormulario: req.params.tipoFormulario,
             inicio: req.params.inicio,
             fin: req.params.fin,
