@@ -3055,35 +3055,45 @@ module.exports = (app) => {
     })
 
     // Get reporte segun tipo formulario y rango de fecha (*** NUEVO ***)
-    app.get('/reporte/:idTipoFormulario/:inicio/:fin/:token', (req, res) => {
-        log.info(`get: /reporte/${req.params.idTipoFormulario}/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
+    app.get('/reporte/:tipoFormulario/:inicio/:fin/:token', (req, res) => {
+        log.info(`get: /reporte/${req.params.tipoFormulario}/${req.params.inicio}/${req.params.fin}/${req.params.token}`)
         log.debug('Procesando solicitud')
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
         let formIds = []
         data = {
-            idTipoFormulario: req.params.idTipoFormulario,
+            tipoFormulario: req.params.tipoFormulario,
             inicio: req.params.inicio,
-            fin: req.params.fin
+            fin: req.params.fin,
+            dataInicio: '',
+            dataFin: ''
         }
 
         let formName
-        if(data.idTipoFormulario == 1){
-            formName = 'reporte_instalaciones-HFC'
-        }else if(data.idTipoFormulario == 2){
-            formName = 'reporte_instalaciones-DTH'
-        }else if(data.idTipoFormulario == 3){
-            formName = 'reporte_mantenciones-HFC'
-        }else if(data.idTipoFormulario == 4){
-            formName = 'reporte_mantenciones-DTH'
-        }else if(data.idTipoFormulario == 5){
-            formName = 'reporte_desconexiones'
-        }else if(data.idTipoFormulario == 6){
-            formName = 'reporte_instalaciones-DTH'
-        }else if(data.idTipoFormulario == 7){
+        if(data.tipoFormulario == 'instalacion'){
+            formName = 'reporte_instalacion'
+            data.dataInicio = 1
+            data.dataFin = 2
+        }else if(data.idTipoFormulario == 'mantencion'){
+            formName = 'reporte_mantencion'
+            data.dataInicio = 3
+            data.dataFin = 4
+        }else if(data.idTipoFormulario == 'desconexion'){
+            formName = 'reporte_desconexion'
+            data.dataInicio = 5
+            data.dataFin = 5
+        }else if(data.idTipoFormulario == 'instalacion-dth'){
+            formName = 'reporte_instalacion-DTH'
+            data.dataInicio = 6
+            data.dataFin = 6
+        }else if(data.idTipoFormulario == 'bafi'){
             formName = 'reporte_BAFI'
-        }else if(data.idTipoFormulario == 8){
+            data.dataInicio = 7
+            data.dataFin = 7
+        }else if(data.idTipoFormulario == 'duo'){
             formName = 'reporte_DUO'
+            data.dataInicio = 8
+            data.dataFin = 8
         }
 
         let auth = new Promise((resolve, reject) => {
