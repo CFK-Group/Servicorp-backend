@@ -1093,29 +1093,6 @@ formularioModel.getZips = (callback) => {
     })
 }
 
-formularioModel.getReporte = (req, callback) => {
-    let values = req
-    pool.getConnection(function(err, connection){
-        prueba = connection.query(`select srv_pregunta.glosa,srv_pregunta.id, srv_respuesta.respuesta,srv_respuesta.create_time,formulario_id,formulario_tipo_formulario_id,username, concat(srv_formulario.latitud, ',', srv_formulario.longitud) as coordenadas from srv_respuesta
-        inner join srv_pregunta
-        on srv_respuesta.pregunta_id=srv_pregunta.id
-        inner join srv_usuario
-        on srv_respuesta.formulario_usuario_id=srv_usuario.id
-        inner join srv_formulario
-        on srv_respuesta.formulario_id=srv_formulario.id
-        where formulario_id='?' and srv_usuario.empresa like lower(?)`, [values.formulario_id, '%'+values.empresa+'%'], (err, row) => {
-            if(err){
-                log.error(`Error en getReporte: ${err.message}`)
-                callback(err, null)
-            }
-            if(!err){
-                callback(null, row)
-            }
-        })
-        connection.release()
-    })
-}
-
 formularioModel.getReporteByFormTypeId = (req, callback) => {
     let values = req
     pool.getConnection(function(err, connection){
