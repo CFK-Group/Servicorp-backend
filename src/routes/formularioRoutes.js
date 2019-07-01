@@ -3,6 +3,7 @@ const global = require('../middlewares/auth')
 const moment = require('moment')
 const log = require('../logging-system/logger').Logger
 const excel = require('exceljs')
+moment().tz("America/Santiago").format()
 
 module.exports = (app) => {
     let statusError = 500
@@ -1890,7 +1891,7 @@ module.exports = (app) => {
                                 row.push('')
                             }
                             row.push(moment(data[i].fecha).format('DD-MM-YYYY'))
-                            row.push(moment(data[i].fecha).format('LTS'))
+                            row.push(moment(data[i].fecha).subtract(4, 'hours').format('LTS'))
                             row.push('')
                             row.push('')
                             row.push('')
