@@ -1,7 +1,6 @@
 const formulario = require('../models/formulario')
 const global = require('../middlewares/auth')
 const moment = require('moment')
-const timezone = 3
 const log = require('../logging-system/logger').Logger
 const excel = require('exceljs')
 

@@ -3,7 +3,7 @@ let formularioModel = {}
 const decodeImg = require('./../middlewares/decodeAndSave.js')
 const log = require('../logging-system/logger').Logger
 const moment = require('moment-timezone');
-moment().tz("America/Los_Angeles").format();
+moment().tz("America/Santiago").format();
 
 formularioModel.getPreguntas = (callback) => {
     pool.getConnection(function(err, connection){
