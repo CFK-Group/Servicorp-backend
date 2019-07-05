@@ -174,7 +174,7 @@ formularioModel.createForm = (req, callback) => {
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 108, req.resp_106],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 109, req.resp_107],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 110, req.resp_108],
-                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 111, req.cod_decodificador]
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 111, req.cod_decodificador],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 675, 'N/A'], // respuesta extra para que formularios HFC y DTH tengan el mismo nº de preguntas
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 676, 'N/A'], // respuesta extra para que formularios HFC y DTH tengan el mismo nº de preguntas
                     ]
