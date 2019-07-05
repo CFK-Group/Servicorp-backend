@@ -1763,6 +1763,8 @@ module.exports = (app) => {
             dataFin: ''
         }
 
+        console.log(data)
+
         let formName
         if(data.tipoFormulario == 'instalacion'){
             formName = 'reporte_instalacion'
@@ -1810,6 +1812,7 @@ module.exports = (app) => {
                         if(err){
                             log.error(err)
                         }
+                        console.log('id de formularios',res)
                         return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
                     })
                 })
