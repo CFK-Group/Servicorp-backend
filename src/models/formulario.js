@@ -780,16 +780,15 @@ formularioModel.createForm = (req, callback) => {
                     break
                 }
 
-                console.log('****************************************',values)
                 // guardando respuestas
                 prueba = connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES ?', [values], (err, result) => {
+                    console.log('sql',prueba.sql)
                     if (err) { 
                         return connection.rollback(() => {
                             log.error('Error al insertar respuestas: ' + err.message)
                             throw err
                         })
                     } 
-                    console.log('sql',prueba.sql)
                     // recibimos las imagenes
                     let imgs = {
                         cod_decodificador: req.cod_decodificador,
