@@ -1822,7 +1822,7 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 this.formIds = resolved
                 return new Promise((resolve, reject) => {
-                    formulario.getReporteByFormTypeId(data.dataInicio, (err, res) => {
+                    formulario.getReporteByFormTypeId(data, (err, res) => {
                         if (err) {
                             log.error(err)
                         }else{
