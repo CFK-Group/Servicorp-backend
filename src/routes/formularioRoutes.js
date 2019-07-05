@@ -1778,15 +1778,15 @@ module.exports = (app) => {
             formName = 'reporte_desconexion'
             data.dataInicio = 5
             data.dataFin = 5
-        }else if(data.tipoFormulario == 'instalacion-dth'){
+        }else if(data.tipoFormulario == 'instalacion-DTH'){
             formName = 'reporte_instalacion-DTH'
             data.dataInicio = 6
             data.dataFin = 6
-        }else if(data.tipoFormulario == 'bafi'){
+        }else if(data.tipoFormulario == 'BAFI'){
             formName = 'reporte_BAFI'
             data.dataInicio = 7
             data.dataFin = 7
-        }else if(data.tipoFormulario == 'duo'){
+        }else if(data.tipoFormulario == 'DUO'){
             formName = 'reporte_DUO'
             data.dataInicio = 8
             data.dataFin = 8
