@@ -1822,7 +1822,7 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 this.formIds = resolved
                 return new Promise((resolve, reject) => {
-                    formulario.getQuestionsByFormTypeId(data.dataInicio, (err, res) => {
+                    formulario.getReporteByFormTypeId(data.dataInicio, (err, res) => {
                         if (err) {
                             log.error(err)
                         }else{
@@ -1845,7 +1845,9 @@ module.exports = (app) => {
                             format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
                             format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
                             for (let i=2; i<res.length; i++){
-                                format.push({header: res[i].glosa, key: res[i].glosa})
+                                if(res[i].glosa == 'IDU funcionando correctamente'){
+                                    format.push({header: res[i].glosa, key: res[i].glosa})
+                                }
                             }
                             format.push({header:'Coordenadas', key:'Coordenadas'})
                             worksheet.columns = format
