@@ -780,6 +780,7 @@ formularioModel.createForm = (req, callback) => {
                     break
                 }
 
+                console.log('****************************************',values)
                 // guardando respuestas
                 connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES ?', [values], (err, result) => {
                     if (err) { 
