@@ -664,9 +664,9 @@ formularioModel.createForm = (req, callback) => {
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 567, req.resp_24],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 568, req.resp_25],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 569, req.resp_26],
-                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 570, req.resp_27],
-                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 571, req.resp_28],
-                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 572, req.cod_decodificador]
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 571, req.resp_27],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 572, req.resp_28],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 570, req.cod_decodificador]
                     ]
                     break
                     case 8:             // duo entel
