@@ -1866,17 +1866,13 @@ module.exports = (app) => {
                 })
             })
 
-            .then((resolved, rejected) => {
-                res.status(200).json(resolved)
-            })
-
-
             // generamos el excel con los resultados
-            /* .then((resolved, rejected) => {
+            .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    console.log(`reporte: ${JSON.stringify(resolved)}`)
+                    console.log(`reporte: resolved`)
 
                     // Creamos la cabezera de la tabla del reporte
+                    data = JSON.parse(JSON.stringify(resolved))
                     format = []
                     worksheet.columns = []
                     format.push({header:'Nº', key:'Nº'})
@@ -1893,13 +1889,13 @@ module.exports = (app) => {
                     format.push({header:'Técnico', key:'Técnico'})
                     format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
                     format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
-                    for (let i=2; i<res.length; i++){
-                        format.push({header: res[i].glosa, key: res[i].glosa})
+                    for (let i=2; i<data.length; i++){
+                        format.push({header: data[i].glosa, key: data[i].glosa})
                     }
                     format.push({header:'Coordenadas', key:'Coordenadas'})
                     worksheet.columns = format
 
-                    data = JSON.parse(JSON.stringify(resolved))
+                    
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     // Agregamos las respuestas de la bdd
                     row = []
@@ -1934,7 +1930,7 @@ module.exports = (app) => {
                                     }else{
                                         row.push(data[j].respuesta)
                                     }
-                                    console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}`)
+                                    console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}: ${JSON.stringify(data[j].respuesta)}`)
                                 }
                             }
                             row.push(data[i].latitud + ',' + data[i].longitud)
@@ -1962,7 +1958,7 @@ module.exports = (app) => {
                         reject(new Error(`No se ha podido enviar el reporte`))
                     })
                 })
-            }) */
+            })
 
             .catch(err => {
                 log.error(err)
