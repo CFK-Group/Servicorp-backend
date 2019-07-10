@@ -1816,43 +1816,6 @@ module.exports = (app) => {
                 })
             })
 
-            // traemos las preguntas de el formulario solicitado para crear las columnas del excel
-            /* .then((resolved, rejected) => {
-                this.formIds = resolved
-                return new Promise((resolve, reject) => {
-                    formulario.getQuestionsByFormTypeId(data.dataInicio, (err, res) => {
-                        if (err) {
-                            log.error(err)
-                        }else{
-
-                            // Creamos la cabezera de la tabla del reporte
-                            format = []
-                            worksheet.columns = []
-                            format.push({header:'Nº', key:'Nº'})
-                            format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:'Folio', key:'Folio'})
-                            format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
-                            format.push({header:'Fecha', key:'Fecha'})
-                            format.push({header:'Hora', key:'Hora'})
-                            format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
-                            format.push({header:'Rut', key:'Rut'})
-                            format.push({header:'Dirección', key:'Dirección'})
-                            format.push({header:'Comuna', key:'Comuna'})
-                            format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
-                            format.push({header:'Técnico', key:'Técnico'})
-                            format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
-                            format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
-                            for (let i=2; i<res.length; i++){
-                                format.push({header: res[i].glosa, key: res[i].glosa})
-                            }
-                            format.push({header:'Coordenadas', key:'Coordenadas'})
-                            worksheet.columns = format
-                        }
-                        return (err) ? reject(new Error(`No se ha podido leer las preguntas de los formularios de la base de datos`)) : resolve(res)
-                    })
-                })
-            }) */
-
             // buscamos los formularios con sus preguntas y respuestas en la bdd
             .then((resolved, rejected) => {
                 log.debug('trayendo datos de la bdd')
