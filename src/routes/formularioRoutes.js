@@ -1873,14 +1873,11 @@ module.exports = (app) => {
                     data = JSON.parse(JSON.stringify(resolved))
 
                     // Creamos la cabezera de la tabla del reporte
-                    format = []
-                    
-
-                    
+                    format = [] // arreglo con los datos de la cabeceras
+                    row = [] // arreglo con las respuestas
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
-                    row = []
                     for(let i=0; i<data.length; i++){
-                        if(data[i].id_formulario != aux && i==0){
+                        if(data[i].id_formulario == data[0].id_formulario){
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
@@ -1900,10 +1897,12 @@ module.exports = (app) => {
                                 format.push({header: data[j].glosa, key: data[j].glosa})
                             }
                             format.push({header:'Coordenadas', key:'Coordenadas'})
-                            aux = data[i].id_formulario
                             worksheet.columns = format // crea los encabezados del excel
-                            aux = 0
+                        }else{
+                            i == 999999999
                         }
+                    }
+                    for(let i=0; i<data.length; i++){
                         if(data[i].id_formulario != aux){ // Agregamos las respuestas de la bdd
                             row.push('')
                             row.push(data[i].username)
