@@ -1867,7 +1867,7 @@ module.exports = (app) => {
             })
 
             .then((resolved, rejected) => {
-                res.status(200).json(JSON.stringify(resolved))
+                res.status(200).json(resolved)
             })
 
 
