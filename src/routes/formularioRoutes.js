@@ -1869,15 +1869,15 @@ module.exports = (app) => {
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    console.log(`reporte:`, resolved)
+                    console.log(`reporte: resolved`)
                     data = JSON.parse(JSON.stringify(resolved))
 
-                    // Creamos la cabezera de la tabla del reporte
-                    format = [] // arreglo con los datos de la cabeceras
-                    row = [] // arreglo con las respuestas
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
+                    format = [] // arreglo con encabezados
+                    row = [] // arreglo con respuestas
                     for(let i=0; i<data.length; i++){
-                        if(data[i].id_formulario == data[0].id_formulario){
+                        // Creamos la cabezera del reporte
+                        if(data[i].id_formulario != aux && i==0){
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
@@ -1894,16 +1894,18 @@ module.exports = (app) => {
                             format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
                             format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
                             for (let j=2; j<data.length; j++){
-                                format.push({header: data[j].glosa, key: data[j].glosa})
+                                if(data[0].formulario_id == data[i].formulario_id){
+                                    format.push({header: data[j].glosa, key: data[j].glosa})
+                                }else{
+                                    j == data.length + 1
+                                }
                             }
                             format.push({header:'Coordenadas', key:'Coordenadas'})
+                            aux = data[i].id_formulario
                             worksheet.columns = format // crea los encabezados del excel
-                        }else{
-                            i == data.length + 1
                         }
-                    }
-                    for(let i=0; i<data.length; i++){
-                        if(data[i].id_formulario != aux){ // Agregamos las respuestas de la bdd
+                        // Agregamos las respuestas de la bdd
+                        if(data[i].id_formulario != aux){
                             row.push('')
                             row.push(data[i].username)
                             if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
