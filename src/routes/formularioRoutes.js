@@ -1819,7 +1819,7 @@ module.exports = (app) => {
             })
 
             // traemos las preguntas de el formulario solicitado para crear las columnas del excel
-            .then((resolved, rejected) => {
+            /* .then((resolved, rejected) => {
                 this.formIds = resolved
                 return new Promise((resolve, reject) => {
                     formulario.getQuestionsByFormTypeId(data.dataInicio, (err, res) => {
@@ -1853,7 +1853,7 @@ module.exports = (app) => {
                         return (err) ? reject(new Error(`No se ha podido leer las preguntas de los formularios de la base de datos`)) : resolve(res)
                     })
                 })
-            })
+            }) */
 
             // buscamos los formularios con sus preguntas y respuestas en la bdd
             .then((resolved, rejected) => {
@@ -1872,10 +1872,34 @@ module.exports = (app) => {
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    console.log(`Respuesta: ${JSON.stringify(resolved)}`)
+                    console.log(`reporte: ${JSON.stringify(resolved)}`)
+
+                    // Creamos la cabezera de la tabla del reporte
+                    format = []
+                    worksheet.columns = []
+                    format.push({header:'Nº', key:'Nº'})
+                    format.push({header:'Usuario', key:'Usuario'})
+                    format.push({header:'Folio', key:'Folio'})
+                    format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
+                    format.push({header:'Fecha', key:'Fecha'})
+                    format.push({header:'Hora', key:'Hora'})
+                    format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
+                    format.push({header:'Rut', key:'Rut'})
+                    format.push({header:'Dirección', key:'Dirección'})
+                    format.push({header:'Comuna', key:'Comuna'})
+                    format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
+                    format.push({header:'Técnico', key:'Técnico'})
+                    format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
+                    format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
+                    for (let i=2; i<res.length; i++){
+                        format.push({header: res[i].glosa, key: res[i].glosa})
+                    }
+                    format.push({header:'Coordenadas', key:'Coordenadas'})
+                    worksheet.columns = format
+
                     data = JSON.parse(JSON.stringify(resolved))
-                    aux = 0 // aquí guardaré el id_formulario para que genere una sola fila con cada formulario
-                    // Agregamos los datos de la bdd
+                    aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
+                    // Agregamos las respuestas de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
                         if(data[i].id_formulario != aux){
