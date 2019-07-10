@@ -1869,43 +1869,42 @@ module.exports = (app) => {
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    console.log(`reporte: resolved`)
                     data = JSON.parse(JSON.stringify(resolved))
 
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     format = [] // arreglo con encabezados
                     row = [] // arreglo con respuestas
 
-                    // Creamos la cabezera del reporte
-                    if(data[i].id_formulario != aux && i==0){
-                        worksheet.columns = []
-                        format.push({header:'Nº', key:'Nº'})
-                        format.push({header:'Usuario', key:'Usuario'})
-                        format.push({header:'Folio', key:'Folio'})
-                        format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
-                        format.push({header:'Fecha', key:'Fecha'})
-                        format.push({header:'Hora', key:'Hora'})
-                        format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
-                        format.push({header:'Rut', key:'Rut'})
-                        format.push({header:'Dirección', key:'Dirección'})
-                        format.push({header:'Comuna', key:'Comuna'})
-                        format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
-                        format.push({header:'Técnico', key:'Técnico'})
-                        format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
-                        format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
-                        for (let j=2; j<data.length; j++){
-                            if(data[0].formulario_id == data[j].formulario_id){ // este if tiene que parar cuando se escriban todas las preguntas
-                                format.push({header: data[j].glosa, key: data[j].glosa})
-                            }else{
-                                j == data.length
-                            }
-                        }
-                        format.push({header:'Coordenadas', key:'Coordenadas'})
-                        aux = data[i].id_formulario
-                        worksheet.columns = format // crea los encabezados del excel
-                    }
                     // Agregamos las respuestas de la bdd
                     for(let i=0; i<data.length; i++){
+                        // Creamos la cabezera del reporte
+                        if(data[0].id_formulario != aux && i==0){
+                            worksheet.columns = []
+                            format.push({header:'Nº', key:'Nº'})
+                            format.push({header:'Usuario', key:'Usuario'})
+                            format.push({header:'Folio', key:'Folio'})
+                            format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
+                            format.push({header:'Fecha', key:'Fecha'})
+                            format.push({header:'Hora', key:'Hora'})
+                            format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
+                            format.push({header:'Rut', key:'Rut'})
+                            format.push({header:'Dirección', key:'Dirección'})
+                            format.push({header:'Comuna', key:'Comuna'})
+                            format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
+                            format.push({header:'Técnico', key:'Técnico'})
+                            format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
+                            format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
+                            for (let j=2; j<data.length; j++){
+                                if(data[0].formulario_id == data[j].formulario_id){ // este if tiene que parar cuando se escriban todas las preguntas
+                                    format.push({header: data[j].glosa, key: data[j].glosa})
+                                }else{
+                                    j == data.length
+                                }
+                            }
+                            format.push({header:'Coordenadas', key:'Coordenadas'})
+                            aux = data[i].id_formulario
+                            worksheet.columns = format // crea los encabezados del excel
+                        }
                         if(data[i].id_formulario != aux){
                             row.push('')
                             row.push(data[i].username)
