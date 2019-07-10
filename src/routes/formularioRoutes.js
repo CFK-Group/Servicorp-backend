@@ -1870,37 +1870,40 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     console.log(`reporte: resolved`)
+                    data = JSON.parse(JSON.stringify(resolved))
 
                     // Creamos la cabezera de la tabla del reporte
-                    data = JSON.parse(JSON.stringify(resolved))
                     format = []
-                    worksheet.columns = []
-                    format.push({header:'Nº', key:'Nº'})
-                    format.push({header:'Usuario', key:'Usuario'})
-                    format.push({header:'Folio', key:'Folio'})
-                    format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
-                    format.push({header:'Fecha', key:'Fecha'})
-                    format.push({header:'Hora', key:'Hora'})
-                    format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
-                    format.push({header:'Rut', key:'Rut'})
-                    format.push({header:'Dirección', key:'Dirección'})
-                    format.push({header:'Comuna', key:'Comuna'})
-                    format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
-                    format.push({header:'Técnico', key:'Técnico'})
-                    format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
-                    format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
-                    for (let i=2; i<data.length; i++){
-                        format.push({header: data[i].glosa, key: data[i].glosa})
-                    }
-                    format.push({header:'Coordenadas', key:'Coordenadas'})
-                    worksheet.columns = format
+                    
 
                     
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
-                    // Agregamos las respuestas de la bdd
                     row = []
                     for(let i=0; i<data.length; i++){
-                        if(data[i].id_formulario != aux){
+                        if(data[i].id_formulario != aux && i==0){
+                            worksheet.columns = []
+                            format.push({header:'Nº', key:'Nº'})
+                            format.push({header:'Usuario', key:'Usuario'})
+                            format.push({header:'Folio', key:'Folio'})
+                            format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
+                            format.push({header:'Fecha', key:'Fecha'})
+                            format.push({header:'Hora', key:'Hora'})
+                            format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
+                            format.push({header:'Rut', key:'Rut'})
+                            format.push({header:'Dirección', key:'Dirección'})
+                            format.push({header:'Comuna', key:'Comuna'})
+                            format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
+                            format.push({header:'Técnico', key:'Técnico'})
+                            format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
+                            format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
+                            for (let j=2; j<data.length; j++){
+                                format.push({header: data[j].glosa, key: data[j].glosa})
+                            }
+                            format.push({header:'Coordenadas', key:'Coordenadas'})
+                            worksheet.columns = format // crea los encabezados del excel
+                        }
+
+                        if(data[i].id_formulario != aux){ // Agregamos las respuestas de la bdd
                             row.push('')
                             row.push(data[i].username)
                             if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
@@ -1934,7 +1937,7 @@ module.exports = (app) => {
                                 }
                             }
                             row.push(data[i].latitud + ',' + data[i].longitud)
-                            worksheet.addRows([row])
+                            worksheet.addRows([row]) // crea una fila del excel
                             row = []
                             aux = data[i].id_formulario
                         }
