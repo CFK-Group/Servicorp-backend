@@ -1869,7 +1869,7 @@ module.exports = (app) => {
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    console.log(`reporte: resolved`)
+                    console.log(`reporte:`, resolved)
                     data = JSON.parse(JSON.stringify(resolved))
 
                     // Creamos la cabezera de la tabla del reporte
