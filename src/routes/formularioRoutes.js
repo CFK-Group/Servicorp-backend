@@ -1878,7 +1878,8 @@ module.exports = (app) => {
                     // Agregamos las respuestas de la bdd
                     for(let i=0; i<data.length; i++){
                         // Creamos la cabezera del reporte
-                        if(data[0].id_formulario != aux && i==0){
+                        if(i==0){
+                            aux = data[0].formulario_id
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
@@ -1895,7 +1896,7 @@ module.exports = (app) => {
                             format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
                             format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
                             for (let j=2; j<data.length; j++){
-                                if(data[0].formulario_id == data[j].formulario_id){ // este if tiene que parar cuando se escriban todas las preguntas
+                                if(aux == data[j].formulario_id){ // este if tiene que parar cuando se escriban todas las preguntas
                                     format.push({header: data[j].glosa, key: data[j].glosa})
                                 }else{
                                     j == data.length
@@ -1904,6 +1905,7 @@ module.exports = (app) => {
                             format.push({header:'Coordenadas', key:'Coordenadas'})
                             aux = data[i].id_formulario
                             worksheet.columns = format // crea los encabezados del excel
+                            aux = 0
                         }
                         if(data[i].id_formulario != aux){
                             row.push('')
