@@ -1866,9 +1866,13 @@ module.exports = (app) => {
                 })
             })
 
+            .then((resolved, rejected) => {
+                res.status(200).json(JSON.stringify(resolved))
+            })
+
 
             // generamos el excel con los resultados
-            .then((resolved, rejected) => {
+            /* .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     console.log(`reporte: ${JSON.stringify(resolved)}`)
 
@@ -1903,8 +1907,6 @@ module.exports = (app) => {
                         if(data[i].id_formulario != aux){
                             row.push('')
                             row.push(data[i].username)
-                            /* row.push(data[1].respuesta)
-                            row.push(data[0].respuesta) */
                             if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
                                 row.push(data[i+1].respuesta)
                             }else{
@@ -1960,7 +1962,7 @@ module.exports = (app) => {
                         reject(new Error(`No se ha podido enviar el reporte`))
                     })
                 })
-            })
+            }) */
 
             .catch(err => {
                 log.error(err)
