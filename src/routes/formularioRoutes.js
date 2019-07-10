@@ -1902,8 +1902,8 @@ module.exports = (app) => {
                             format.push({header:'Coordenadas', key:'Coordenadas'})
                             aux = data[i].id_formulario
                             worksheet.columns = format // crea los encabezados del excel
+                            aux = 0
                         }
-                        aux = 0
                         if(data[i].id_formulario != aux){ // Agregamos las respuestas de la bdd
                             row.push('')
                             row.push(data[i].username)
