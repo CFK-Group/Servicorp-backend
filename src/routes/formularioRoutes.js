@@ -1763,8 +1763,6 @@ module.exports = (app) => {
             dataFin: ''
         }
 
-        console.log(data)
-
         let formName
         if(data.tipoFormulario == 'instalacion'){
             formName = 'reporte_instalacion'
