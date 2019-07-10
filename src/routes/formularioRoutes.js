@@ -1899,7 +1899,7 @@ module.exports = (app) => {
                             format.push({header:'Coordenadas', key:'Coordenadas'})
                             worksheet.columns = format // crea los encabezados del excel
                         }else{
-                            i == 999999999
+                            i == data.length + 1
                         }
                     }
                     for(let i=0; i<data.length; i++){
