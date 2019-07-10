@@ -1894,7 +1894,7 @@ module.exports = (app) => {
                             format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
                             format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
                             for (let j=2; j<data.length; j++){
-                                if(data[0].formulario_id == data[i].formulario_id){
+                                if(data[0].formulario_id == data[j].formulario_id){ // este if tiene q parar cuando se escriban todas las preguntas
                                     format.push({header: data[j].glosa, key: data[j].glosa})
                                 }else{
                                     j == data.length + 1
