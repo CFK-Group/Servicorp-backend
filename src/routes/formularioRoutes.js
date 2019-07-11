@@ -1802,19 +1802,6 @@ module.exports = (app) => {
         })
 
         auth
-            // buscamos los formularios en la bdd
-            .then( (resolved, rejected) => {
-                return new Promise( (resolve, reject) => {
-                    log.info('iniciando busqueda de formularios')
-                    formulario.getFormulariosId(data, (err, res) => {
-                        if(err){
-                            log.error(err)
-                        }
-                        console.log('id de formularios',res)
-                        return (err) ? reject(new Error(`No se ha podido generar el reporte`)) : resolve(res)
-                    })
-                })
-            })
 
             // buscamos los formularios con sus preguntas y respuestas en la bdd
             .then((resolved, rejected) => {
