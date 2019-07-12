@@ -1633,7 +1633,7 @@ module.exports = (app) => {
         
         let data = {
             inicio: req.params.inicio,
-            fin: req.params.fin,
+            fin: moment(req.params.fin).add(1, 'days').format('YYYY-MM-DD'),
             empresa: req.params.empresa
         }
         let auth = new Promise ( (resolve, reject) => {
@@ -1758,7 +1758,7 @@ module.exports = (app) => {
         let data = {
             tipoFormulario: req.params.tipoFormulario,
             inicio: req.params.inicio,
-            fin: req.params.fin,
+            fin: moment(req.params.fin).add(1, 'days').format('YYYY-MM-DD'),
             dataInicio: '',
             dataFin: ''
         }
