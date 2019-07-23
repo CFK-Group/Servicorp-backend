@@ -1760,7 +1760,8 @@ module.exports = (app) => {
             inicio: req.params.inicio,
             fin: moment(req.params.fin).add(1, 'days').format('YYYY-MM-DD'),
             dataInicio: '',
-            dataFin: ''
+            dataFin: '',
+            ot: ''
         }
 
         let formName
@@ -1768,26 +1769,32 @@ module.exports = (app) => {
             formName = 'reporte_instalacion'
             data.dataInicio = 1
             data.dataFin = 2
+            data.ot = 'OT Claro'
         }else if(data.tipoFormulario == 'mantencion'){
             formName = 'reporte_mantencion'
             data.dataInicio = 3
             data.dataFin = 4
+            data.ot = 'OT Claro'
         }else if(data.tipoFormulario == 'desconexion'){
             formName = 'reporte_desconexion'
             data.dataInicio = 5
             data.dataFin = 5
+            data.ot = 'OT Claro'
         }else if(data.tipoFormulario == 'instalacion-DTH'){
             formName = 'reporte_instalacion-DTH'
             data.dataInicio = 6
             data.dataFin = 6
+            data.ot = 'OT Entel'
         }else if(data.tipoFormulario == 'BAFI'){
             formName = 'reporte_BAFI'
             data.dataInicio = 7
             data.dataFin = 7
+            data.ot = 'OT Entel'
         }else if(data.tipoFormulario == 'DUO'){
             formName = 'reporte_DUO'
             data.dataInicio = 8
             data.dataFin = 8
+            data.ot = 'OT Entel'
         }
 
         let auth = new Promise((resolve, reject) => {
@@ -1833,7 +1840,7 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
+                            format.push({header:data.ot, key:data.ot})
                             format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
