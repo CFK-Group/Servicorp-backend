@@ -1764,37 +1764,39 @@ module.exports = (app) => {
             ot: ''
         }
 
+        let otText = ''
+
         let formName
         if(data.tipoFormulario == 'instalacion'){
             formName = 'reporte_instalacion'
             data.dataInicio = 1
             data.dataFin = 2
-            data.ot = 'OT Claro'
+            otText = 'OT Claro'
         }else if(data.tipoFormulario == 'mantencion'){
             formName = 'reporte_mantencion'
             data.dataInicio = 3
             data.dataFin = 4
-            data.ot = 'OT Claro'
+            otText = 'OT Claro'
         }else if(data.tipoFormulario == 'desconexion'){
             formName = 'reporte_desconexion'
             data.dataInicio = 5
             data.dataFin = 5
-            data.ot = 'OT Claro'
+            otText = 'OT Claro'
         }else if(data.tipoFormulario == 'instalacion-DTH'){
             formName = 'reporte_instalacion-DTH'
             data.dataInicio = 6
             data.dataFin = 6
-            data.ot = 'OT Entel'
+            otText = 'OT Entel'
         }else if(data.tipoFormulario == 'BAFI'){
             formName = 'reporte_BAFI'
             data.dataInicio = 7
             data.dataFin = 7
-            data.ot = 'OT Entel'
+            otText = 'OT Entel'
         }else if(data.tipoFormulario == 'DUO'){
             formName = 'reporte_DUO'
             data.dataInicio = 8
             data.dataFin = 8
-            data.ot = 'OT Entel'
+            otText = 'OT Entel'
         }
 
         let auth = new Promise((resolve, reject) => {
@@ -1840,7 +1842,7 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:data.ot, key:data.ot})
+                            format.push({header:otText, key:otText})
                             format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
