@@ -1833,8 +1833,8 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Número de OT Servicio', key:'Número de OT Servicio'})
+                            format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
                             format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
@@ -1860,13 +1860,13 @@ module.exports = (app) => {
                         if(data[i].id_formulario != aux){
                             row.push('')
                             row.push(data[i].username)
-                            if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
-                                row.push(data[i+1].respuesta)
+                            if(data[i].glosa == 'OT SERVICORP'){
+                                row.push(data[i].respuesta)
                             }else{
                                 row.push('')
                             }
-                            if(data[i].glosa == 'OT SERVICORP'){
-                                row.push(data[i].respuesta)
+                            if(data[i+1].glosa == 'FOLIO DE SERVICIO'){
+                                row.push(data[i+1].respuesta)
                             }else{
                                 row.push('')
                             }
