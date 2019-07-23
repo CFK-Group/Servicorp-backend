@@ -670,8 +670,8 @@ formularioModel.createForm = (req, callback) => {
                     case 8:             // duo entel
                     empresa = 'entel'
                     values = [
-                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 573, req.ot_servicorp],
-                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 574, req.folio_servicio],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 573, req.folio_servicio],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 574, req.ot_servicorp],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 575, req.resp_1],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 576, req.resp_2],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 577, req.resp_3],
