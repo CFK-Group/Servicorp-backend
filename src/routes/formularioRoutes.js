@@ -1837,9 +1837,11 @@ module.exports = (app) => {
                             console.log('Eliminando pregunta: ', i)
                             data[i+1].pop()
                         }
-                    }
 
-                    resolve(resolved)
+                        if(i=60){
+                            resolve(resolved)
+                        }
+                    }
                 })
             })
 
