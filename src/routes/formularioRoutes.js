@@ -1828,11 +1828,13 @@ module.exports = (app) => {
                 return new Promise((resolve, reject) => {
 
                     data = JSON.parse(JSON.stringify(resolved))
-                    
+
                     for(let i=42; i<60; i++){ //la cantidad de iteraciones se fijó al azar
                         if(tipoFormulario === 'instalacion'){
+                            console.log('Eliminando pregunta: ', i)
                             data[i].pop()
                         }else if(tipoFormulario === 'mantencion'){
+                            console.log('Eliminando pregunta: ', i)
                             data[i+1].pop()
                         }
                     }
