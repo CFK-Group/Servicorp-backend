@@ -781,7 +781,6 @@ formularioModel.createForm = (req, callback) => {
 
                 // guardando respuestas
                 prueba = connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES ?', [values], (err, result) => {
-                    console.log('sql',prueba.sql)
                     if (err) { 
                         return connection.rollback(() => {
                             log.error('Error al insertar respuestas: ' + err.message)
@@ -1102,7 +1101,6 @@ formularioModel.getReporteByFormTypeId = (req, callback) => {
                 log.debug(row)
                 callback(null, row)
             }
-            console.log(prueba.sql)
         })
         connection.release()
     })
