@@ -1829,18 +1829,10 @@ module.exports = (app) => {
 
                     data = JSON.parse(JSON.stringify(resolved))
 
-                    for(let i=42; i<60; i++){ //la cantidad de iteraciones se fijó al azar
-                        if(tipoFormulario === 'instalacion'){
-                            console.log('Eliminando pregunta: ', i)
-                            data[i].pop()
-                        }else if(tipoFormulario === 'mantencion'){
-                            console.log('Eliminando pregunta: ', i)
-                            data[i+1].pop()
-                        }
-
-                        if(i=60){
-                            resolve(resolved)
-                        }
+                    if(tipoFormulario === 'instalacion'){
+                        data.splice(42,18)
+                    }else if(tipoFormulario === 'mantencion'){
+                        data.splice(43,19)
                     }
                 })
             })
