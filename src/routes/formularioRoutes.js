@@ -1823,6 +1823,24 @@ module.exports = (app) => {
                 })
             })
 
+            // eliminamos las preguntas innecesarias
+            .then((resolved, rejected) => {
+                return new Promise((resolve, reject) => {
+
+                    data = JSON.parse(JSON.stringify(resolved))
+                    
+                    for(let i=42; i<60; i++){ //la cantidad de iteraciones se fijó al azar
+                        if(tipoFormulario === 'instalacion'){
+                            data[i].pop()
+                        }else if(tipoFormulario === 'mantencion'){
+                            data[i+1].pop()
+                        }
+                    }
+
+                    resolve(resolved)
+                })
+            })
+
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
@@ -1831,15 +1849,6 @@ module.exports = (app) => {
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     format = [] // arreglo con encabezados
                     row = [] // arreglo con respuestas
-
-                    // quitamos las preguntas q no interesan
-                    for(let i=42; i<60; i++){ //la cantidad de iteraciones se fijó al azar
-                        if(tipoFormulario === 'instalacion'){
-                            data[i].pop()
-                        }else if(tipoFormulario === 'mantencion'){
-                            data[i+1].pop()
-                        }
-                    }
 
                     // Agregamos las respuestas de la bdd
                     for(let i=0; i<data.length; i++){
