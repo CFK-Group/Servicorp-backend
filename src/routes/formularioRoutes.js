@@ -1763,9 +1763,7 @@ module.exports = (app) => {
             dataFin: '',
             ot: ''
         }
-
         let otText = ''
-
         let formName
         if(tipoFormulario == 'instalacion'){
             formName = 'reporte_instalacion'
@@ -1849,20 +1847,20 @@ module.exports = (app) => {
                         if(i==0){
                             aux = data[0].formulario_id
                             worksheet.columns = []
-                            format.push({header:'Nº', key:'Nº'})
-                            format.push({header:'Usuario', key:'Usuario'})
+                            format.push({header: 'Nº', key: 'Nº'})
+                            format.push({header: 'Usuario', key: 'Usuario'})
                             format.push({header: otText, key: otText})
-                            format.push({header:'Folio', key:'Folio'})
-                            format.push({header:'Fecha', key:'Fecha'})
-                            format.push({header:'Hora', key:'Hora'})
-                            format.push({header:'Nombre de Cliente', key:'Nombre de Cliente'})
-                            format.push({header:'Rut', key:'Rut'})
-                            format.push({header:'Dirección', key:'Dirección'})
-                            format.push({header:'Comuna', key:'Comuna'})
-                            format.push({header:'Empresa Instaladora', key:'Empresa Instaladora'})
-                            format.push({header:'Técnico', key:'Técnico'})
-                            format.push({header:'Fecha de Servicio', key:'Fecha de Servicio'})
-                            format.push({header:'Tipo de Venta', key:'Tipo de Venta'})
+                            format.push({header: 'Folio', key: 'Folio'})
+                            format.push({header: 'Fecha', key: 'Fecha'})
+                            format.push({header: 'Hora', key: 'Hora'})
+                            format.push({header: 'Nombre de Cliente', key: 'Nombre de Cliente'})
+                            format.push({header: 'Rut', key: 'Rut'})
+                            format.push({header: 'Dirección', key: 'Dirección'})
+                            format.push({header: 'Comuna', key: 'Comuna'})
+                            format.push({header: 'Empresa Instaladora', key: 'Empresa Instaladora'})
+                            format.push({header: 'Técnico', key: 'Técnico'})
+                            format.push({header: 'Fecha de Servicio', key: 'Fecha de Servicio'})
+                            format.push({header: 'Tipo de Venta', key: 'Tipo de Venta'})
                             for (let j=2; j<data.length; j++){
                                 if(data[i].id_formulario == data[j].id_formulario){ // este if tiene que parar cuando se escriban todas las preguntas
                                     format.push({header: data[j].glosa, key: data[j].glosa})
