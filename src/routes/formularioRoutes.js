@@ -1755,8 +1755,8 @@ module.exports = (app) => {
         log.debug('Procesando solicitud')
         let workbook = new excel.Workbook() //creating workbook
         let worksheet = workbook.addWorksheet('Reporte')
+        let tipoFormulario = req.params.tipoFormulario
         let data = {
-            tipoFormulario: req.params.tipoFormulario,
             inicio: req.params.inicio,
             fin: moment(req.params.fin).add(1, 'days').format('YYYY-MM-DD'),
             dataInicio: '',
@@ -1767,32 +1767,32 @@ module.exports = (app) => {
         let otText = ''
 
         let formName
-        if(data.tipoFormulario == 'instalacion'){
+        if(tipoFormulario == 'instalacion'){
             formName = 'reporte_instalacion'
             data.dataInicio = 1
             data.dataFin = 2
             otText = 'OT Claro'
-        }else if(data.tipoFormulario == 'mantencion'){
+        }else if(tipoFormulario == 'mantencion'){
             formName = 'reporte_mantencion'
             data.dataInicio = 3
             data.dataFin = 4
             otText = 'OT Claro'
-        }else if(data.tipoFormulario == 'desconexion'){
+        }else if(tipoFormulario == 'desconexion'){
             formName = 'reporte_desconexion'
             data.dataInicio = 5
             data.dataFin = 5
             otText = 'OT Claro'
-        }else if(data.tipoFormulario == 'instalacion-DTH'){
+        }else if(tipoFormulario == 'instalacion-DTH'){
             formName = 'reporte_instalacion-DTH'
             data.dataInicio = 6
             data.dataFin = 6
             otText = 'OT Entel'
-        }else if(data.tipoFormulario == 'BAFI'){
+        }else if(tipoFormulario == 'BAFI'){
             formName = 'reporte_BAFI'
             data.dataInicio = 7
             data.dataFin = 7
             otText = 'OT Entel'
-        }else if(data.tipoFormulario == 'DUO'){
+        }else if(tipoFormulario == 'DUO'){
             formName = 'reporte_DUO'
             data.dataInicio = 8
             data.dataFin = 8
@@ -1834,6 +1834,15 @@ module.exports = (app) => {
                     format = [] // arreglo con encabezados
                     row = [] // arreglo con respuestas
 
+                    // quitamos las preguntas q no interesan
+                    for(let i=42; i<60; i++){ //la cantidad de iteraciones se fijó al azar
+                        if(tipoFormulario === 'instalacion'){
+                            data[i].pop()
+                        }else if(tipoFormulario === 'mantencion'){
+                            data[i+1].pop()
+                        }
+                    }
+
                     // Agregamos las respuestas de la bdd
                     for(let i=0; i<data.length; i++){
                         // Creamos la cabezera del reporte
@@ -1842,7 +1851,7 @@ module.exports = (app) => {
                             worksheet.columns = []
                             format.push({header:'Nº', key:'Nº'})
                             format.push({header:'Usuario', key:'Usuario'})
-                            format.push({header:otText, key:otText})
+                            format.push({header: otText, key: otText})
                             format.push({header:'Folio', key:'Folio'})
                             format.push({header:'Fecha', key:'Fecha'})
                             format.push({header:'Hora', key:'Hora'})
