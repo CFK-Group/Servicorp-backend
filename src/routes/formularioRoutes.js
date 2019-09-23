@@ -1831,7 +1831,6 @@ module.exports = (app) => {
                     data.splice(43,19)
                 }
                 return resolve(resolved)
-                })
             })
 
             // generamos el excel con los resultados
