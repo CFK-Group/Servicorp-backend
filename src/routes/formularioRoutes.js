@@ -1825,15 +1825,12 @@ module.exports = (app) => {
 
             // eliminamos las preguntas innecesarias
             .then((resolved, rejected) => {
-                return new Promise((resolve, reject) => {
-
-                    if(tipoFormulario === 'instalacion'){
-                        data.splice(42,18)
-                    }else if(tipoFormulario === 'mantencion'){
-                        data.splice(43,19)
-                    }
-
-                    resolve(resolved)
+                if(tipoFormulario === 'instalacion'){
+                    data.splice(42,18)
+                }else if(tipoFormulario === 'mantencion'){
+                    data.splice(43,19)
+                }
+                return resolve(resolved)
                 })
             })
 
@@ -1977,10 +1974,10 @@ module.exports = (app) => {
         .then((resolved, rejected) => {
             res.status(200).json({
                 success: true,
-                message: `Imágenes del furmulario con id = ${req.params.idFormulario}`,
+                message: `Imágenes del formulario con id = ${req.params.idFormulario}`,
                 data: resolved
             })
-            log.info(`Imágenes del furmulario con id = ${req.params.idFormulario}`)
+            log.info(`Imágenes del formulario con id = ${req.params.idFormulario}`)
             log.info(`res: ${JSON.stringify(resolved)}`)
         })
 
