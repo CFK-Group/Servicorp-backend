@@ -1831,7 +1831,7 @@ module.exports = (app) => {
                 }else if(tipoFormulario === 'mantencion'){
                     data.splice(43,19)
                 }
-                return resolve(resolved)
+                return resolve(data)
             })
 
             // generamos el excel con los resultados
