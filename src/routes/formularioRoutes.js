@@ -1838,7 +1838,7 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = resolved
-                    console.log(data)
+                    console.log(resolved)
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     format = [] // arreglo con encabezados
                     row = [] // arreglo con respuestas
