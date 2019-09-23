@@ -1831,14 +1831,14 @@ module.exports = (app) => {
                 }else if(tipoFormulario === 'mantencion'){
                     data.splice(43,17)
                 }
-                console.log(data)
                 return resolve(data)
             })
-
+            
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
                     data = resolved
+                    console.log(data)
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     format = [] // arreglo con encabezados
                     row = [] // arreglo con respuestas
