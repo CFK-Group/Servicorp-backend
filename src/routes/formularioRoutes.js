@@ -1823,16 +1823,6 @@ module.exports = (app) => {
                 })
             })
 
-            // eliminamos las preguntas innecesarias
-            .then((resolved, rejected) => {
-                if(tipoFormulario === 'instalacion'){
-                    data.splice(42,18)
-                }else if(tipoFormulario === 'mantencion'){
-                    data.splice(43,19)
-                }
-                return resolve(resolved)
-            })
-
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
