@@ -1827,13 +1827,13 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
 
-                    data = JSON.parse(JSON.stringify(resolved))
-
                     if(tipoFormulario === 'instalacion'){
                         data.splice(42,18)
                     }else if(tipoFormulario === 'mantencion'){
                         data.splice(43,19)
                     }
+
+                    resolve(resolved)
                 })
             })
 
