@@ -75,7 +75,7 @@ module.exports = (app) => {
     app.post('/new/user/:token', (req, res) => {
         log.info(`post: /new/user/${req.params.token}`)
         log.info('req: ' + JSON.stringify(req.body))
-        log.info('res: ' + JSON.stringify(res))
+        // log.info('res: ' + JSON.stringify(res))
         const userData = {
             'id': null,
             'username': req.body.username,
