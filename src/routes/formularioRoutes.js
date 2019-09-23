@@ -1837,7 +1837,7 @@ module.exports = (app) => {
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    data = JSON.parse(JSON.stringify(resolved))
+                    data = resolved
                     console.log(data)
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     format = [] // arreglo con encabezados
