@@ -1823,10 +1823,20 @@ module.exports = (app) => {
                 })
             })
 
+            // eliminamos las preguntas innecesarias
+            .then((resolved, rejected) => {
+                data = JSON.parse(JSON.stringify(resolved))
+                if(tipoFormulario === 'instalacion'){
+                    data.splice(42,18)
+                }else if(tipoFormulario === 'mantencion'){
+                    data.splice(43,19)
+                }
+                return resolve(resolved)
+            })
+
             // generamos el excel con los resultados
             .then((resolved, rejected) => {
                 return new Promise((resolve, reject) => {
-                    data = JSON.parse(JSON.stringify(resolved))
 
                     aux = 0 // aquí se guarda el id_formulario para que genere una sola fila con cada formulario
                     format = [] // arreglo con encabezados
