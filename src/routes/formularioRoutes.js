@@ -1829,7 +1829,7 @@ module.exports = (app) => {
                 if(tipoFormulario === 'instalacion'){
                     data.splice(42,18)
                 }else if(tipoFormulario === 'mantencion'){
-                    data.splice(43,19)
+                    data.splice(43,17)
                 }
                 return resolve(data)
             })
