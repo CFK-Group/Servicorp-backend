@@ -1831,6 +1831,7 @@ module.exports = (app) => {
                 }else if(tipoFormulario === 'mantencion'){
                     data.splice(43,17)
                 }
+                console.log(data)
                 return resolve(data)
             })
 
