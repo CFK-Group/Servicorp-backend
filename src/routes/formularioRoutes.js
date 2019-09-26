@@ -1836,7 +1836,7 @@ module.exports = (app) => {
                     } else if (tipoFormulario === 'mantencion') {
                         for(let i=1; i<data.length; i++){
                             if(data[i].orden===49){
-                                data.splice(i,19)
+                                data.splice(i,17)
                             }
                         }
                     }
