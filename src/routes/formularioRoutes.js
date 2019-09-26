@@ -1829,13 +1829,13 @@ module.exports = (app) => {
                     data = JSON.parse(JSON.stringify(resolved))
                     if (tipoFormulario === 'instalacion') {
                         for(let i=1; i<110; i++){
-                            if(data[i].orden>45 && data[i].orden<64){
+                            if(data[i].orden>47 && data[i].orden<66){
                                 data.splice(i,1)
                             }
                         }
                     } else if (tipoFormulario === 'mantencion') {
                         for(let i=1; i<110; i++){
-                            if(data[i].orden>46 && data[i].orden<64){
+                            if(data[i].orden>47 && data[i].orden<66){
                                 data.splice(i,1)
                             }
                         }
