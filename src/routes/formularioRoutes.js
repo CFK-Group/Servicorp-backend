@@ -1828,9 +1828,17 @@ module.exports = (app) => {
                 return new Promise((resolve, reject) => {
                     data = JSON.parse(JSON.stringify(resolved))
                     if (tipoFormulario === 'instalacion') {
-                        data.splice(42, 18)
+                        for(let i=1; i<110; i++){
+                            if(data[i].orden>45 && data[i].orden<64){
+                                data.splice(i,1)
+                            }
+                        }
                     } else if (tipoFormulario === 'mantencion') {
-                        data.splice(43, 17)
+                        for(let i=1; i<110; i++){
+                            if(data[i].orden>46 && data[i].orden<64){
+                                data.splice(i,1)
+                            }
+                        }
                     }
                     return resolve(data)
                 })
