@@ -65,7 +65,7 @@ formularioModel.createForm = (req, callback) => {
                     case 1:             // instalacion hfc claro
                     empresa = 'claro'
                     console.log('**************************')
-                    console.log(req.resp_109, req.resp_110)
+                    console.log(req)
                     console.log('**************************')
                     values = [
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 1, req.ot_servicorp],
