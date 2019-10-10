@@ -788,8 +788,9 @@ formularioModel.createForm = (req, callback) => {
                 let formulario = new Table({
                     head: ['ID de Formulario', 'Tipo de Formulario', 'ID de Usuario', 'ID de Pregunta', 'Respuesta']
                 })
-                formulario.push(values)
-                console.log(formulario.toString())
+                formulario.push(values).then(() => {
+                    console.log(formulario.toString())
+                })
 
                 // guardando respuestas
                 prueba = connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES ?', [values], (err, result) => {
