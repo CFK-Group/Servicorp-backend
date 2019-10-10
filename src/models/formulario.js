@@ -1,5 +1,6 @@
 let fs = require('fs')
 let formularioModel = {}
+let Table = require('cli-table3')
 const decodeImg = require('./../middlewares/decodeAndSave.js')
 const log = require('../logging-system/logger').Logger
 const moment = require('moment-timezone')
@@ -782,6 +783,13 @@ formularioModel.createForm = (req, callback) => {
                     log.error('Error en el id de formulario')
                     break
                 }
+
+                // mostramos una tabla en consola con los valores recibidos
+                let formulario = new Table({
+                    head: ['ID de Formulario', 'Tipo de Formulario', 'ID de Usuario', 'ID de Pregunta', 'Respuesta']
+                })
+                formulario.push(values)
+                console.log(formulario.toString())
 
                 // guardando respuestas
                 prueba = connection.query('INSERT INTO srv_respuesta (formulario_id, formulario_tipo_formulario_id, formulario_usuario_id, pregunta_id, respuesta) VALUES ?', [values], (err, result) => {
