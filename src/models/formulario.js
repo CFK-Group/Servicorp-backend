@@ -420,7 +420,7 @@ formularioModel.createForm = (req, callback) => {
                     case 4:             // mantencion dth claro
                     empresa = 'claro'
                     console.log('**************************')
-                    console.log(req.resp_109, resp_110)
+                    console.log(req.resp_109, req.resp_110)
                     console.log('**************************')
                     values = [
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 336, req.ot_servicorp],
