@@ -788,7 +788,7 @@ formularioModel.createForm = (req, callback) => {
                 let formulario = new Table({
                     head: ['ID de Formulario', 'Tipo de Formulario', 'ID de Usuario', 'ID de Pregunta', 'Respuesta']
                 })
-                for(let i=0; i<values.length(); i++){
+                for(let i=0; i<values.length; i++){
                     formulario.push(values[i])
                 }
                 console.log(formulario.toString())
