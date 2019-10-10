@@ -64,6 +64,9 @@ formularioModel.createForm = (req, callback) => {
                 switch (req.tipo_formulario_id) {
                     case 1:             // instalacion hfc claro
                     empresa = 'claro'
+                    console.log('**************************')
+                    console.log(req.resp_109, resp_110)
+                    console.log('**************************')
                     values = [
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 1, req.ot_servicorp],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 2, req.folio_servicio],
@@ -416,6 +419,9 @@ formularioModel.createForm = (req, callback) => {
                     break
                     case 4:             // mantencion dth claro
                     empresa = 'claro'
+                    console.log('**************************')
+                    console.log(req.resp_109, resp_110)
+                    console.log('**************************')
                     values = [
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 336, req.ot_servicorp],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 337, req.folio_servicio],
