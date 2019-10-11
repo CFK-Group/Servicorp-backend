@@ -1901,8 +1901,8 @@ module.exports = (app) => {
                             } else {
                                 row.push('')
                             }
-                            row.push(moment(data[i].fecha).subtract(3, 'hours').format('DD-MM-YYYY'))
-                            row.push(moment(data[i].fecha).subtract(3, 'hours').format('LTS'))
+                            row.push(moment(data[i].fecha).tz("America/Santiago").format('DD-MM-YYYY'))
+                            row.push(moment(data[i].fecha).tz("America/Santiago").format('LTS'))
                             row.push('')
                             row.push('')
                             row.push('')
