@@ -1760,7 +1760,7 @@ module.exports = (app) => {
         let worksheet = workbook.addWorksheet('Reporte')
         let tipoFormulario = req.params.tipoFormulario
         let data = {
-            inicio: req.params.inicio,
+            inicio: moment(req.params.inicio).format('YYYY-MM-DD'),
             fin: moment(req.params.fin).add(1, 'days').format('YYYY-MM-DD'),
             dataInicio: '',
             dataFin: '',
