@@ -9,6 +9,6 @@ Para iniciar el proyecto en un nuevo sitio, primero debe clonar el repo, luego u
 npm i
 ```
 Finalmente, debe crear las siguientes carpetas/archivos:
-*'src/middlewares/database.js'
-*'src/middlewares/logging-system.js'
-*'src/reportes/'
+* 'src/middlewares/database.js'
+* 'src/middlewares/logging-system.js'
+* 'src/reportes/'
