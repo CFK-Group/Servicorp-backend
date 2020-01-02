@@ -1565,7 +1565,6 @@ module.exports = (app) => {
                         "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad
                     }
                 })
-                log.info(`res: ${JSON.stringify(resolved)}`)
             })
 
             // manejamos algún posible error
