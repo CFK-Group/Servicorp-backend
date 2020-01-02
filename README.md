@@ -11,7 +11,7 @@ npm i
 Finalmente, debe crear las siguientes carpetas/archivos:
 * 'src/middlewares/database.js'
 * 'src/logging-system/logger.js'
-* '/var/log/servicorp/info.txt' - Válido para servidores Linux
-* '/var/log/servicorp/debug.txt' - Válido para servidores Linux
-* '/var/log/servicorp/error.txt' - Válido para servidores Linux
+* '/var/log/servicorp/info.txt'   - (Válido para servidores Linux)
+* '/var/log/servicorp/debug.txt'  - (Válido para servidores Linux)
+* '/var/log/servicorp/error.txt'  - (Válido para servidores Linux)
 * 'src/reportes/'
