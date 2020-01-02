@@ -1917,7 +1917,6 @@ module.exports = (app) => {
                                     } else {
                                         row.push(data[j].respuesta)
                                     }
-                                    console.log(`Respuesta ${j}: ${JSON.stringify(data[j].glosa)}: ${JSON.stringify(data[j].respuesta)}`)
                                 }
                             }
                             row.push(data[i].latitud + ',' + data[i].longitud)
