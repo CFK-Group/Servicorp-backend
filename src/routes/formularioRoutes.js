@@ -1552,7 +1552,7 @@ module.exports = (app) => {
             .then((resolved, rejected) => {
                 res.status(200).json({
                     success: true,
-                    message: `Cantidad de formularios por usuario con id = ${data.usuario_id}`,
+                    message: `Cantidad de formularios por usuario con id = ${data.usuario_id} entre fechas ${data.fechaInicio} y ${data.fechaFin}`,
                     data: {
                         "instalacionHfc": resolved[0].cantidad,
                         "instalacionDth": resolved[1].cantidad,
