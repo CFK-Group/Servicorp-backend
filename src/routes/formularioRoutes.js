@@ -1521,7 +1521,7 @@ module.exports = (app) => {
         let data = {
             usuario_id: req.params.userId,
             fechaInicio: req.params.fechaInicio,
-            fechaFin: moment(req.params.fin).add(23, 'h').add(59, 'm').add(59, 's').format('YYYY-MM-DD HH:mm')
+            fechaFin: moment(req.params.fechaFin).add(23, 'h').add(59, 'm').add(59, 's').format('YYYY-MM-DD HH:mm')
         }
         let usuario_id = req.params.userId
         let auth = new Promise((resolve, reject) => {
