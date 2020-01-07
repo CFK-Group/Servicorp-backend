@@ -37,7 +37,7 @@ userModel.getUserById = (id, callback) => {
 
 userModel.getUserByUsername = (user, callback) => {
     pool.getConnection(function(err, connection){
-        connection.query('SELECT * FROM srv_usuario WHERE username = ?', user,
+        connection.query('SELECT * FROM srv_usuario WHERE username = ? AND estado="activo"', user,
             (err, row) => {
                 if(err){
                     callback(err, null);
