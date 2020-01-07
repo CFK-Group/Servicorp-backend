@@ -3,7 +3,7 @@ const log = require('../logging-system/logger').Logger;
 
 userModel.getUsers = (callback) => {
     pool.getConnection(function(err, connection){
-        connection.query('SELECT * FROM srv_usuario ORDER BY id WHERE estado="activo"',
+        connection.query('SELECT * FROM srv_usuario ORDER BY id',
             (err, row) => {
                 if(err){
                     callback(err, null)
