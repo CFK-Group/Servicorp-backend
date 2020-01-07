@@ -15,3 +15,4 @@ Finalmente, debe crear las siguientes carpetas/archivos:
 * '/var/log/servicorp/debug.txt'  - (Válido para servidores Linux)
 * '/var/log/servicorp/error.txt'  - (Válido para servidores Linux)
 * 'src/reportes/'
+* 'src/public/img/'
