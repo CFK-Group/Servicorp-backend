@@ -931,7 +931,7 @@ formularioModel.getFormularios = (req, callback) => {
             req.tipo_formulario_id,
             req.usuario_id
         ]
-        connection.query(`SELECT * FROM srv_formulario WHERE tipo_formulario_id=? and usuario_id=? and create_time>'2019-09-25' ORDER BY create_time DESC`, data, (err, row) => {
+        connection.query(`SELECT * FROM srv_formulario WHERE tipo_formulario_id=? and usuario_id=? and create_time>DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY create_time DESC`, data, (err, row) => {
             if(err){
                 callback(err, null)
                 log.error(`Error en getFormularios: ${err.message}`)
