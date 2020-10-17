@@ -1254,6 +1254,8 @@ module.exports = (app) => {
             data.tipo_formulario_id = 7
         } else if (req.params.empresa.toString() === 'entel' && req.params.tipoFormulario.toString() === 'duo') {
             data.tipo_formulario_id = 8
+        } else if (req.params.empresa.toString() === 'entel' && req.params.tipoFormulario.toString() === 'fibra') {
+            data.tipo_formulario_id = 9
         }
         let auth = new Promise((resolve, reject) => {
             global.validateToken(req.params.token, (response, err) => {

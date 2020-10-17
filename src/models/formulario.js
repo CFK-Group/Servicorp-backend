@@ -53,7 +53,7 @@ formularioModel.createForm = (req, callback) => {
             // inserción de un nuevo formulario
             connection.query('INSERT INTO srv_formulario (latitud, longitud, tipo_formulario_id, usuario_id) VALUES (?)', [values], (err, result) => {
                 if(err)  {  
-                    connection. rollback ( function ( )  { 
+                    connection.rollback ( function ( )  { 
                         log.error('Error al crear nuevo formulario: ' + err.message)
                         throw err
                     }) 
@@ -783,6 +783,73 @@ formularioModel.createForm = (req, callback) => {
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 671, req.resp_98],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 672, req.resp_99],
                         [formulario_id, req.tipo_formulario_id, req.usuario_id, 673, req.cod_decodificador]
+                    ]
+                    break
+                    case 9:             // FIBRA entel
+                    empresa = 'entel'
+                    values = [
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 683, req.folio_servicio],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 684, req.ot_servicorp],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 685, req.resp_1],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 686, req.resp_2],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 687, req.resp_3],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 688, req.resp_4],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 689, req.resp_5],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 690, req.resp_6],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 691, req.resp_7],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 692, req.resp_8],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 693, req.resp_9],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 694, req.resp_10],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 695, req.resp_11],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 696, req.resp_12],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 697, req.resp_13],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 698, req.resp_14],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 699, req.resp_15],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 700, req.resp_16],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 701, req.resp_17],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 702, req.resp_18],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 703, req.resp_19],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 704, req.resp_20],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 705, req.resp_21],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 706, req.resp_22],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 707, req.resp_23],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 708, req.resp_24],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 709, req.resp_25],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 710, req.resp_26],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 711, req.resp_27],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 712, req.resp_28],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 713, req.resp_29],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 714, req.resp_30],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 715, req.resp_31],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 716, req.resp_32],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 717, req.resp_33],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 718, req.resp_34],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 719, req.resp_35],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 720, req.resp_36],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 721, req.resp_37],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 722, req.resp_38],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 723, req.resp_39],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 724, req.resp_40],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 725, req.resp_41],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 726, req.resp_42],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 727, req.resp_43],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 728, req.resp_44],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 729, req.resp_45],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 730, req.resp_46],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 731, req.resp_47],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 732, req.resp_48],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 733, req.resp_49],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 734, req.resp_50],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 735, req.resp_51],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 736, req.resp_52],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 737, req.resp_53],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 738, req.resp_54],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 739, req.resp_55],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 740, req.resp_56],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 741, req.resp_57],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 742, req.resp_58],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 743, req.resp_59],
+                        [formulario_id, req.tipo_formulario_id, req.usuario_id, 744, req.cod_decodificador]
                     ]
                     break
                     default:
