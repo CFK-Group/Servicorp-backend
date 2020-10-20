@@ -968,7 +968,7 @@ module.exports = (app) => {
 
     // Formulario de bafi id=7
     app.post('/formulario/entel/bafi', (req, res) => {
-        log.info('post: /formulario/entel/instalacion/dth')
+        log.info('post: /formulario/entel/bafi')
         log.info('req: ' + JSON.stringify(req.body))
 
         const respuestas = {
@@ -1066,7 +1066,7 @@ module.exports = (app) => {
 
     // Formulario de duo id=8
     app.post('/formulario/entel/duo', (req, res) => {
-        log.info('post: /formulario/entel/instalacion/dth')
+        log.info('post: /formulario/entel/duo')
         log.info('req: ' + JSON.stringify(req.body))
 
         const respuestas = {
@@ -1186,6 +1186,135 @@ module.exports = (app) => {
             longitud: req.body.longitud,
             tipo_formulario_id: 8,
             usuario_id: null
+        }
+        let auth = new Promise((resolve, reject) => {
+            global.validateToken(req.body.token, (response, err) => {
+                if (!err) {
+                    log.info('usuario autorizado')
+                    respuestas.usuario_id = response.userId
+                    return resolve(true)
+                } else {
+                    statusError = 401
+                    reject(new Error('Token inválido'))
+                }
+            })
+        })
+
+        auth
+            // creamos el formulario, guardamos respuestas e imágenes
+            .then((resolved, rejected) => {
+                return new Promise((resolve, reject) => {
+                    formulario.createForm(respuestas, (err, res) => {
+                        if (err) {
+                            log.error(err)
+                        }
+                        return (err) ? reject(new Error('No se ha podido crear un nuevo formulario')) : resolve(res)
+                    })
+                })
+            })
+
+            // respondemos al cliente
+            .then((resolved, rejected) => {
+                res.status(200).json({
+                    success: true,
+                    message: `Formulario guardado con éxito`
+                })
+                log.info('res: Formulario guardado con éxito')
+            })
+
+            // manejamos algún posible error
+            .catch((err) => {
+                log.error(err)
+                res.status(statusError).json({
+                    success: false,
+                    message: err.message
+                })
+            })
+    })
+
+    // Formulario de duo id=9
+    app.post('/formulario/entel/fibra', (req, res) => {
+        log.info('post: /formulario/entel/fibra')
+        log.info('req: ' + JSON.stringify(req.body))
+
+        const respuestas = {
+            fecha: Math.floor(Date.now() / 1000),
+            ot_servicorp: req.body.ot_servicorp,
+            folio_servicio: req.body.folio_servicio,
+            resp_1: req.body.resp_1,
+            resp_2: req.body.resp_2,
+            resp_3: req.body.resp_3,
+            resp_4: req.body.resp_4,
+            resp_5: req.body.resp_5,
+            resp_6: req.body.resp_6,
+            resp_7: req.body.resp_7,
+            resp_8: req.body.resp_8,
+            resp_9: req.body.resp_9,
+            resp_10: req.body.resp_10,
+            resp_11: req.body.resp_11,
+            resp_12: req.body.resp_12,
+            resp_13: req.body.resp_13,
+            resp_14: req.body.resp_14,
+            resp_15: req.body.resp_15,
+            resp_16: req.body.resp_16,
+            resp_17: req.body.resp_17,
+            resp_18: req.body.resp_18,
+            resp_19: req.body.resp_19,
+            resp_20: req.body.resp_20,
+            resp_21: req.body.resp_21,
+            resp_22: req.body.resp_22,
+            resp_23: req.body.resp_23,
+            resp_24: req.body.resp_24,
+            resp_25: req.body.resp_25,
+            resp_26: req.body.resp_26,
+            resp_27: req.body.resp_27,
+            resp_28: req.body.resp_28,
+            resp_29: req.body.resp_29,
+            resp_30: req.body.resp_30,
+            resp_31: req.body.resp_31,
+            resp_32: req.body.resp_32,
+            resp_33: req.body.resp_33,
+            resp_34: req.body.resp_34,
+            resp_35: req.body.resp_35,
+            resp_36: req.body.resp_36,
+            resp_37: req.body.resp_37,
+            resp_38: req.body.resp_38,
+            resp_39: req.body.resp_39,
+            resp_40: req.body.resp_40,
+            resp_41: req.body.resp_41,
+            resp_42: req.body.resp_42,
+            resp_43: req.body.resp_43,
+            resp_44: req.body.resp_44,
+            resp_45: req.body.resp_45,
+            resp_46: req.body.resp_46,
+            resp_47: req.body.resp_47,
+            resp_48: req.body.resp_48,
+            resp_49: req.body.resp_49,
+            resp_50: req.body.resp_50,
+            resp_51: req.body.resp_51,
+            resp_52: req.body.resp_52,
+            resp_53: req.body.resp_53,
+            resp_54: req.body.resp_54,
+            resp_55: req.body.resp_55,
+            resp_56: req.body.resp_56,
+            resp_57: req.body.resp_57,
+            resp_58: req.body.resp_58,
+            resp_59: req.body.resp_59,
+            cod_decodificador: req.body.cod_decodificador,
+            imagen_1: req.body.imagen_1,
+            imagen_2: req.body.imagen_2,
+            imagen_3: req.body.imagen_3,
+            imagen_4: req.body.imagen_4,
+            imagen_5: req.body.imagen_5,
+            imagen_6: req.body.imagen_6,
+            imagen_7: req.body.imagen_7,
+            imagen_8: req.body.imagen_8,
+            imagen_9: req.body.imagen_9,
+            imagen_10: req.body.imagen_10,
+            latitud: req.body.latitud,
+            longitud: req.body.longitud,
+            tipo_formulario_id: 9,
+            usuario_id: req.body.usuario_id
         }
         let auth = new Promise((resolve, reject) => {
             global.validateToken(req.body.token, (response, err) => {
