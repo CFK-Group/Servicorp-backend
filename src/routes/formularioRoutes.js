@@ -1931,6 +1931,11 @@ module.exports = (app) => {
             data.dataInicio = 8
             data.dataFin = 8
             otText = 'OT Entel'
+        } else if (tipoFormulario == 'FIBRA') {
+            formName = 'reporte_FIBRA'
+            data.dataInicio = 9
+            data.dataFin = 9
+            otText = 'OT Entel'
         }
 
         let auth = new Promise((resolve, reject) => {
@@ -2061,11 +2066,12 @@ module.exports = (app) => {
                     }
 
                     // Creamos el archivo
-                    workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`)
+                    workbook.xlsx.writeFile(`./../Servicorp-backend/src/reportes/${formName}.xlsx`)
                         .then(() => {
                             log.debug("reporte creado!")
-                            res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`, (err) => {
+                            res.download(`./../Servicorp-backend/src/reportes/${formName}.xlsx`, (err) => {
                                 if (err) {
+                                    console.error(err)
                                     res.status(500).json({
                                         success: false,
                                         message: 'Error al generar reporte'
