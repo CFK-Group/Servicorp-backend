@@ -1629,7 +1629,8 @@ module.exports = (app) => {
                         "instalacionDthEntel": resolved[5].cantidad,
                         "BAFIEntel": resolved[6].cantidad,
                         "DUOEntel": resolved[7].cantidad,
-                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad
+                        "FIBRAEntel": resolved[8].cantidad,
+                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad + resolved[8].cantidad
                     }
                 })
                 log.info(`res: ${JSON.stringify(resolved)}`)
@@ -1693,7 +1694,8 @@ module.exports = (app) => {
                         "instalacionDthEntel": resolved[5].cantidad,
                         "BAFIEntel": resolved[6].cantidad,
                         "DUOEntel": resolved[7].cantidad,
-                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad
+                        "FIBRAEntel": resolved[8].cantidad,
+                        "total": resolved[0].cantidad + resolved[1].cantidad + resolved[2].cantidad + resolved[3].cantidad + resolved[4].cantidad + resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad + resolved[8].cantidad
                     }
                 })
             })
@@ -1816,7 +1818,8 @@ module.exports = (app) => {
                             "instalacionDthEntel": resolved[5].cantidad,
                             "BAFIEntel": resolved[6].cantidad,
                             "DUOEntel": resolved[7].cantidad,
-                            "total": resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad
+                            "FIBRAEntel": resolved[8].cantidad,
+                            "total": resolved[5].cantidad + resolved[6].cantidad + resolved[7].cantidad + resolved[8].cantidad
                         }
                     })
                 }

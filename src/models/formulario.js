@@ -1087,8 +1087,9 @@ formularioModel.getTotalFormsByUserId = (req, callback) => {
             UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5
             UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=6
             UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=7
-            UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=8;`, 
-            [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
+            UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=8 
+            UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=9;`, 
+            [usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id,usuario_id], (err, row) => {
             if(err){
                 log.error(`Error en getTotalFormsByUserId: ${err.message}`)
                 callback(err, null)
@@ -1111,7 +1112,9 @@ formularioModel.getTotalFormsByUserIdAndDate = (req, callback) => {
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=5 and (create_time BETWEEN ? AND ?)
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=6 and (create_time BETWEEN ? AND ?)
         UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=7 and (create_time BETWEEN ? AND ?)
-        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=8 and (create_time BETWEEN ? AND ?);`, [
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=8 and (create_time BETWEEN ? AND ?)
+        UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE usuario_id=? and tipo_formulario_id=9 and (create_time BETWEEN ? AND ?);`, [
+            data.usuario_id, data.fechaInicio, data.fechaFin,
             data.usuario_id, data.fechaInicio, data.fechaFin,
             data.usuario_id, data.fechaInicio, data.fechaFin,
             data.usuario_id, data.fechaInicio, data.fechaFin,
@@ -1142,9 +1145,9 @@ formularioModel.getTotalFormsByDate = (req, callback) => {
             query = query.concat(` UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id BETWEEN 1 AND 5 AND create_time BETWEEN '${req.fechas[i]}' AND '${req.fechas[i+1]}'`)
         }
     }else if(req.empresa == 'entel'){
-        query = `SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id BETWEEN 6 AND 8 AND create_time BETWEEN '${req.fechas[0]}' AND '${req.fechas[1]}'`
+        query = `SELECT count(*) as 'cantidad' FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id BETWEEN 6 AND 9 AND create_time BETWEEN '${req.fechas[0]}' AND '${req.fechas[1]}'`
         for(let i=1; i<req.fechas.length-1; i++){
-            query = query.concat(` UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id BETWEEN 6 AND 8 AND create_time BETWEEN '${req.fechas[i]}' AND '${req.fechas[i+1]}'`)
+            query = query.concat(` UNION ALL SELECT count(*) FROM cfk_servicorp.srv_formulario WHERE tipo_formulario_id BETWEEN 6 AND 9 AND create_time BETWEEN '${req.fechas[i]}' AND '${req.fechas[i+1]}'`)
         }
     }
     pool.getConnection(function(err, connection){
