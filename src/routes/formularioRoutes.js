@@ -2014,6 +2014,9 @@ module.exports = (app) => {
                             format.push({ header: 'Técnico', key: 'Técnico' })
                             format.push({ header: 'Fecha de Servicio', key: 'Fecha de Servicio' })
                             format.push({ header: 'Tipo de Venta', key: 'Tipo de Venta' })
+                            if (tipoFormulario === 'FIBRA') {
+                                format.push({header: 'Plan', key: 'Plan'})
+                            }
                             for (let j = 2; j < data.length; j++) {
                                 if (data[i].id_formulario == data[j].id_formulario) { // este if tiene que parar cuando se escriban todas las preguntas
                                     format.push({ header: data[j].glosa, key: data[j].glosa })
@@ -2049,6 +2052,7 @@ module.exports = (app) => {
                             row.push('')
                             row.push('')
                             row.push('')
+                            row.push('')
                             for (let j = i + 2; j < data.length; j++) { // este for llena las respuestas sin hacer un match con las preguntas
                                 if (data[i].id_formulario == data[j].id_formulario) {
                                     if (data[j].glosa == 'Código Decodificador' && data[j].respuesta == '') {
@@ -2066,10 +2070,10 @@ module.exports = (app) => {
                     }
 
                     // Creamos el archivo
-                    workbook.xlsx.writeFile(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`)
+                    workbook.xlsx.writeFile(`./src/reportes/${formName}.xlsx`)
                         .then(() => {
                             log.debug("reporte creado!")
-                            res.download(`/var/www/Servicorp/Servicorp-backend/src/reportes/${formName}.xlsx`, (err) => {
+                            res.download(`./src/reportes/${formName}.xlsx`, (err) => {
                                 if (err) {
                                     console.error(err)
                                     res.status(500).json({
