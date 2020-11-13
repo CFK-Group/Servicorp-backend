@@ -2052,7 +2052,9 @@ module.exports = (app) => {
                             row.push('')
                             row.push('')
                             row.push('')
-                            row.push('')
+                            if (tipoFormulario === 'FIBRA') {
+                                row.push('')
+                            }
                             for (let j = i + 2; j < data.length; j++) { // este for llena las respuestas sin hacer un match con las preguntas
                                 if (data[i].id_formulario == data[j].id_formulario) {
                                     if (data[j].glosa == 'Código Decodificador' && data[j].respuesta == '') {
